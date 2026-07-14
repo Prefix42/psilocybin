@@ -1,0 +1,70 @@
+[project]
+name = "psylocybin"
+version = "0.1.0"
+description = "A hallucination-driven fuzzer for exercising your test suite's resilience."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = ["pytest>=7.0"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.1",
+    "ruff>=0.5",
+    "mypy>=1.10",
+    "bandit>=1.7",
+    "pip-audit>=2.7",
+    "radon>=6.0",
+    "xenon>=0.9",
+    "build>=1.2",
+]
+
+[project.entry-points.pytest11]
+psylocybin = "psylocybin.plugin"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.coverage.run]
+source = ["psylocybin"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S", "C90"]
+# S101: assert use is expected and fine in tests.
+per-file-ignores = { "tests/*" = ["S101"] }
+mccabe = { max-complexity = 10 }
+
+[tool.mypy]
+python_version = "3.9"
+mypy_path = "src"
+packages = ["psylocybin"]
+ignore_missing_imports = true
+disallow_untyped_defs = false
+warn_unused_ignores = true
+warn_redundant_casts = true
+
+[tool.bandit]
+exclude_dirs = ["tests", "build", "dist"]
+# B311: "standard pseudo-random generators not suitable for security purposes".
+# psylocybin uses random.Random deliberately for reproducible fuzz seeding,
+# never for anything security- or crypto-sensitive.
+skips = ["B311"]
