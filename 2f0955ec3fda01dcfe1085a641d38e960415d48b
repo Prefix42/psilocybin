@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mixed",
+  "files_touched": 2,
+  "summary": "Added a 'Keeping the README in sync' section to AGENTS.md, diagnosing the README staleness the user noticed as the same failure pattern as the earlier handoff-notes staleness (a vague ongoing obligation with no concrete trigger), and fixing it the same way: tying README updates to checkpoints that already happen (PR description drafting, workflow file changes). Rewrote notes-for-next-agent.md to reflect true current state - PR #8 merged, the release-pipeline smoke test in progress, and this staleness incident and its fix.",
+  "verification": "Reviewed the new AGENTS.md section against the existing Handoff notes section it was modeled on for consistency, and checked the rewritten notes file against the actual current branch/commit state.",
+  "confidence": "self"
+}
