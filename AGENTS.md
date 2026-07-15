@@ -37,7 +37,10 @@ usage:
 - Ref: `refs/notes/effort` (always pass `--ref=effort` explicitly - do not
   use the default notes ref).
 - One note per commit that represents meaningful agent work. Add it
-  right after making the commit it describes:
+  right after making the commit it describes. Never note a merge
+  commit - merges are excluded from every query below via
+  `--no-merges` and aren't "work" in the sense this log tracks, so a
+  note on one would just be dead weight.
 
   ```bash
   git notes --ref=effort add -F entry.json <commit-sha>
@@ -49,12 +52,12 @@ usage:
   ```json
   {
     "agent": "Claude Sonnet 5",
-    "session_scope": "deep-dive | mechanical | verification | mixed | config (see definitions below)",
+    "session_scope": "deep-dive | mechanical | verification | mixed | config | bookkeeping (see definitions below)",
     "files_touched": 1,
     "summary": "What was actually done, one or two sentences.",
     "verification": "What was run or reproduced to confirm it, if anything.",
     "uncommitted_work": "Optional: related investigation/review in the same session that produced no commit of its own, so it isn't lost just because there's nothing to attach a note to.",
-    "self_reported_activity": "Optional, raw and self-reported only (e.g. 'about 12 tool calls'). Not a comparable metric across agents/tools - many agents/humans have no equivalent to report, and a raw count doesn't track with effort or difficulty. Never surface this in the leaderboard's headline columns - see 'MR/PR description: leaderboard' below.",
+    "self_reported_activity": "Optional, raw and self-reported only (e.g. 'about 12 tool calls'). Not a comparable metric across agents/tools - many agents/humans have no equivalent to report, and a raw count doesn't track with effort or difficulty. Never surface this in the leaderboard's headline columns - see 'PR description: leaderboard' below.",
     "confidence": "self | estimated. 'self' means the agent named in `agent` wrote this note about its own work, at the time. 'estimated' means a different agent inferred it after the fact from the diff/commit message alone, with no session context - even a delayed self-backfill by the same agent name counts as 'self' only if it's genuinely recalling the work, not reconstructing it from the diff. Required whenever confidence isn't 'self'.",
     "estimated_by": "Required when confidence is 'estimated': who made the estimate. Omit entirely when confidence is 'self'."
   }
@@ -80,6 +83,13 @@ usage:
     once found, even if some diagnosis preceded it.
   - `mixed`: genuinely spans more than one of the above within a single
     commit's work.
+  - `bookkeeping`: work that exists purely to keep this leaderboard/log
+    itself in sync with reality - updating a README/PR leaderboard
+    table or the top-agent badge to reflect already-recorded commits,
+    with no other project change bundled in. Still gets a note, so the
+    overhead of maintaining this system is itself a visible metric, but
+    see "PR description: leaderboard" below for why it's excluded
+    from the counts.
   - If a commit's work doesn't cleanly fit one category, use `mixed`
     rather than deliberating over it - don't spend more effort
     classifying the work than the work itself took.
@@ -123,25 +133,31 @@ usage:
   command to paste - agents never run `git config` themselves, even
   with approval.
 
-## MR/PR description: leaderboard
+## PR description: leaderboard
 
-When drafting an MR/PR description for this repository (e.g. via the `mr`
-skill), append a leaderboard as the LAST section of the description,
+When drafting a PR description for this repository (e.g. via the `mr`
+skill - this repo is hosted on GitHub, so "PR" throughout, never "MR"),
+append a leaderboard as the LAST section of the description,
 built from the effort notes above:
 
-- **This MR/PR**: aggregate `refs/notes/effort` entries for just the
-  commits in this MR/PR's range (`git log --notes=effort
+- **This PR**: aggregate `refs/notes/effort` entries for just the
+  commits in this PR's range (`git log --no-merges --notes=effort
   origin/main...HEAD`, or the equivalent base branch) - commit count and
   `session_scope` breakdown, grouped by `agent`.
 - **Running total**: the same aggregation, at the same level of detail
   (commit count and `session_scope` breakdown per agent), across
-  `git log --notes=effort origin/main HEAD` - not a bare total count.
-  This is a union of two specific refs (everything reachable from the
-  real trunk, `origin/main`, or from this PR's own branch), not
-  `--branches` and not `--all`:
+  `git log --no-merges --notes=effort origin/main HEAD` - not a bare
+  total count. Always pass `--no-merges`: merge commits aren't agent
+  work and are never noted (see the Effort log section above), so
+  counting them would only ever inflate "unscoped" with noise. This is
+  a union of two specific refs (everything reachable from the real
+  trunk, `origin/main`, or from this PR's own branch), not `--branches`
+  and not `--all`:
   - `--all` walks `refs/notes/effort` itself (each `git notes add`
     creates a commit on that ref), polluting the count with the notes
-    ref's own bookkeeping commits rather than real project work.
+    ref's own internal plumbing commits rather than real project work -
+    not to be confused with the `bookkeeping` session_scope below,
+    which is a different thing on the *project's* own history.
   - `--branches` walks *every* local branch indiscriminately. If work
     happened on some other branch that was abandoned and never merged
     into `origin/main`, `--branches` would still count it forever as
@@ -151,24 +167,32 @@ built from the effort notes above:
   - Use `origin/main`, not local `main`: local `main` can itself be
     stale if nobody's pulled recently, silently undercounting.
   - The leaderboard should show cumulative standing across the project
-    at a glance, not just this MR/PR's slice - once this PR merges,
+    at a glance, not just this PR's slice - once this PR merges,
     `origin/main`'s own history will include it, so this number is a
     preview of the post-merge total, not a separate, disconnected
     figure.
 - List every agent that has ever contributed (i.e. appears anywhere in
-  the Running Total column), even if their This MR/PR count is 0 -
+  the Running Total column), even if their This PR count is 0 -
   don't drop a row just because someone didn't touch this particular
   PR. Sort rows by Running Total, descending (highest cumulative
   contribution first).
 - Commits with no effort note still count toward the total - tally them
   as "unscoped" rather than silently excluding them, so the running
   total is never quietly undercounted.
+- Exclude commits noted `session_scope: bookkeeping` from every count
+  and breakdown entirely - not "unscoped", not counted under any
+  agent, just left out, as if they were never in the log at all. This
+  is deliberate, not an oversight: a bookkeeping commit's entire
+  purpose is re-syncing the leaderboard to match already-recorded work,
+  so counting it would immediately make the number it just wrote stale
+  again, needing another sync, forever. Leaving it out is what makes a
+  bookkeeping commit *not* require a follow-up.
 - Omit a row only if it is zero in *both* columns - this mainly applies
   to "unscoped": if every commit has an effort note, there's nothing
   left to tally there and the row should be dropped entirely rather than
   showing "0 commits | 0 commits". It essentially never applies to a
   named agent, since the rule above already keeps every agent with any
-  Running Total history in the table regardless of their This MR/PR
+  Running Total history in the table regardless of their This PR
   count.
 - If `refs/notes/effort` isn't available locally to query (e.g. it was
   never fetched), say so explicitly in the leaderboard section rather
