@@ -20,10 +20,22 @@ Before making changes to this repository, review the shared project notes in the
 
 Keep [.agents/notes-for-next-agent.md](.agents/notes-for-next-agent.md)
 accurate proactively, not just as a final step before a session ends.
-Update it as soon as status actually changes - a fix lands, CI goes green
-or red, a loose end gets resolved, a new one appears - rather than
-batching it all up at the end. Treat it as the living source of truth
-for where things currently stand, not a one-time handoff memo.
+
+"Update it as soon as status actually changes" turned out to be too
+vague to actually happen in practice - an entire session's worth of
+work (a whole subsystem built, a real data-loss incident survived,
+several CI fixes) went by without a single update, because there was
+no concrete moment that triggered it. Tie it to checkpoints that
+already happen instead of a vague feeling that "status changed":
+
+- Whenever drafting or regenerating a PR description for this repo.
+- Whenever `AGENTS.md` itself changes - a process/convention shift is
+  exactly the kind of thing this file exists to record.
+- At minimum, once before a session ends - but treat that as the last
+  resort, not the only trigger.
+
+Treat it as the living source of truth for where things currently
+stand, not a one-time handoff memo.
 
 ## Effort log
 
@@ -174,12 +186,54 @@ usage:
   above - and offer the command to fix it, same rule: recommend, never
   run it yourself.
 
-## PR description: leaderboard
+## Versioning
+
+`pyproject.toml`'s `version` field must be bumped in the same PR as any
+change under `src/`, or any change to `pyproject.toml`'s `dependencies`
+or `requires-python` fields specifically - not the whole file. This is
+enforced by CI (the `version-bump` job in `.github/workflows/ci.yml`),
+which fails the PR otherwise - not a suggestion, a blocking check.
+
+- Deliberately scoped narrower than "any `pyproject.toml` change":
+  `dev` extras (ruff, mypy, bandit, etc.) and tool config
+  (`[tool.ruff]`, `[tool.mypy]`, and the like) never affect what
+  `pip install psylocybin` actually installs for an end user, so they
+  don't require a bump - and just as importantly, a blanket whole-file
+  trigger would block every routine dependency-bot PR in this repo,
+  since almost all of its traffic here is dev-tooling bumps, not
+  runtime dependencies.
+- Bump policy (patch/minor/major) is left to judgment - this repo
+  doesn't have a formal semver policy yet, just the requirement that
+  *some* bump happens alongside a triggering change.
+- PR titles must be prefixed with the version currently in
+  `pyproject.toml` at the tip of that PR's branch, formatted as
+  `[X.Y.Z]` - e.g. `[1.0.0] Fix the mutation strategy for negative
+  zero`. Use whatever version is actually there, whether or not this
+  specific PR is the one that bumped it.
+- Merging a PR that changes `pyproject.toml`'s version triggers
+  `.github/workflows/release.yml`, which tags and creates a GitHub
+  Release automatically - see that workflow for exactly how it decides
+  whether a release is actually warranted (it's not just "did the file
+  change").
+- The actual PyPI/TestPyPI publish steps in `publish.yml` are
+  **temporarily disabled** (`if: false`, with the original condition
+  left as a comment) while this version-bump/release-automation system
+  is still being worked out. Don't silently re-enable them - that's the
+  user's call once they're satisfied with how this works end to end.
+
+## PR description: structure and leaderboard
 
 When drafting a PR description for this repository - this repo is
-hosted on GitHub, so "PR" throughout, never "MR" - append a leaderboard
-as the LAST section of the description, built from the effort notes
-above:
+hosted on GitHub, so "PR" throughout, never "MR" - structure it as:
+
+- `## Overview` - a short intro paragraph, what this PR does and why.
+- `## What changed` - the substance, broken into `###` subsections per
+  area touched (e.g. one per workflow file, one for docs). This is the
+  user's confirmed preference over a flat list of `###` sections with
+  no enclosing headers - the two-level structure reads better.
+- The leaderboard (below), appended as the LAST section.
+
+Building the leaderboard itself, from the effort notes above:
 
 - **This PR**: aggregate `refs/notes/effort` entries for just the
   commits in this PR's range (`git log --no-merges --notes=effort
@@ -220,6 +274,16 @@ above:
 - Commits with no effort note still count toward the total - tally them
   as "unscoped" rather than silently excluding them, so the running
   total is never quietly undercounted.
+- Commits authored by `dependabot[bot]` - author email containing
+  `49699333+dependabot[bot]@users.noreply.github.com`, Dependabot's
+  fixed GitHub App user ID, consistent across every repo, not just this
+  one - never have an effort note and never will, since Dependabot
+  doesn't participate in this convention. Give these their own row,
+  labeled `Dependabot (automated)`, rather than folding them into
+  "unscoped" - they're a known, identifiable source, not a genuine gap
+  in the log the way an unscoped human/agent commit would be. Still
+  sorted into the table by Running Total like any other row, per the
+  sort rule above.
 - Exclude commits noted `session_scope: bookkeeping` from every count
   and breakdown entirely - not "unscoped", not counted under any
   agent, just left out, as if they were never in the log at all. This
@@ -259,12 +323,17 @@ Example shape:
 |---|---|---|
 | Claude Sonnet 5 | 4 commits (1 deep-dive, 2 mechanical, 1 mixed) | 12 commits (3 deep-dive, 6 mechanical, 2 verification, 1 mixed) |
 | GitHub Copilot | 0 commits | 2 commits (2 mechanical) |
+| Dependabot (automated) | 0 commits | 2 commits |
 | Ada Lovelace | 0 commits | 1 commit (1 config) |
+| unscoped | 0 commits | 1 commit (unscoped) |
 ```
 
 (`Ada Lovelace` above illustrates the "list everyone, even at 0 This PR"
 rule - included because Running Total is nonzero, sorted last because
-it's the smallest.)
+it's the smallest. `Dependabot (automated)` and `unscoped` illustrate
+the difference between a known, identifiable non-participant and a
+genuine gap in the log - both can be nonzero at once, and neither one
+absorbs the other.)
 
 ## Style
 
