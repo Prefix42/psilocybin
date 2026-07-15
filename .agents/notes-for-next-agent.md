@@ -50,7 +50,7 @@
 
 ## Suggested next step
 - With CI green and docs squared away, the natural next step is opening
-  the PR for `feature/bigbang` (no GitLab/GitHub MR automation available
+  the PR for `feature/bigbang` (no GitHub PR automation available
   in this environment - hand-draft title/description for the user to
   paste in). Otherwise, there's no outstanding bug or failing check to
   chase.
