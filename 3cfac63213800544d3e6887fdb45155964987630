@@ -1,0 +1,9 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 3,
+  "summary": "Wrote the sample app and the initial unit test suite, following the already-designed public API.",
+  "verification": "None recorded beyond the diff itself.",
+  "confidence": "estimated",
+  "estimated_by": "Claude Sonnet 5"
+}
