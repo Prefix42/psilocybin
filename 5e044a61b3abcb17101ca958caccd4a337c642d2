@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Added a one-time startup check to AGENTS.md for whether the refs/notes/effort push/fetch refspecs are configured locally, since that config never survives a fresh clone in this ephemeral environment.",
+  "verification": "Reviewed the diff for correctness; no functional code affected.",
+  "confidence": "self"
+}
