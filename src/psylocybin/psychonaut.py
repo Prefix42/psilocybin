@@ -64,9 +64,19 @@ class Psychonaut:
     ):
         if mode not in VALID_MODES:
             raise ValueError(f"mode must be one of {VALID_MODES}, got {mode!r}")
+        
+        # Validate exception_pool contains only exception classes
+        exception_pool_tuple = tuple(exception_pool)
+        for exc in exception_pool_tuple:
+            if not isinstance(exc, type) or not issubclass(exc, BaseException):
+                raise TypeError(
+                    f"exception_pool must contain only exception classes, "
+                    f"got {exc!r}"
+                )
+        
         self.targets: List[str] = list(targets)
         self.intensity = intensity
-        self.exception_pool = tuple(exception_pool)
+        self.exception_pool = exception_pool_tuple
         self._rng = random.Random(seed)
         self.report = report if report is not None else TripReport()
         self.mode = mode
@@ -77,22 +87,47 @@ class Psychonaut:
     def _mutate(self, value: Any) -> Any:
         """Turn a real return value into a plausible hallucination."""
         if isinstance(value, bool):
+            # Special case bool before int check since bool is subclass of int
             return not value
         if isinstance(value, int):
-            return value + self._rng.choice([-1, 1])
+            # Add or subtract 1, ensuring mutation
+            delta = self._rng.choice([-1, 1])
+            return value + delta
         if isinstance(value, float):
-            return value * self._rng.choice([-1.0, 0.0, 2.0])
+            # For floats, try different mutation strategies
+            # Avoid operations that don't change the value
+            choice = self._rng.choice([0, 1, 2])
+            if choice == 0:
+                # Add/subtract a small value
+                return value + self._rng.choice([-1.0, 1.0])
+            elif choice == 1:
+                # Negate (handles inf as well as finite values)
+                return -value if value != 0 else self._rng.choice([-1.0, 1.0])
+            else:
+                # Invert (safe for 0.0 and inf)
+                if value == 0:
+                    return 1.0
+                else:
+                    return 1.0 / value
         if isinstance(value, str):
-            return value[::-1] if value else "\U0001f344"  # mushroom
+            # Reverse for non-empty, return a fixed mutation for empty
+            return value[::-1] if value else "HALLUCINATED"
         if isinstance(value, list):
-            return []
+            # Return empty list if non-empty, otherwise return a list with a dummy
+            return [] if value else [None]
         if isinstance(value, tuple):
-            return ()
+            # Return empty tuple if non-empty, otherwise return a tuple with a dummy
+            return () if value else (None,)
         if isinstance(value, dict):
-            return {}
+            # Return empty dict if non-empty, otherwise return a dict with a dummy
+            return {} if value else {"hallucinated": True}
         if value is None:
-            return "unexpectedly_not_none"
-        return value
+            # For None, use a falsy sentinel value that is distinct from None
+            # Use 0 which is falsy like None but a different type
+            return 0
+        # For unknown types, try to return something different
+        # Return the type name as a marker that mutation happened
+        return f"<hallucinated {type(value).__name__}>"
 
     def _wrap(self, target_path: str, original: Callable) -> Callable:
         def wrapper(*args, **kwargs):
@@ -105,7 +140,12 @@ class Psychonaut:
 
             self._hallucinated = True
             if self._rng.random() < 0.5:
-                result = original(*args, **kwargs)
+                try:
+                    result = original(*args, **kwargs)
+                except Exception:
+                    # If original() raises, that's a real exception, not a hallucination.
+                    # Let it propagate without recording it as a hallucination.
+                    raise
                 mutated = self._mutate(result)
                 self.report.record(
                     HallucinationEvent(

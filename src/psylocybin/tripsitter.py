@@ -78,7 +78,7 @@ class TripSitter:
         # list, suppress it -- that's an expected hallucination side
         # effect, not a test failure.
         allowed = tuple(self.guidelines.allowed_exceptions or ())
-        if exc_type is not None and issubclass(exc_type, allowed):
+        if allowed and exc_type is not None and issubclass(exc_type, allowed):
             return True
         return False
 
@@ -94,7 +94,8 @@ class TripSitter:
                 f"trip exceeded max_hallucinations "
                 f"({self.report.count} > {g.max_hallucinations})"
             )
-        if exc_type is not None and not issubclass(exc_type, tuple(g.allowed_exceptions or ())):
+        allowed = tuple(g.allowed_exceptions or ())
+        if exc_type is not None and (not allowed or not issubclass(exc_type, allowed)):
             return f"unguided exception escaped the trip: {exc_type.__name__}: {exc}"
         return ""
 
@@ -104,14 +105,20 @@ class TripSitter:
         @sitter.watch(["myapp.orders.place_order"])
         def test_order_flow_survives_hallucination():
             ...
+        
+        Note: Each decorated function invocation gets a fresh TripSitter
+        to ensure proper test isolation.
         """
         targets = list(targets)
+        guidelines = self.guidelines
 
         def decorator(fn: Callable) -> Callable:
             @functools.wraps(fn)
             def wrapped(*args, **kwargs):
-                self.guide(targets)
-                with self:
+                # Create a fresh TripSitter for each test invocation
+                fresh_sitter = TripSitter(guidelines)
+                fresh_sitter.guide(targets)
+                with fresh_sitter:
                     return fn(*args, **kwargs)
             return wrapped
 

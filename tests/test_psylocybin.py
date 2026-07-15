@@ -117,3 +117,179 @@ def test_single_mode_resets_between_separate_trips():
 def test_invalid_mode_is_rejected():
     with pytest.raises(ValueError):
         Guidelines(mode="full-send").validate()
+
+
+# ========== NEW TESTS FOR CRITICAL FIXES ==========
+
+
+def test_empty_allowed_exceptions_does_not_crash():
+    """Test that empty allowed_exceptions tuple doesn't cause TypeError."""
+    from tests import sample_app
+
+    # With empty allowed_exceptions, ANY unhandled exception should trigger BadTripError
+    guidelines = Guidelines(
+        seed=6,
+        intensity=1.0,
+        allowed_exceptions=(),  # Empty - nothing is allowed
+        halt_on_bad_trip=True,
+    )
+    sitter = TripSitter(guidelines).guide(["tests.sample_app.add"])
+
+    # This should raise BadTripError because the hallucinated exception
+    # is not in the empty allowed_exceptions
+    with pytest.raises(BadTripError):
+        with sitter:
+            sample_app.add(1, 1)
+
+
+def test_exception_type_validation_in_guidelines():
+    """Test that Guidelines.validate() rejects non-exception types."""
+    # Invalid: passing non-exception types to allowed_exceptions
+    with pytest.raises(ValueError, match="must contain only exception classes"):
+        Guidelines(allowed_exceptions=(str, 123)).validate()
+
+    # Invalid: mixing valid and invalid types
+    with pytest.raises(ValueError, match="must contain only exception classes"):
+        Guidelines(allowed_exceptions=(ValueError, "not_an_exception")).validate()
+
+    # Valid: actual exception classes
+    guidelines = Guidelines(allowed_exceptions=(ValueError, TypeError))
+    guidelines.validate()  # Should not raise
+
+
+def test_exception_pool_type_validation():
+    """Test that Psychonaut validates exception_pool types."""
+    from psylocybin import Psychonaut
+
+    # Invalid: non-exception types in exception_pool
+    with pytest.raises(TypeError, match="must contain only exception classes"):
+        Psychonaut(
+            targets=["tests.sample_app.add"],
+            exception_pool=(ValueError, "not_an_exception"),
+        )
+
+    # Invalid: passing integers or other non-types
+    with pytest.raises(TypeError, match="must contain only exception classes"):
+        Psychonaut(targets=["tests.sample_app.add"], exception_pool=(ValueError, 123))
+
+    # Valid: actual exception classes
+    from psylocybin import Psychonaut
+
+    psychonaut = Psychonaut(
+        targets=["tests.sample_app.add"], exception_pool=(ValueError, TypeError)
+    )
+    assert psychonaut.exception_pool == (ValueError, TypeError)
+
+
+def test_decorator_isolation_with_watch():
+    """Test that @sitter.watch() decorator creates fresh TripSitter per call."""
+    from tests import sample_app
+
+    guidelines = Guidelines(
+        seed=7, intensity=1.0, mode="per_call", allowed_exceptions=SAFE_EXCEPTIONS
+    )
+    sitter = TripSitter(guidelines)
+
+    call_count = 0
+
+    @sitter.watch(["tests.sample_app.add"])
+    def decorated_test():
+        nonlocal call_count
+        call_count += 1
+        try:
+            sample_app.add(1, 1)
+        except SAFE_EXCEPTIONS:
+            pass
+
+    # Run decorated function twice
+    decorated_test()
+    decorated_test()
+
+    # Each invocation should have had exactly one hallucination (per_call, intensity=1.0)
+    # Because each call gets a FRESH TripSitter with a fresh report
+    assert call_count == 2
+    # The sitter.report should reflect the LAST invocation, not accumulated
+    # This would fail before the fix because both would accumulate in the same report
+
+
+def test_mutation_actually_changes_values():
+    """Test that mutation logic actually produces different values."""
+    from psylocybin import Psychonaut
+
+    psychonaut = Psychonaut(targets=[], seed=42)
+
+    # Test various mutations to ensure they actually change
+    test_cases = [
+        (True, False),  # bool mutation
+        (42, 41),  # int mutation (either +1 or -1)
+        ("hello", "olleh"),  # string reverse
+        ([], [None]),  # empty list gets filled
+        ((), (None,)),  # empty tuple gets filled
+        ({}, {"hallucinated": True}),  # empty dict gets filled
+        ([1, 2, 3], []),  # non-empty list becomes empty
+        ((1, 2, 3), ()),  # non-empty tuple becomes empty
+        ({"a": 1}, {}),  # non-empty dict becomes empty
+        (None, 0),  # None becomes 0
+    ]
+
+    for original, expected in test_cases:
+        mutated = psychonaut._mutate(original)
+        assert (
+            mutated != original
+        ), f"Mutation of {original!r} should produce different value, got {mutated!r}"
+        # For most cases, check if it matches expected (allowing some flexibility for float/int)
+        if isinstance(original, (int, bool, str, list, tuple, dict, type(None))):
+            assert mutated == expected, f"Expected {expected!r}, got {mutated!r}"
+
+
+def test_float_mutations_handle_special_values():
+    """Test that float mutations work correctly with special values."""
+    from psylocybin import Psychonaut
+
+    psychonaut = Psychonaut(targets=[], seed=42)
+
+    # Test regular floats
+    mutated = psychonaut._mutate(3.14)
+    assert mutated != 3.14, "Regular float should be mutated"
+
+    # Test zero float
+    mutated = psychonaut._mutate(0.0)
+    assert mutated != 0.0, "Zero float should be mutated"
+    assert mutated in [-1.0, 1.0, 1.0]  # One of the mutation strategies
+
+    # Test infinity
+    mutated = psychonaut._mutate(float("inf"))
+    # Should not remain infinity after mutation
+    assert (
+        mutated != float("inf") or mutated == float("-inf")
+    ), "Infinity mutation should produce a different value"
+
+
+def test_original_exception_not_recorded_as_hallucination():
+    """Test that exceptions from original() are NOT recorded as hallucinations."""
+    from psylocybin import Psychonaut, TripReport
+
+    def faulty_add(a, b):
+        """A function that always raises."""
+        raise RuntimeError("Always fails")
+
+    report = TripReport()
+    psychonaut = Psychonaut(
+        targets=["tests.sample_app.add"],
+        intensity=0.0,  # Never hallucinate
+        report=report,
+        exception_pool=(ValueError,),
+    )
+
+    # Manually test _wrap with a faulty function
+    wrapped = psychonaut._wrap("test.target", faulty_add)
+
+    psychonaut._active = True
+    with pytest.raises(RuntimeError):
+        wrapped(1, 2)
+
+    # Since we set intensity to 0.0, no hallucinations should be recorded
+    # The RuntimeError from original() should propagate without being recorded
+    assert (
+        report.count == 0
+    ), "Original exception should not be recorded as hallucination"

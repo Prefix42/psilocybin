@@ -56,3 +56,11 @@ class Guidelines:
             raise ValueError("max_hallucinations must be >= 0")
         if self.max_duration_seconds is not None and self.max_duration_seconds <= 0:
             raise ValueError("max_duration_seconds must be > 0")
+        
+        # Validate that allowed_exceptions contains only exception classes
+        for exc in self.allowed_exceptions:
+            if not isinstance(exc, type) or not issubclass(exc, BaseException):
+                raise ValueError(
+                    f"allowed_exceptions must contain only exception classes, "
+                    f"got {exc!r}"
+                )
