@@ -16,6 +16,15 @@ Before making changes to this repository, review the shared project notes in the
 - Follow the documented architecture and patterns rather than inventing new approaches.
 - If a task is ambiguous, consult the shared notes before proposing or implementing changes.
 
+## Handoff notes
+
+Keep [.agents/notes-for-next-agent.md](.agents/notes-for-next-agent.md)
+accurate proactively, not just as a final step before a session ends.
+Update it as soon as status actually changes - a fix lands, CI goes green
+or red, a loose end gets resolved, a new one appears - rather than
+batching it all up at the end. Treat it as the living source of truth
+for where things currently stand, not a one-time handoff memo.
+
 ## Style
 
 These apply everywhere in this repository - source code, comments,
