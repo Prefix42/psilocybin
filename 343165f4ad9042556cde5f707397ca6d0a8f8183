@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "deep-dive",
+  "files_touched": 1,
+  "summary": "Fixed two real gaps in the leaderboard rules found while actually using them: switched the Running Total base from --branches to a union of origin/main and HEAD, since --branches would count work on an abandoned, never-merged branch forever as long as its ref exists locally; and fixed a row-omission rule I had misapplied (dropped a contributor with a nonzero Running Total but zero This-PR count in a prior leaderboard output). Added an explicit sort-by-Running-Total-descending rule.",
+  "verification": "Confirmed git log origin/main HEAD --format='%H' | sort -u | wc -l still gives 31, matching the prior --branches count in this repo (no regression here since there's no stale branch currently), while reasoning through why it would diverge correctly in the stale-branch case.",
+  "confidence": "self"
+}
