@@ -106,6 +106,9 @@ jobs:
   secrets:
     name: Secret scanning (gitleaks)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
     steps:
       - uses: actions/checkout@v4
         with:
