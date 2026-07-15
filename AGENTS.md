@@ -234,11 +234,12 @@ which fails the PR otherwise - not a suggestion, a blocking check.
 - Bump policy (patch/minor/major) is left to judgment - this repo
   doesn't have a formal semver policy yet, just the requirement that
   *some* bump happens alongside a triggering change.
-- PR titles must be prefixed with the version currently in
-  `pyproject.toml` at the tip of that PR's branch, formatted as
-  `[X.Y.Z]` - e.g. `[1.0.0] Fix the mutation strategy for negative
-  zero`. Use whatever version is actually there, whether or not this
-  specific PR is the one that bumped it.
+- PR titles must be prefixed `[X.Y.Z]` only when that PR itself bumps
+  `pyproject.toml`'s version - e.g. `[1.0.0] Fix the mutation strategy
+  for negative zero`, using the new version being introduced. A PR that
+  doesn't touch the version gets no prefix at all - it marks the PR
+  that changed the version, not a running label for whatever version
+  happens to be current.
 - Merging a PR that changes `pyproject.toml`'s version triggers
   `.github/workflows/release.yml`, which tags and creates a GitHub
   Release automatically - see that workflow for exactly how it decides
