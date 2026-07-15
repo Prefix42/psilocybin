@@ -54,9 +54,16 @@ usage:
     "summary": "What was actually done, one or two sentences.",
     "verification": "What was run or reproduced to confirm it, if anything.",
     "uncommitted_work": "Optional: related investigation/review in the same session that produced no commit of its own, so it isn't lost just because there's nothing to attach a note to.",
-    "self_reported_activity": "Optional, raw and self-reported only (e.g. 'about 12 tool calls'). Not a comparable metric across agents/tools - many agents/humans have no equivalent to report, and a raw count doesn't track with effort or difficulty. Never surface this in the leaderboard's headline columns - see 'MR/PR description: leaderboard' below."
+    "self_reported_activity": "Optional, raw and self-reported only (e.g. 'about 12 tool calls'). Not a comparable metric across agents/tools - many agents/humans have no equivalent to report, and a raw count doesn't track with effort or difficulty. Never surface this in the leaderboard's headline columns - see 'MR/PR description: leaderboard' below.",
+    "confidence": "self | estimated. 'self' means the agent named in `agent` wrote this note about its own work, at the time. 'estimated' means a different agent inferred it after the fact from the diff/commit message alone, with no session context - even a delayed self-backfill by the same agent name counts as 'self' only if it's genuinely recalling the work, not reconstructing it from the diff. Required whenever confidence isn't 'self'.",
+    "estimated_by": "Required when confidence is 'estimated': who made the estimate. Omit entirely when confidence is 'self'."
   }
   ```
+
+  Every note ever written to this repo's `refs/notes/effort` so far is
+  itself only a rough estimate, self-reported or not - treat `confidence`
+  as a hedge on top of an already-fuzzy signal, not a claim that `self`
+  notes are precise and `estimated` ones aren't.
 
 - `session_scope` definitions, kept intentionally loose - this is a rough
   trend signal, not a precise taxonomy:
@@ -138,6 +145,10 @@ built from the effort notes above:
 - Commits with no effort note still count toward the total - tally them
   as "unscoped" rather than silently excluding them, so the running
   total is never quietly undercounted.
+- Omit any row whose count is zero in both columns - an all-zero
+  "unscoped" row (or an all-zero agent row) adds nothing at a glance and
+  just clutters the table. If unscoped is genuinely zero everywhere,
+  leave the row out entirely rather than showing "0 commits | 0 commits".
 - If `refs/notes/effort` isn't available locally to query (e.g. it was
   never fetched), say so explicitly in the leaderboard section rather
   than omitting it or fabricating numbers.
@@ -146,6 +157,12 @@ built from the effort notes above:
   putting it in a table cell next to real commit counts would make it
   look like one. If it's worth surfacing at all, do so as a separate,
   clearly-labeled aside below the table, never as a column.
+- Do not surface `confidence`/`estimated_by` in the leaderboard table
+  either - keep the table itself clean (names and numbers only, no
+  "(estimated)" tags or asides). The distinction still lives in the
+  underlying notes for anyone who wants to query it later; the table is
+  an at-a-glance summary, not the place to relitigate provenance every
+  time it's generated.
 
 Example shape:
 
@@ -156,7 +173,6 @@ Example shape:
 |---|---|---|
 | Claude Sonnet 5 | 4 commits (1 deep-dive, 2 mechanical, 1 mixed) | 12 commits (3 deep-dive, 6 mechanical, 2 verification, 1 mixed) |
 | GitHub Copilot | 0 commits | 2 commits (2 mechanical) |
-| unscoped | 0 commits | 3 commits (unscoped) |
 ```
 
 ## Style
