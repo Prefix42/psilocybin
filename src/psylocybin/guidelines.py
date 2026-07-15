@@ -49,18 +49,35 @@ class Guidelines:
     halt_on_bad_trip: bool = True
 
     def validate(self) -> None:
+        self._validate_intensity()
+        self._validate_mode()
+        self._validate_max_hallucinations()
+        self._validate_max_duration_seconds()
+        self._validate_allowed_exceptions()
+
+    def _validate_intensity(self) -> None:
         if not 0.0 <= self.intensity <= 1.0:
             raise ValueError("intensity must be between 0.0 and 1.0")
+
+    def _validate_mode(self) -> None:
         if self.mode not in VALID_MODES:
             raise ValueError(f"mode must be one of {VALID_MODES}, got {self.mode!r}")
+
+    def _validate_max_hallucinations(self) -> None:
         if self.max_hallucinations is not None and self.max_hallucinations < 0:
             raise ValueError("max_hallucinations must be >= 0")
+
+    def _validate_max_duration_seconds(self) -> None:
         if self.max_duration_seconds is not None and self.max_duration_seconds <= 0:
             raise ValueError("max_duration_seconds must be > 0")
 
-        # Validate that allowed_exceptions contains only exception classes
+    def _validate_allowed_exceptions(self) -> None:
         for exc in self.allowed_exceptions:
-            if not isinstance(exc, type) or not issubclass(exc, BaseException):
+            if not self._is_exception_class(exc):
                 raise ValueError(
                     f"allowed_exceptions must contain only exception classes, got {exc!r}"
                 )
+
+    @staticmethod
+    def _is_exception_class(exc: object) -> bool:
+        return isinstance(exc, type) and issubclass(exc, BaseException)
