@@ -106,19 +106,21 @@ class TripSitter:
         def test_order_flow_survives_hallucination():
             ...
         
-        Note: Each decorated function invocation gets a fresh TripSitter
-        to ensure proper test isolation.
+        Note: Each decorated function invocation resets the TripSitter's state
+        to ensure proper test isolation. The sitter's report will reflect only
+        the most recent invocation.
         """
         targets = list(targets)
-        guidelines = self.guidelines
 
         def decorator(fn: Callable) -> Callable:
             @functools.wraps(fn)
             def wrapped(*args, **kwargs):
-                # Create a fresh TripSitter for each test invocation
-                fresh_sitter = TripSitter(guidelines)
-                fresh_sitter.guide(targets)
-                with fresh_sitter:
+                # Reset state for test isolation
+                self._psychonaut = None
+                self.report = TripReport()
+                # Guide and execute
+                self.guide(targets)
+                with self:
                     return fn(*args, **kwargs)
             return wrapped
 

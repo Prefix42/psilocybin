@@ -86,6 +86,8 @@ class Psychonaut:
 
     def _mutate(self, value: Any) -> Any:
         """Turn a real return value into a plausible hallucination."""
+        import math
+        
         if isinstance(value, bool):
             # Special case bool before int check since bool is subclass of int
             return not value
@@ -94,21 +96,35 @@ class Psychonaut:
             delta = self._rng.choice([-1, 1])
             return value + delta
         if isinstance(value, float):
+            # Handle special float values
+            if math.isnan(value):
+                # NaN is never equal to anything (including itself), so return different value
+                return 0.0
             # For floats, try different mutation strategies
-            # Avoid operations that don't change the value
-            choice = self._rng.choice([0, 1, 2])
+            # These strategies are ordered to ensure most produce mutations
+            choice = self._rng.choice([0, 1, 2, 3])
             if choice == 0:
-                # Add/subtract a small value
-                return value + self._rng.choice([-1.0, 1.0])
+                # Negate - works for everything including inf
+                return -value
             elif choice == 1:
-                # Negate (handles inf as well as finite values)
-                return -value if value != 0 else self._rng.choice([-1.0, 1.0])
-            else:
-                # Invert (safe for 0.0 and inf)
+                # Invert - always produces different value (0->1, fin->fin, inf->0)
                 if value == 0:
                     return 1.0
                 else:
                     return 1.0 / value
+            elif choice == 2:
+                # Add for finite, negate for infinite
+                if math.isinf(value):
+                    return -value
+                else:
+                    return value + self._rng.choice([-1.0, 1.0])
+            else:
+                # Multiply by values that are never 1.0
+                multiplier = self._rng.choice([0.5, 2.0, -1.0, 0.0])
+                # 0.0 * anything = 0.0, which is different from non-zero
+                # -1.0 * x = -x, which is different from x
+                # 0.5 * x and 2.0 * x are different from x for most values
+                return value * multiplier
         if isinstance(value, str):
             # Reverse for non-empty, return a fixed mutation for empty
             return value[::-1] if value else "HALLUCINATED"
@@ -172,8 +188,14 @@ class Psychonaut:
         self._active = True
         self._hallucinated = False
         for target_path in self.targets:
-            patcher = patch(target_path, autospec=True)
-            original = patcher.get_original()[0]
+            try:
+                patcher = patch(target_path, autospec=True)
+                original = patcher.get_original()[0]
+            except (AttributeError, ImportError, TypeError) as e:
+                raise ValueError(
+                    f"Failed to patch target '{target_path}': {type(e).__name__}: {e}. "
+                    f"Target must be a valid importable path to a callable, e.g. 'mymodule.function'"
+                )
             mock_obj = patcher.start()
             mock_obj.side_effect = self._wrap(target_path, original)
             self._patchers.append(patcher)
