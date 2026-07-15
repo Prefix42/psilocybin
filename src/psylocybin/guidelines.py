@@ -15,11 +15,11 @@ class Guidelines:
         seed: RNG seed for reproducible trips. None means non-deterministic.
         intensity: probability (0.0-1.0) that any given eligible call
             hallucinates. What counts as "eligible" depends on `mode`.
-        mode: "per_call" (default) — every call to a target is
+        mode: "per_call" (default) - every call to a target is
             independently eligible to hallucinate, at `intensity`
             probability, for the whole trip. Good for testing resilience
             to ongoing/repeated unreliability.
-            "single" — at most one hallucination happens for the entire
+            "single" - at most one hallucination happens for the entire
             trip; `intensity` is the probability any given call is the
             one that hallucinates, and once it has, every later call in
             the trip behaves normally. Good for testing resilience to a
@@ -34,7 +34,7 @@ class Guidelines:
             raise (and that are permitted to escape the `with sitter:` block)
             without being treated as a bad trip.
         forbidden_targets: dotted paths that must never be hallucinated,
-            even if requested — guiding one raises GuidelineViolation.
+            even if requested - guiding one raises GuidelineViolation.
         halt_on_bad_trip: if True, a guideline breach raises BadTripError.
             If False, the breach is only recorded on the TripReport.
     """
