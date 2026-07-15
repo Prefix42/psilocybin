@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Fixed the PR-title version-prefix rule in AGENTS.md, which previously said to use whatever version is currently in pyproject.toml on every PR regardless of whether that PR changed it. The user caught this while reviewing a drafted PR title that carried a stale [0.1.2] prefix on a documentation-only PR that didn't touch the version - corrected the rule to only prefix a PR title when that PR itself bumps the version.",
+  "verification": "Grepped notes-for-next-agent.md for any reference to the old rule to confirm no other file needed the same correction.",
+  "confidence": "self"
+}
