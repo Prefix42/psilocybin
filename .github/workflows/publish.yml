@@ -1,8 +1,15 @@
 name: Publish
 
+# No `release: types: [published]` trigger here - a GitHub Release
+# created by release.yml uses the automatic GITHUB_TOKEN, and GitHub
+# deliberately does not let events triggered by GITHUB_TOKEN start other
+# workflow runs (anti-recursion safeguard), so that trigger would never
+# actually fire. release.yml builds and verifies the distribution itself
+# as a follow-up job instead of relying on this workflow being triggered
+# by its own release. This workflow is now reachable only by manual
+# workflow_dispatch, for an ad hoc publish outside the normal release
+# flow.
 on:
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
       target:
@@ -69,7 +76,7 @@ jobs:
     name: Publish to PyPI
     # TEMPORARILY DISABLED - see publish-testpypi above for context. Restore
     # the line below to re-enable, at the user's discretion:
-    #   if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.target == 'pypi')
+    #   if: github.event_name == 'workflow_dispatch' && inputs.target == 'pypi'
     if: false
     needs: build
     runs-on: ubuntu-latest
