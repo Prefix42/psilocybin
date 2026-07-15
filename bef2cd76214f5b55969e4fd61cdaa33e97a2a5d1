@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "bookkeeping",
+  "files_touched": 1,
+  "summary": "Updated the README's Effort Log table to match the current effort-log state (34/2/1, no unscoped row - every non-merge commit at this point has a note). No other project change bundled in - pure leaderboard resync, the first real use of the new bookkeeping category so this commit doesn't require another resync after itself.",
+  "verification": "Recomputed totals directly from git notes --ref=effort list and git log --no-merges before writing the numbers in.",
+  "confidence": "self"
+}
