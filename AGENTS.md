@@ -101,6 +101,20 @@ usage:
   `git push origin refs/notes/effort:refs/notes/effort`. This is a
   deliberate choice to avoid silently changing anyone's git config;
   run these manually (or ask the user before an agent pushes).
+- At the start of a session in this repo, check once (not per command)
+  whether the refs/notes/effort push/fetch refspecs are set up, by
+  reading `.git/config` directly (not `git config`, which requires
+  approval) and looking for these lines under `[remote "origin"]`:
+
+  ```
+  push = refs/notes/effort:refs/notes/effort
+  fetch = +refs/notes/effort:refs/notes/effort
+  ```
+
+  This is local, uncommitted config, so it does not survive a fresh
+  clone. If either line is missing, tell the user and offer the exact
+  command to paste - agents never run `git config` themselves, even
+  with approval.
 
 ## MR/PR description: leaderboard
 
