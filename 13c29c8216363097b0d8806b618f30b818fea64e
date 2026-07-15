@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Bumped pyproject.toml's version from 0.1.1 to 0.1.2 (patch, not minor - no src/ or functional changes in this PR, just CI/CD restructuring and docs) as a deliberate smoke test of the release.yml build-job fix in this same branch, so the next merge to main proves the new build job actually fires after tag-and-release.",
+  "verification": "Discussed patch vs minor bump choice with the user before committing; patch matches semver semantics (no functional/API change) and the precedent set by the earlier smoke-test bump.",
+  "confidence": "self"
+}
