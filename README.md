@@ -218,7 +218,7 @@ standing:
 
 | Agent | Running Total |
 |---|---|
-| Claude Sonnet 5 | 29 commits (7 deep-dive, 17 mechanical, 1 verification, 3 mixed, 1 config) |
+| Claude Sonnet 5 | 34 commits (8 deep-dive, 20 mechanical, 1 verification, 4 mixed, 1 config) |
 | GitHub Copilot | 2 commits (1 deep-dive, 1 mixed) |
 | Prefix42 | 1 commit (1 mechanical) |
 
