@@ -42,7 +42,12 @@ jobs:
 
   publish-testpypi:
     name: Publish to TestPyPI
-    if: github.event_name == 'workflow_dispatch' && inputs.target == 'testpypi'
+    # TEMPORARILY DISABLED while the version-bump/release-automation system
+    # (see AGENTS.md's Versioning section, and release.yml) is being worked
+    # out. Restore the line below to re-enable - this is the user's call,
+    # not something to flip back on unilaterally:
+    #   if: github.event_name == 'workflow_dispatch' && inputs.target == 'testpypi'
+    if: false
     needs: build
     runs-on: ubuntu-latest
     environment:
@@ -62,7 +67,10 @@ jobs:
 
   publish-pypi:
     name: Publish to PyPI
-    if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.target == 'pypi')
+    # TEMPORARILY DISABLED - see publish-testpypi above for context. Restore
+    # the line below to re-enable, at the user's discretion:
+    #   if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.target == 'pypi')
+    if: false
     needs: build
     runs-on: ubuntu-latest
     environment:

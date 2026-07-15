@@ -120,10 +120,57 @@ jobs:
           # Optional: set GITLEAKS_LICENSE in repo secrets if you're on an
           # org account; not required for public repos.
 
+  version-bump:
+    name: Version bump required for src/ or runtime-dependency changes
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Require a pyproject.toml version bump when it matters
+        run: |
+          BASE="${{ github.event.pull_request.base.sha }}"
+
+          SRC_CHANGED=false
+          if git diff --name-only "$BASE"...HEAD -- src/ | grep -q .; then
+            SRC_CHANGED=true
+          fi
+
+          OLD_DEPS=$(git show "$BASE:pyproject.toml" | grep -E '^(dependencies|requires-python) = ')
+          NEW_DEPS=$(grep -E '^(dependencies|requires-python) = ' pyproject.toml)
+          DEPS_CHANGED=false
+          if [ "$OLD_DEPS" != "$NEW_DEPS" ]; then
+            DEPS_CHANGED=true
+          fi
+
+          # Dev-only extras and tool config (ruff/mypy/bandit/etc.) deliberately
+          # don't count here - they never affect what `pip install psylocybin`
+          # actually installs, so requiring a version bump for those would just
+          # block routine dependency-bot PRs for no user-facing reason.
+          if [ "$SRC_CHANGED" = "true" ] || [ "$DEPS_CHANGED" = "true" ]; then
+            OLD_VERSION=$(git show "$BASE:pyproject.toml" | grep -m1 '^version = ')
+            NEW_VERSION=$(grep -m1 '^version = ' pyproject.toml)
+            if [ "$OLD_VERSION" = "$NEW_VERSION" ]; then
+              REASON="src/ changed"
+              if [ "$SRC_CHANGED" = "true" ] && [ "$DEPS_CHANGED" = "true" ]; then
+                REASON="src/ and runtime dependencies changed"
+              elif [ "$DEPS_CHANGED" = "true" ]; then
+                REASON="runtime dependencies (dependencies/requires-python) changed"
+              fi
+              echo "::error::$REASON in this PR but pyproject.toml's version was not bumped ($NEW_VERSION). Bump the version to merge."
+              exit 1
+            fi
+            echo "Version bumped: $OLD_VERSION -> $NEW_VERSION"
+          else
+            echo "No src/ or runtime-dependency changes in this PR - version bump not required."
+          fi
+
   all-checks:
     name: All checks passed
     if: always()
-    needs: [test, lint, typecheck, complexity, security, secrets]
+    needs: [test, lint, typecheck, complexity, security, secrets, version-bump]
     runs-on: ubuntu-latest
     steps:
       - name: Fail if any dependency job failed
