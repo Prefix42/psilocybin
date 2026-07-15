@@ -1,3 +1,5 @@
+import math
+
 import pytest
 
 from psylocybin import BadTripError, Guidelines, TripSitter
@@ -234,9 +236,9 @@ def test_mutation_actually_changes_values():
 
     for original, expected in test_cases:
         mutated = psychonaut._mutate(original)
-        assert (
-            mutated != original
-        ), f"Mutation of {original!r} should produce different value, got {mutated!r}"
+        assert mutated != original, (
+            f"Mutation of {original!r} should produce different value, got {mutated!r}"
+        )
         # For most cases, check if it matches expected (allowing some flexibility for float/int)
         if isinstance(original, (int, bool, str, list, tuple, dict, type(None))):
             assert mutated == expected, f"Expected {expected!r}, got {mutated!r}"
@@ -284,15 +286,12 @@ def test_original_exception_not_recorded_as_hallucination():
 
     # Since we set intensity to 0.0, no hallucinations should be recorded
     # The RuntimeError from original() should propagate without being recorded
-    assert (
-        report.count == 0
-    ), "Original exception should not be recorded as hallucination"
+    assert report.count == 0, "Original exception should not be recorded as hallucination"
 
 
 def test_nan_is_mutated():
     """Test that NaN float values are properly mutated."""
     from psylocybin import Psychonaut
-    import math
 
     psychonaut = Psychonaut(targets=[], seed=99)
     nan = float("nan")
@@ -306,7 +305,6 @@ def test_nan_is_mutated():
 def test_infinity_is_mutated():
     """Test that infinity values are properly mutated."""
     from psylocybin import Psychonaut
-    import math
 
     psychonaut = Psychonaut(targets=[], seed=100)
 
@@ -328,7 +326,7 @@ def test_infinity_is_mutated():
 
 def test_invalid_patch_target_raises_clear_error():
     """Test that invalid patch targets raise helpful error messages."""
-    from psylocybin import TripSitter, Guidelines
+    from psylocybin import Guidelines, TripSitter
 
     guidelines = Guidelines()
     sitter = TripSitter(guidelines)

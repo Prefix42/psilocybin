@@ -13,8 +13,9 @@ The TripSitter is responsible for:
 """
 
 import functools
+from collections.abc import Callable, Iterable
 from time import monotonic
-from typing import Callable, Iterable, Optional
+from typing import Optional
 
 from .exceptions import BadTripError, GuidelineViolation
 from .guidelines import Guidelines
@@ -61,6 +62,10 @@ class TripSitter:
 
     def __exit__(self, exc_type, exc, tb) -> bool:
         # Always bring the codebase back to sobriety first, no matter what.
+        if self._psychonaut is None:
+            self.report.ended_at = monotonic()
+            return False
+
         self._psychonaut.__exit__(exc_type, exc, tb)
         self.report.ended_at = monotonic()
 
@@ -91,8 +96,7 @@ class TripSitter:
             )
         if g.max_hallucinations is not None and self.report.count > g.max_hallucinations:
             return (
-                f"trip exceeded max_hallucinations "
-                f"({self.report.count} > {g.max_hallucinations})"
+                f"trip exceeded max_hallucinations ({self.report.count} > {g.max_hallucinations})"
             )
         allowed = tuple(g.allowed_exceptions or ())
         if exc_type is not None and (not allowed or not issubclass(exc_type, allowed)):
@@ -105,7 +109,7 @@ class TripSitter:
         @sitter.watch(["myapp.orders.place_order"])
         def test_order_flow_survives_hallucination():
             ...
-        
+
         Note: Each decorated function invocation resets the TripSitter's state
         to ensure proper test isolation. The sitter's report will reflect only
         the most recent invocation.
@@ -122,6 +126,7 @@ class TripSitter:
                 self.guide(targets)
                 with self:
                     return fn(*args, **kwargs)
+
             return wrapped
 
         return decorator

@@ -1,7 +1,8 @@
 """Guidelines: the configured boundaries a trip must stay within."""
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import Optional, Sequence, Type
+from typing import Optional
 
 from .psychonaut import MODE_PER_CALL, VALID_MODES
 
@@ -43,7 +44,7 @@ class Guidelines:
     mode: str = MODE_PER_CALL
     max_hallucinations: Optional[int] = None
     max_duration_seconds: Optional[float] = None
-    allowed_exceptions: Sequence[Type[BaseException]] = field(default_factory=tuple)
+    allowed_exceptions: Sequence[type[BaseException]] = field(default_factory=tuple)
     forbidden_targets: Sequence[str] = field(default_factory=tuple)
     halt_on_bad_trip: bool = True
 
@@ -56,11 +57,10 @@ class Guidelines:
             raise ValueError("max_hallucinations must be >= 0")
         if self.max_duration_seconds is not None and self.max_duration_seconds <= 0:
             raise ValueError("max_duration_seconds must be > 0")
-        
+
         # Validate that allowed_exceptions contains only exception classes
         for exc in self.allowed_exceptions:
             if not isinstance(exc, type) or not issubclass(exc, BaseException):
                 raise ValueError(
-                    f"allowed_exceptions must contain only exception classes, "
-                    f"got {exc!r}"
+                    f"allowed_exceptions must contain only exception classes, got {exc!r}"
                 )

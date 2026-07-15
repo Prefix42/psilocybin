@@ -12,8 +12,10 @@ A Psychonaut never enforces limits on itself -- that's the TripSitter's
 job. The Psychonaut just trips.
 """
 
+import math
 import random
-from typing import Any, Callable, Iterable, List, Optional
+from collections.abc import Iterable
+from typing import Any, Callable, Optional
 from unittest.mock import patch
 
 from .report import HallucinationEvent, TripReport
@@ -58,92 +60,83 @@ class Psychonaut:
         targets: Iterable[str],
         intensity: float = 0.25,
         seed: Optional[int] = None,
-        exception_pool: Iterable[type] = DEFAULT_EXCEPTION_POOL,
+        exception_pool: Iterable[type[BaseException]] = DEFAULT_EXCEPTION_POOL,
         report: Optional[TripReport] = None,
         mode: str = MODE_PER_CALL,
     ):
         if mode not in VALID_MODES:
             raise ValueError(f"mode must be one of {VALID_MODES}, got {mode!r}")
-        
+
         # Validate exception_pool contains only exception classes
         exception_pool_tuple = tuple(exception_pool)
         for exc in exception_pool_tuple:
             if not isinstance(exc, type) or not issubclass(exc, BaseException):
-                raise TypeError(
-                    f"exception_pool must contain only exception classes, "
-                    f"got {exc!r}"
-                )
-        
-        self.targets: List[str] = list(targets)
+                raise TypeError(f"exception_pool must contain only exception classes, got {exc!r}")
+
+        self.targets: list[str] = list(targets)
         self.intensity = intensity
         self.exception_pool = exception_pool_tuple
-        self._rng = random.Random(seed)
+        self._rng = random.Random(seed)  # noqa: S311
         self.report = report if report is not None else TripReport()
         self.mode = mode
-        self._patchers: List[Any] = []
+        self._patchers: list[Any] = []
         self._active = False
         self._hallucinated = False
 
     def _mutate(self, value: Any) -> Any:
         """Turn a real return value into a plausible hallucination."""
-        import math
-        
         if isinstance(value, bool):
-            # Special case bool before int check since bool is subclass of int
             return not value
         if isinstance(value, int):
-            # Add or subtract 1, ensuring mutation
-            delta = self._rng.choice([-1, 1])
-            return value + delta
+            return self._mutate_int(value)
         if isinstance(value, float):
-            # Handle special float values
-            if math.isnan(value):
-                # NaN is never equal to anything (including itself), so return different value
-                return 0.0
-            # For floats, try different mutation strategies
-            # These strategies are ordered to ensure most produce mutations
-            choice = self._rng.choice([0, 1, 2, 3])
-            if choice == 0:
-                # Negate - works for everything including inf
-                return -value
-            elif choice == 1:
-                # Invert - always produces different value (0->1, fin->fin, inf->0)
-                if value == 0:
-                    return 1.0
-                else:
-                    return 1.0 / value
-            elif choice == 2:
-                # Add for finite, negate for infinite
-                if math.isinf(value):
-                    return -value
-                else:
-                    return value + self._rng.choice([-1.0, 1.0])
-            else:
-                # Multiply by values that are never 1.0
-                multiplier = self._rng.choice([0.5, 2.0, -1.0, 0.0])
-                # 0.0 * anything = 0.0, which is different from non-zero
-                # -1.0 * x = -x, which is different from x
-                # 0.5 * x and 2.0 * x are different from x for most values
-                return value * multiplier
+            return self._mutate_float(value)
         if isinstance(value, str):
-            # Reverse for non-empty, return a fixed mutation for empty
-            return value[::-1] if value else "HALLUCINATED"
+            return self._mutate_string(value)
         if isinstance(value, list):
-            # Return empty list if non-empty, otherwise return a list with a dummy
-            return [] if value else [None]
+            return self._mutate_list(value)
         if isinstance(value, tuple):
-            # Return empty tuple if non-empty, otherwise return a tuple with a dummy
-            return () if value else (None,)
+            return self._mutate_tuple(value)
         if isinstance(value, dict):
-            # Return empty dict if non-empty, otherwise return a dict with a dummy
-            return {} if value else {"hallucinated": True}
+            return self._mutate_dict(value)
         if value is None:
-            # For None, use a falsy sentinel value that is distinct from None
-            # Use 0 which is falsy like None but a different type
             return 0
-        # For unknown types, try to return something different
-        # Return the type name as a marker that mutation happened
         return f"<hallucinated {type(value).__name__}>"
+
+    def _mutate_int(self, value: int) -> int:
+        delta = self._rng.choice([-1, 1])
+        return value + delta
+
+    def _mutate_float(self, value: float) -> float:
+        if math.isnan(value):
+            return 0.0
+
+        choice = self._rng.choice([0, 1, 2, 3])
+        if choice == 0:
+            return -value
+        if choice == 1:
+            if value == 0:
+                return 1.0
+            return 1.0 / value
+        if choice == 2:
+            if math.isinf(value):
+                return -value
+            return value + self._rng.choice([-1.0, 1.0])
+
+        multiplier = self._rng.choice([0.5, 2.0, -1.0, 0.0])
+        return value * multiplier
+
+    def _mutate_string(self, value: str) -> str:
+        return value[::-1] if value else "HALLUCINATED"
+
+    def _mutate_list(self, value: list[Any]) -> list[Any]:
+        return [] if value else [None]
+
+    def _mutate_tuple(self, value: tuple[Any, ...]) -> tuple[Any, ...]:
+        return () if value else (None,)
+
+    def _mutate_dict(self, value: dict[Any, Any]) -> dict[Any, Any]:
+        return {} if value else {"hallucinated": True}
 
     def _wrap(self, target_path: str, original: Callable) -> Callable:
         def wrapper(*args, **kwargs):
@@ -194,8 +187,9 @@ class Psychonaut:
             except (AttributeError, ImportError, TypeError) as e:
                 raise ValueError(
                     f"Failed to patch target '{target_path}': {type(e).__name__}: {e}. "
-                    f"Target must be a valid importable path to a callable, e.g. 'mymodule.function'"
-                )
+                    "Target must be a valid importable path to a callable, "
+                    "e.g. 'mymodule.function'"
+                ) from e
             mock_obj = patcher.start()
             mock_obj.side_effect = self._wrap(target_path, original)
             self._patchers.append(patcher)
