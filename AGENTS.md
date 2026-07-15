@@ -41,9 +41,13 @@ usage:
   commit - merges are excluded from every query below via
   `--no-merges` and aren't "work" in the sense this log tracks, so a
   note on one would just be dead weight.
+- **Always chain the add and the push into one command, never two
+  separate steps** - see the footgun below for why this is not
+  optional:
 
   ```bash
-  git notes --ref=effort add -F entry.json <commit-sha>
+  git notes --ref=effort add -F entry.json <commit-sha> && \
+    git push origin refs/notes/effort:refs/notes/effort
   ```
 
 - Content is strict JSON (no prose notes, so any agent can parse it
@@ -118,27 +122,40 @@ usage:
   `git push origin refs/notes/effort:refs/notes/effort`. This is a
   deliberate choice to avoid silently changing anyone's git config;
   run these manually (or ask the user before an agent pushes).
-- **Known footgun, confirmed in practice, not hypothetical**: if the
-  configured fetch refspec for this ref starts with `+` (force update -
-  `+refs/notes/effort:refs/notes/effort`), any fetch - including an
-  IDE's automatic background fetch, not just a deliberate one - will
-  silently overwrite the local ref with whatever's on the remote,
-  destroying any local notes added since the last push, with zero
-  warning. This already happened once in this repo's history: a note
-  written locally was silently lost to a background fetch before it
-  had been pushed, and had to be re-added from a saved copy. Two
-  mitigations, not mutually exclusive:
-  - Don't leave a note unpushed for long - push soon after adding one,
-    since the vulnerable window is exactly "local note exists, hasn't
-    been pushed yet."
-  - Prefer a fetch refspec *without* the leading `+`
-    (`refs/notes/effort:refs/notes/effort`). Without force, a fetch
-    that would overwrite local-only notes fails loudly instead
-    (`[rejected] ... (non-fast-forward)`) rather than silently
-    discarding them - forcing a deliberate `git notes --ref=effort
-    merge` to reconcile, instead of losing data no one noticed was at
-    risk. This is a git config change, so an agent can recommend it but
-    never make it - see the config-check bullet above.
+- **Known footgun, confirmed in practice, not hypothetical, and it took
+  real effort to pin down**: something in this environment (most likely
+  an IDE's automatic background fetch) periodically force-updates
+  `refs/notes/effort` to match the remote, silently destroying any
+  local notes added since the last push, with zero warning. This
+  happened repeatedly in this repo's history within a single session -
+  multiple notes were silently lost before being pushed, each time
+  re-added from a saved copy.
+  - The first suspected cause was the fetch refspec's leading `+`
+    (force update - `+refs/notes/effort:refs/notes/effort`). Removing
+    it did **not** stop the clobbering - the loss kept the exact same
+    signature (always reverting to the same stale remote commit)
+    afterward, meaning whatever is fetching is very likely forcing the
+    update at the command level (e.g. `git fetch --force`), which
+    overrides the refspec's own `+`/no-`+` setting regardless of local
+    config. Prefer a fetch refspec without the leading `+` anyway as
+    harmless defense in depth, but do not treat it as sufficient on its
+    own - it demonstrably wasn't.
+  - The actual defense: **always chain the note add and the push into
+    one command** (see above), never add a note and leave it for a
+    later, separate push. A forced sync can only destroy local-only
+    (unpushed) notes - once local matches remote, a forced sync is a
+    no-op, not a loss. This doesn't reduce the *probability* of a
+    clobber, it eliminates the *window* it can act on, which is what
+    actually matters here.
+  - If notes keep going missing even with chaining (e.g. a clobber
+    lands in the gap between the `add` and the `push` themselves, not
+    just after), that means chaining isn't sufficient and this approach
+    needs to be escalated, in order: first reconsider a tracked
+    `worklog.md`-style file instead of `git notes` (committing the
+    entry atomically with the work it describes removes the gap
+    entirely, at the cost of needing its own commit approval rather
+    than git notes' lighter-touch add); if that's still not robust
+    enough, look outside git entirely for where this data lives.
 - At the start of a session in this repo, check once (not per command)
   whether the refs/notes/effort push/fetch refspecs are set up, by
   reading `.git/config` directly (not `git config`, which requires
