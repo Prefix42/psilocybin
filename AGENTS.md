@@ -128,9 +128,13 @@ built from the effort notes above:
   `session_scope` breakdown, grouped by `agent`.
 - **Running total**: the same aggregation, at the same level of detail
   (commit count and `session_scope` breakdown per agent), across the
-  entire repository history (`git log --notes=effort --all`) - not a
-  bare total count. The leaderboard should show cumulative standing
-  across the project at a glance, not just this MR/PR's slice.
+  entire repository history (`git log --notes=effort --branches`) - not
+  a bare total count. Use `--branches`, not `--all`: `--all` also walks
+  `refs/notes/effort` itself (each `git notes add` creates a commit on
+  that ref), which pollutes the count with the notes ref's own
+  bookkeeping commits rather than real project work. The leaderboard
+  should show cumulative standing across the project at a glance, not
+  just this MR/PR's slice.
 - Commits with no effort note still count toward the total - tally them
   as "unscoped" rather than silently excluding them, so the running
   total is never quietly undercounted.
