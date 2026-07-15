@@ -221,12 +221,19 @@ which fails the PR otherwise - not a suggestion, a blocking check.
   is still being worked out. Don't silently re-enable them - that's the
   user's call once they're satisfied with how this works end to end.
 
-## PR description: leaderboard
+## PR description: structure and leaderboard
 
 When drafting a PR description for this repository - this repo is
-hosted on GitHub, so "PR" throughout, never "MR" - append a leaderboard
-as the LAST section of the description, built from the effort notes
-above:
+hosted on GitHub, so "PR" throughout, never "MR" - structure it as:
+
+- `## Overview` - a short intro paragraph, what this PR does and why.
+- `## What changed` - the substance, broken into `###` subsections per
+  area touched (e.g. one per workflow file, one for docs). This is the
+  user's confirmed preference over a flat list of `###` sections with
+  no enclosing headers - the two-level structure reads better.
+- The leaderboard (below), appended as the LAST section.
+
+Building the leaderboard itself, from the effort notes above:
 
 - **This PR**: aggregate `refs/notes/effort` entries for just the
   commits in this PR's range (`git log --no-merges --notes=effort
