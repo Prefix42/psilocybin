@@ -8,7 +8,8 @@
 
 ## What was already tried
 - I refactored the validation logic in [src/psylocybin/guidelines.py](src/psylocybin/guidelines.py) into smaller helper methods to reduce complexity.
-- The change is currently staged in the working tree as a local edit.
+- That change was committed as `8ba9cfa` with the message `Document CI complexity handoff`.
+- The repository is otherwise left in a clean checkpoint for the next agent to continue from.
 
 ## Why this is likely the right fix
 - Xenon is flagging the class because its validation method was too complex in one block.
