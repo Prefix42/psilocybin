@@ -118,6 +118,27 @@ usage:
   `git push origin refs/notes/effort:refs/notes/effort`. This is a
   deliberate choice to avoid silently changing anyone's git config;
   run these manually (or ask the user before an agent pushes).
+- **Known footgun, confirmed in practice, not hypothetical**: if the
+  configured fetch refspec for this ref starts with `+` (force update -
+  `+refs/notes/effort:refs/notes/effort`), any fetch - including an
+  IDE's automatic background fetch, not just a deliberate one - will
+  silently overwrite the local ref with whatever's on the remote,
+  destroying any local notes added since the last push, with zero
+  warning. This already happened once in this repo's history: a note
+  written locally was silently lost to a background fetch before it
+  had been pushed, and had to be re-added from a saved copy. Two
+  mitigations, not mutually exclusive:
+  - Don't leave a note unpushed for long - push soon after adding one,
+    since the vulnerable window is exactly "local note exists, hasn't
+    been pushed yet."
+  - Prefer a fetch refspec *without* the leading `+`
+    (`refs/notes/effort:refs/notes/effort`). Without force, a fetch
+    that would overwrite local-only notes fails loudly instead
+    (`[rejected] ... (non-fast-forward)`) rather than silently
+    discarding them - forcing a deliberate `git notes --ref=effort
+    merge` to reconcile, instead of losing data no one noticed was at
+    risk. This is a git config change, so an agent can recommend it but
+    never make it - see the config-check bullet above.
 - At the start of a session in this repo, check once (not per command)
   whether the refs/notes/effort push/fetch refspecs are set up, by
   reading `.git/config` directly (not `git config`, which requires
@@ -125,13 +146,16 @@ usage:
 
   ```
   push = refs/notes/effort:refs/notes/effort
-  fetch = +refs/notes/effort:refs/notes/effort
+  fetch = refs/notes/effort:refs/notes/effort
   ```
 
   This is local, uncommitted config, so it does not survive a fresh
   clone. If either line is missing, tell the user and offer the exact
   command to paste - agents never run `git config` themselves, even
-  with approval.
+  with approval. If the fetch line has a leading `+`
+  (`+refs/notes/effort:refs/notes/effort`), flag it - see the footgun
+  above - and offer the command to fix it, same rule: recommend, never
+  run it yourself.
 
 ## PR description: leaderboard
 
