@@ -186,6 +186,35 @@ usage:
   above - and offer the command to fix it, same rule: recommend, never
   run it yourself.
 
+## Keeping the README in sync
+
+The README's Effort Log table and Top Agent badge, and its CI/CD section,
+have gone stale before - drifting for several merged PRs (including a
+handful of Dependabot merges never reflected as a leaderboard row) before
+anyone noticed. "Keep it in sync" without a concrete trigger didn't work
+for handoff notes either (see above) for the same reason: a vague
+ongoing obligation with no specific moment attached to it just doesn't
+fire. Tie README updates to checkpoints that already happen:
+
+- Whenever a PR description is drafted or regenerated (see "PR
+  description: structure and leaderboard" below) and its Running Total
+  differs from what's currently in the README's Effort Log table -
+  update the table (and the Top Agent badge, if the top agent changed)
+  in that same PR, not a follow-up.
+- Whenever a workflow file under `.github/workflows/` is added, removed,
+  or has its trigger/behavior meaningfully changed (e.g. a job disabled
+  or re-enabled) - update the CI/CD section in the same PR, so the
+  README never describes a pipeline that doesn't match what's actually
+  wired up.
+- Before opening any PR, do a quick sanity check: does this PR's
+  Running Total, or anything in `.github/workflows/`, disagree with
+  what the README currently says? If so, fold the fix into the PR
+  rather than leaving it for someone to notice later.
+
+A README-only sync with no other project change bundled in is
+`session_scope: bookkeeping` - see the Effort log section above for why
+that's still noted but excluded from the leaderboard counts.
+
 ## Versioning
 
 `pyproject.toml`'s `version` field must be bumped in the same PR as any
