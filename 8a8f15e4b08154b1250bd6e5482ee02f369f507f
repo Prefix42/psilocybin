@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "deep-dive",
+  "files_touched": 2,
+  "summary": "Diagnosed why publish.yml never ran after release.yml successfully created the v0.1.1 release: release.yml creates the release using the automatic GITHUB_TOKEN, and GitHub deliberately blocks GITHUB_TOKEN-triggered events from starting other workflow runs (anti-recursion safeguard), so publish.yml's release:published trigger could never have fired. Fixed by moving the build/twine-check job directly into release.yml as a follow-up to tag-and-release (gated on a new job output so it only runs when a release was actually created), and removed publish.yml's dead release trigger, leaving it reachable only via manual workflow_dispatch.",
+  "verification": "Confirmed the tag v0.1.1 existed (proving release.yml itself ran) while no build artifact/run evidence existed for publish.yml, consistent with the GITHUB_TOKEN cascade theory. Validated both workflow YAML files parse via the project's own venv PyYAML before committing.",
+  "confidence": "self"
+}
