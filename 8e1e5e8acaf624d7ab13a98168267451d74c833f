@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Fixed a stray 'GitLab/GitHub MR automation' reference in the handoff notes to just 'GitHub PR automation', matching the earlier repo-wide MR to PR terminology sweep in AGENTS.md - this repo only ever used GitHub.",
+  "verification": "Grepped the repo for other stray 'MR' mentions; none remained.",
+  "confidence": "self"
+}
