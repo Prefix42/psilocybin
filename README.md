@@ -190,14 +190,27 @@ pip-audit                                      # dependency vulnerability scan
 An `all-checks` job aggregates the above into a single required status,
 handy as a single branch-protection check.
 
-`.github/workflows/publish.yml` builds the sdist/wheel and publishes via
+`.github/workflows/release.yml` tags and publishes a GitHub Release
+automatically whenever a push to `main` bumps `pyproject.toml`'s version -
+see [AGENTS.md](AGENTS.md#versioning) for the version-bump rule that CI
+enforces on every PR to make this possible.
+
+`.github/workflows/publish.yml` builds the sdist/wheel and, once
+re-enabled, would publish via
 [PyPI trusted publishing](https://docs.pypi.org/trusted-publishers/) (OIDC,
 no long-lived API token stored in the repo):
 
-- Publishing a GitHub **Release** publishes to PyPI.
-- `workflow_dispatch` lets you manually target TestPyPI or PyPI.
+- Publishing a GitHub **Release** would publish to PyPI.
+- `workflow_dispatch` would let you manually target TestPyPI or PyPI.
 
-To enable trusted publishing, add a publisher on both
+**The actual PyPI/TestPyPI upload steps are currently disabled**
+(`if: false`) while the version-bump/release-automation system above is
+still being validated end to end - see
+[AGENTS.md](AGENTS.md#versioning). The build/check steps still run, just
+nothing gets uploaded yet.
+
+To enable trusted publishing once uploads are turned back on, add a
+publisher on both
 [pypi.org](https://pypi.org/manage/account/publishing/) and
 [test.pypi.org](https://test.pypi.org/manage/account/publishing/) pointing
 at this repo, workflow filename (`publish.yml`), and the `pypi` /
@@ -218,7 +231,8 @@ standing:
 
 | Agent | Running Total |
 |---|---|
-| Claude Sonnet 5 | 34 commits (8 deep-dive, 20 mechanical, 1 verification, 4 mixed, 1 config) |
+| Claude Sonnet 5 | 40 commits (10 deep-dive, 23 mechanical, 1 verification, 5 mixed, 1 config) |
+| Dependabot (automated) | 5 commits |
 | GitHub Copilot | 2 commits (1 deep-dive, 1 mixed) |
 | Prefix42 | 1 commit (1 mechanical) |
 
