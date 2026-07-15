@@ -135,10 +135,10 @@ usage:
 
 ## PR description: leaderboard
 
-When drafting a PR description for this repository (e.g. via the `mr`
-skill - this repo is hosted on GitHub, so "PR" throughout, never "MR"),
-append a leaderboard as the LAST section of the description,
-built from the effort notes above:
+When drafting a PR description for this repository - this repo is
+hosted on GitHub, so "PR" throughout, never "MR" - append a leaderboard
+as the LAST section of the description, built from the effort notes
+above:
 
 - **This PR**: aggregate `refs/notes/effort` entries for just the
   commits in this PR's range (`git log --no-merges --notes=effort
