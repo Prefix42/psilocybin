@@ -249,6 +249,25 @@ which fails the PR otherwise - not a suggestion, a blocking check.
   left as a comment) while this version-bump/release-automation system
   is still being worked out. Don't silently re-enable them - that's the
   user's call once they're satisfied with how this works end to end.
+- **Footgun, already hit once:** `release.yml` creates its GitHub
+  Release using the automatic `secrets.GITHUB_TOKEN`. GitHub
+  deliberately does not let events triggered by `GITHUB_TOKEN` start
+  other workflow runs (an anti-recursion safeguard) - so a `release:
+  types: [published]` trigger anywhere else in this repo will never
+  actually fire off the back of it, even though the release genuinely
+  gets created. `publish.yml` used to rely on exactly that trigger and
+  it silently never ran (not even its harmless `build` job) until this
+  was noticed and fixed. The fix in place now: `release.yml` builds and
+  `twine check`s the distribution itself, as a `build` job that runs
+  right after `tag-and-release` (gated on `needs.tag-and-release.outputs.
+  released == 'true'`, so it only runs when a release was actually
+  created, not when `pyproject.toml` changed without a version bump).
+  `publish.yml` no longer listens for `release: published` at all - it's
+  reachable only by manual `workflow_dispatch`. Don't reintroduce a
+  `release: published` trigger expecting it to fire automatically off
+  `release.yml`'s own release - it won't, unless the token used to
+  create that release changes (e.g. a PAT instead of `GITHUB_TOKEN`,
+  which has its own tradeoffs and hasn't been adopted here).
 
 ## PR description: structure and leaderboard
 
