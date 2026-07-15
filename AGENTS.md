@@ -267,6 +267,16 @@ above:
 - Commits with no effort note still count toward the total - tally them
   as "unscoped" rather than silently excluding them, so the running
   total is never quietly undercounted.
+- Commits authored by `dependabot[bot]` - author email containing
+  `49699333+dependabot[bot]@users.noreply.github.com`, Dependabot's
+  fixed GitHub App user ID, consistent across every repo, not just this
+  one - never have an effort note and never will, since Dependabot
+  doesn't participate in this convention. Give these their own row,
+  labeled `Dependabot (automated)`, rather than folding them into
+  "unscoped" - they're a known, identifiable source, not a genuine gap
+  in the log the way an unscoped human/agent commit would be. Still
+  sorted into the table by Running Total like any other row, per the
+  sort rule above.
 - Exclude commits noted `session_scope: bookkeeping` from every count
   and breakdown entirely - not "unscoped", not counted under any
   agent, just left out, as if they were never in the log at all. This
@@ -306,12 +316,17 @@ Example shape:
 |---|---|---|
 | Claude Sonnet 5 | 4 commits (1 deep-dive, 2 mechanical, 1 mixed) | 12 commits (3 deep-dive, 6 mechanical, 2 verification, 1 mixed) |
 | GitHub Copilot | 0 commits | 2 commits (2 mechanical) |
+| Dependabot (automated) | 0 commits | 2 commits |
 | Ada Lovelace | 0 commits | 1 commit (1 config) |
+| unscoped | 0 commits | 1 commit (unscoped) |
 ```
 
 (`Ada Lovelace` above illustrates the "list everyone, even at 0 This PR"
 rule - included because Running Total is nonzero, sorted last because
-it's the smallest.)
+it's the smallest. `Dependabot (automated)` and `unscoped` illustrate
+the difference between a known, identifiable non-participant and a
+genuine gap in the log - both can be nonzero at once, and neither one
+absorbs the other.)
 
 ## Style
 
