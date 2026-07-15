@@ -20,10 +20,22 @@ Before making changes to this repository, review the shared project notes in the
 
 Keep [.agents/notes-for-next-agent.md](.agents/notes-for-next-agent.md)
 accurate proactively, not just as a final step before a session ends.
-Update it as soon as status actually changes - a fix lands, CI goes green
-or red, a loose end gets resolved, a new one appears - rather than
-batching it all up at the end. Treat it as the living source of truth
-for where things currently stand, not a one-time handoff memo.
+
+"Update it as soon as status actually changes" turned out to be too
+vague to actually happen in practice - an entire session's worth of
+work (a whole subsystem built, a real data-loss incident survived,
+several CI fixes) went by without a single update, because there was
+no concrete moment that triggered it. Tie it to checkpoints that
+already happen instead of a vague feeling that "status changed":
+
+- Whenever drafting or regenerating a PR description for this repo.
+- Whenever `AGENTS.md` itself changes - a process/convention shift is
+  exactly the kind of thing this file exists to record.
+- At minimum, once before a session ends - but treat that as the last
+  resort, not the only trigger.
+
+Treat it as the living source of truth for where things currently
+stand, not a one-time handoff memo.
 
 ## Effort log
 
@@ -173,6 +185,41 @@ usage:
   (`+refs/notes/effort:refs/notes/effort`), flag it - see the footgun
   above - and offer the command to fix it, same rule: recommend, never
   run it yourself.
+
+## Versioning
+
+`pyproject.toml`'s `version` field must be bumped in the same PR as any
+change under `src/`, or any change to `pyproject.toml`'s `dependencies`
+or `requires-python` fields specifically - not the whole file. This is
+enforced by CI (the `version-bump` job in `.github/workflows/ci.yml`),
+which fails the PR otherwise - not a suggestion, a blocking check.
+
+- Deliberately scoped narrower than "any `pyproject.toml` change":
+  `dev` extras (ruff, mypy, bandit, etc.) and tool config
+  (`[tool.ruff]`, `[tool.mypy]`, and the like) never affect what
+  `pip install psylocybin` actually installs for an end user, so they
+  don't require a bump - and just as importantly, a blanket whole-file
+  trigger would block every routine dependency-bot PR in this repo,
+  since almost all of its traffic here is dev-tooling bumps, not
+  runtime dependencies.
+- Bump policy (patch/minor/major) is left to judgment - this repo
+  doesn't have a formal semver policy yet, just the requirement that
+  *some* bump happens alongside a triggering change.
+- PR titles must be prefixed with the version currently in
+  `pyproject.toml` at the tip of that PR's branch, formatted as
+  `[X.Y.Z]` - e.g. `[1.0.0] Fix the mutation strategy for negative
+  zero`. Use whatever version is actually there, whether or not this
+  specific PR is the one that bumped it.
+- Merging a PR that changes `pyproject.toml`'s version triggers
+  `.github/workflows/release.yml`, which tags and creates a GitHub
+  Release automatically - see that workflow for exactly how it decides
+  whether a release is actually warranted (it's not just "did the file
+  change").
+- The actual PyPI/TestPyPI publish steps in `publish.yml` are
+  **temporarily disabled** (`if: false`, with the original condition
+  left as a comment) while this version-bump/release-automation system
+  is still being worked out. Don't silently re-enable them - that's the
+  user's call once they're satisfied with how this works end to end.
 
 ## PR description: leaderboard
 
