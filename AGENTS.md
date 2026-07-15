@@ -134,21 +134,42 @@ built from the effort notes above:
   origin/main...HEAD`, or the equivalent base branch) - commit count and
   `session_scope` breakdown, grouped by `agent`.
 - **Running total**: the same aggregation, at the same level of detail
-  (commit count and `session_scope` breakdown per agent), across the
-  entire repository history (`git log --notes=effort --branches`) - not
-  a bare total count. Use `--branches`, not `--all`: `--all` also walks
-  `refs/notes/effort` itself (each `git notes add` creates a commit on
-  that ref), which pollutes the count with the notes ref's own
-  bookkeeping commits rather than real project work. The leaderboard
-  should show cumulative standing across the project at a glance, not
-  just this MR/PR's slice.
+  (commit count and `session_scope` breakdown per agent), across
+  `git log --notes=effort origin/main HEAD` - not a bare total count.
+  This is a union of two specific refs (everything reachable from the
+  real trunk, `origin/main`, or from this PR's own branch), not
+  `--branches` and not `--all`:
+  - `--all` walks `refs/notes/effort` itself (each `git notes add`
+    creates a commit on that ref), polluting the count with the notes
+    ref's own bookkeeping commits rather than real project work.
+  - `--branches` walks *every* local branch indiscriminately. If work
+    happened on some other branch that was abandoned and never merged
+    into `origin/main`, `--branches` would still count it forever as
+    long as that stale branch ref exists locally - `origin/main HEAD`
+    only ever counts the real trunk plus the specific branch being
+    described, so abandoned work that never shipped is never counted.
+  - Use `origin/main`, not local `main`: local `main` can itself be
+    stale if nobody's pulled recently, silently undercounting.
+  - The leaderboard should show cumulative standing across the project
+    at a glance, not just this MR/PR's slice - once this PR merges,
+    `origin/main`'s own history will include it, so this number is a
+    preview of the post-merge total, not a separate, disconnected
+    figure.
+- List every agent that has ever contributed (i.e. appears anywhere in
+  the Running Total column), even if their This MR/PR count is 0 -
+  don't drop a row just because someone didn't touch this particular
+  PR. Sort rows by Running Total, descending (highest cumulative
+  contribution first).
 - Commits with no effort note still count toward the total - tally them
   as "unscoped" rather than silently excluding them, so the running
   total is never quietly undercounted.
-- Omit any row whose count is zero in both columns - an all-zero
-  "unscoped" row (or an all-zero agent row) adds nothing at a glance and
-  just clutters the table. If unscoped is genuinely zero everywhere,
-  leave the row out entirely rather than showing "0 commits | 0 commits".
+- Omit a row only if it is zero in *both* columns - this mainly applies
+  to "unscoped": if every commit has an effort note, there's nothing
+  left to tally there and the row should be dropped entirely rather than
+  showing "0 commits | 0 commits". It essentially never applies to a
+  named agent, since the rule above already keeps every agent with any
+  Running Total history in the table regardless of their This MR/PR
+  count.
 - If `refs/notes/effort` isn't available locally to query (e.g. it was
   never fetched), say so explicitly in the leaderboard section rather
   than omitting it or fabricating numbers.
@@ -173,7 +194,12 @@ Example shape:
 |---|---|---|
 | Claude Sonnet 5 | 4 commits (1 deep-dive, 2 mechanical, 1 mixed) | 12 commits (3 deep-dive, 6 mechanical, 2 verification, 1 mixed) |
 | GitHub Copilot | 0 commits | 2 commits (2 mechanical) |
+| Ada Lovelace | 0 commits | 1 commit (1 config) |
 ```
+
+(`Ada Lovelace` above illustrates the "list everyone, even at 0 This PR"
+rule - included because Running Total is nonzero, sorted last because
+it's the smallest.)
 
 ## Style
 
