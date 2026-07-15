@@ -12,6 +12,8 @@ jobs:
   tag-and-release:
     name: Tag and release on version bump
     runs-on: ubuntu-latest
+    outputs:
+      released: ${{ steps.check.outputs.already_tagged == 'false' }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -41,3 +43,30 @@ jobs:
           gh release create "v${{ steps.version.outputs.version }}" \
             --title "v${{ steps.version.outputs.version }}" \
             --generate-notes
+
+  build:
+    name: Build distribution
+    needs: tag-and-release
+    if: needs.tag-and-release.outputs.released == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - run: pip install build
+
+      - name: Build sdist and wheel
+        run: python -m build
+
+      - name: Verify metadata (twine check)
+        run: |
+          pip install twine
+          twine check dist/*
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist/

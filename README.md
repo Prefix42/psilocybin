@@ -193,15 +193,20 @@ handy as a single branch-protection check.
 `.github/workflows/release.yml` tags and publishes a GitHub Release
 automatically whenever a push to `main` bumps `pyproject.toml`'s version -
 see [AGENTS.md](AGENTS.md#versioning) for the version-bump rule that CI
-enforces on every PR to make this possible.
+enforces on every PR to make this possible. It also builds the sdist/wheel
+and runs `twine check` as a follow-up job right after tagging, rather than
+relying on the newly-created release to trigger a separate workflow: a
+release created with the automatic `GITHUB_TOKEN` deliberately cannot
+trigger other workflow runs (GitHub's anti-recursion safeguard), so a
+`release: published` trigger elsewhere would never actually fire.
 
-`.github/workflows/publish.yml` builds the sdist/wheel and, once
+`.github/workflows/publish.yml` builds the sdist/wheel again and, once
 re-enabled, would publish via
 [PyPI trusted publishing](https://docs.pypi.org/trusted-publishers/) (OIDC,
-no long-lived API token stored in the repo):
-
-- Publishing a GitHub **Release** would publish to PyPI.
-- `workflow_dispatch` would let you manually target TestPyPI or PyPI.
+no long-lived API token stored in the repo) - but only via manual
+`workflow_dispatch`, for an ad hoc publish outside the normal release
+flow. It is *not* triggered automatically by a GitHub Release, for the
+same reason `release.yml` builds its own distribution above.
 
 **The actual PyPI/TestPyPI upload steps are currently disabled**
 (`if: false`) while the version-bump/release-automation system above is
@@ -231,7 +236,7 @@ standing:
 
 | Agent | Running Total |
 |---|---|
-| Claude Sonnet 5 | 40 commits (10 deep-dive, 23 mechanical, 1 verification, 5 mixed, 1 config) |
+| Claude Sonnet 5 | 46 commits (11 deep-dive, 26 mechanical, 1 verification, 7 mixed, 1 config) |
 | Dependabot (automated) | 5 commits |
 | GitHub Copilot | 2 commits (1 deep-dive, 1 mixed) |
 | Prefix42 | 1 commit (1 mechanical) |
