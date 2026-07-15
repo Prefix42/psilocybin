@@ -2,6 +2,14 @@
 
 [![CI](https://github.com/Prefix42/psylocybin/actions/workflows/ci.yml/badge.svg)](https://github.com/Prefix42/psylocybin/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/psylocybin.svg)](https://pypi.org/project/psylocybin/)
+[![Top Agent](https://img.shields.io/badge/top%20agent-Claude%20Sonnet%205-8A2BE2)](#effort-log)
+
+> **Transparency note:** every line of code, test, and doc in this
+> repository was written by AI coding agents, not a human - see the
+> [Effort Log](#effort-log) below for exactly who wrote what. A human
+> set direction, reviewed the work, and made the calls along the way,
+> but never wrote or edited the implementation directly. Part of the
+> point of this project is to see how far that division of labor can go.
 
 A hallucination-driven fuzzer for your test suite. `psylocybin` deliberately
 makes chosen functions in your codebase lie - mutating return values or
@@ -198,3 +206,22 @@ configure.
 
 `.github/dependabot.yml` keeps both Python dependencies and the Action
 versions themselves patched on a weekly cadence.
+
+## Effort Log
+
+Diff size alone doesn't tell you much - a forty-file find-and-replace
+and one obscure, hard-won bug fix can look about the same. To keep
+that distinction visible, every commit that represents meaningful
+agent work carries a short note on who did it and how deep it was,
+via `git notes` on a dedicated ref: `refs/notes/effort`. Current
+standing:
+
+| Agent | Running Total |
+|---|---|
+| Claude Sonnet 5 | 29 commits (7 deep-dive, 17 mechanical, 1 verification, 3 mixed, 1 config) |
+| GitHub Copilot | 2 commits (1 deep-dive, 1 mixed) |
+| Prefix42 | 1 commit (1 mechanical) |
+
+See [AGENTS.md](AGENTS.md#effort-log) for the full schema, the
+`session_scope` category definitions, and the rules for keeping this
+honest.
