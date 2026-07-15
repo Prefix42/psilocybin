@@ -1,0 +1,9 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Straightened em dashes to hyphens in guidelines.py's docstring, matching the repo's no-em-dash style rule.",
+  "verification": "None recorded beyond the diff itself.",
+  "confidence": "estimated",
+  "estimated_by": "Claude Sonnet 5"
+}
