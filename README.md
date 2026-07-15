@@ -1,19 +1,19 @@
 # psylocybin
 
-[![CI](https://github.com/OWNER/psylocybin/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/psylocybin/actions/workflows/ci.yml)
+[![CI](https://github.com/Prefix42/psylocybin/actions/workflows/ci.yml/badge.svg)](https://github.com/Prefix42/psylocybin/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/psylocybin.svg)](https://pypi.org/project/psylocybin/)
 
 A hallucination-driven fuzzer for your test suite. `psylocybin` deliberately
-makes chosen functions in your codebase lie — mutating return values or
-raising unexpected exceptions — so you can see whether the surrounding code
+makes chosen functions in your codebase lie - mutating return values or
+raising unexpected exceptions - so you can see whether the surrounding code
 survives it. It's built to plug straight into `pytest`.
 
 Two roles, borrowed from how a psychedelic trip is actually run safely:
 
-- **`Psychonaut`** — takes the trip. It wraps target callables (given as
+- **`Psychonaut`** - takes the trip. It wraps target callables (given as
   dotted import paths) and, at a configured intensity, hallucinates instead
   of behaving normally.
-- **`TripSitter`** — watches over the trip. It enforces the `Guidelines` you
+- **`TripSitter`** - watches over the trip. It enforces the `Guidelines` you
   configure (max duration, max hallucination count, which exceptions are
   acceptable, which targets are off-limits), and *guarantees* the codebase
   is restored to normal when the trip ends, whether it ended cleanly or not.
@@ -48,8 +48,8 @@ print(sitter.report.summary())
 assert not sitter.report.bad_trip
 ```
 
-If a guideline is breached — too many hallucinations, the trip ran too long,
-or an exception escaped that wasn't on the allowed list — the `with`
+If a guideline is breached - too many hallucinations, the trip ran too long,
+or an exception escaped that wasn't on the allowed list - the `with`
 block raises `BadTripError` on exit. The target callables are *always*
 unpatched first, regardless of outcome, so a bad trip never leaves your
 codebase in a hallucinating state.
@@ -90,24 +90,24 @@ def test_order_flow():
 ## Hallucination modes
 
 `Guidelines.mode` controls *how many* hallucinations a trip can produce.
-`intensity` always means the same thing — the probability that any given
-eligible call hallucinates — but what's "eligible" depends on the mode:
+`intensity` always means the same thing - the probability that any given
+eligible call hallucinates - but what's "eligible" depends on the mode:
 
-- **`"per_call"`** (default) — every call to a target is independently
+- **`"per_call"`** (default) - every call to a target is independently
   eligible for the entire trip. At `intensity=0.3`, roughly 30% of *all*
   calls hallucinate, for as long as the trip runs. Use this to test
-  resilience against ongoing, repeated unreliability — e.g. a flaky
+  resilience against ongoing, repeated unreliability - e.g. a flaky
   downstream service that misbehaves on and off throughout a whole request.
 
   ```python
   guidelines = Guidelines(intensity=0.3, mode="per_call", seed=1)
   ```
 
-- **`"single"`** — at most one hallucination happens for the *whole* trip.
+- **`"single"`** - at most one hallucination happens for the *whole* trip.
   `intensity` is the probability any given call is the one that
   hallucinates; once it's happened, every later call in the trip behaves
   completely normally, no matter the intensity. Use this to test
-  resilience against a single, isolated glitch — e.g. one dropped
+  resilience against a single, isolated glitch - e.g. one dropped
   connection or one bad response in an otherwise-healthy run.
 
   ```python
@@ -117,17 +117,17 @@ eligible call hallucinates — but what's "eligible" depends on the mode:
   ```
 
 A fresh trip (a new `with sitter:` block after `sitter.guide(...)`) always
-starts sober again — `"single"` mode's one-hallucination budget resets
+starts sober again - `"single"` mode's one-hallucination budget resets
 each time a trip begins, it does not carry over across trips.
 
 ## What counts as a hallucination
 
 For a given target call selected to hallucinate, `Psychonaut` picks one of:
 
-- **Return mutation** — the real return value is computed, then perturbed
+- **Return mutation** - the real return value is computed, then perturbed
   (booleans flipped, numbers nudged, strings reversed/replaced, collections
   emptied, `None` replaced with a truthy surprise).
-- **Exception injection** — a random exception from the configured pool
+- **Exception injection** - a random exception from the configured pool
   (default: `ValueError`, `TypeError`, `RuntimeError`, `KeyError`,
   `IndexError`) is raised instead of the function running at all.
 
@@ -137,7 +137,7 @@ kind, and detail, so a bad trip is fully explainable after the fact.
 ## Design notes
 
 - Targets are patched with `unittest.mock.patch(..., autospec=True)`, so
-  only existing, importable callables can be guided — you can't hallucinate
+  only existing, importable callables can be guided - you can't hallucinate
   something that isn't there.
 - `TripSitter.__exit__` unpatches everything *before* evaluating guidelines,
   so a codebase is never left in a "tripping" state, even when a
@@ -145,7 +145,7 @@ kind, and detail, so a bad trip is fully explainable after the fact.
 - `forbidden_targets` is checked at `guide()` time, before any patching
   happens, so it can't accidentally be bypassed by a bad trip.
 - `mode="single"` is enforced inside `Psychonaut` itself (not by
-  `TripSitter` aborting after the fact) — once the one hallucination has
+  `TripSitter` aborting after the fact) - once the one hallucination has
   fired, later calls are never even rolled against `intensity`, they just
   behave normally. The one-hallucination budget resets every time a new
   trip starts (`with sitter:`), it isn't shared across separate trips run
@@ -172,7 +172,7 @@ pip-audit                                      # dependency vulnerability scan
 
 | Job | Tool | Purpose |
 |---|---|---|
-| `test` | `pytest` + `pytest-cov` | tests across Python 3.9–3.13, with coverage |
+| `test` | `pytest` + `pytest-cov` | tests across Python 3.9-3.13, with coverage |
 | `lint` | `ruff` | style and lint issues |
 | `typecheck` | `mypy` | static type checking |
 | `complexity` | `radon` / `xenon` | cyclomatic complexity & maintainability ("code smell") gate |
@@ -193,7 +193,7 @@ To enable trusted publishing, add a publisher on both
 [pypi.org](https://pypi.org/manage/account/publishing/) and
 [test.pypi.org](https://test.pypi.org/manage/account/publishing/) pointing
 at this repo, workflow filename (`publish.yml`), and the `pypi` /
-`testpypi` GitHub environments referenced in the workflow — no secrets to
+`testpypi` GitHub environments referenced in the workflow - no secrets to
 configure.
 
 `.github/dependabot.yml` keeps both Python dependencies and the Action
