@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "deep-dive",
+  "files_touched": 1,
+  "summary": "Found while actually computing leaderboard numbers for the first MR: AGENTS.md's documented running-total command (git log --notes=effort --all) pulls in refs/notes/effort's own bookkeeping commits (each git notes add creates one), inflating the count from 29 real commits to 33. Fixed the instructions to use --branches instead, which only walks refs/heads/*.",
+  "verification": "Ran both git log --branches --oneline | wc -l (29) and git log --all --format='%H %d' comparisons before and after the fix, and separately confirmed via git log refs/notes/effort --oneline that the 4 extra commits were exactly the notes ref's own 'Notes added by git notes add' commits.",
+  "uncommitted_work": ""
+}
