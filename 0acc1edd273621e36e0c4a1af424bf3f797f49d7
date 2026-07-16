@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Opus 4.8",
+  "session_scope": "bookkeeping",
+  "files_touched": 1,
+  "summary": "Resynced the README Effort Log table to add the Claude Opus 4.8 row after this session's 12 review commits were noted on refs/notes/effort.",
+  "verification": "Row totals match the effort notes just pushed (2 deep-dive, 7 mixed, 1 mechanical, 2 config); Top Agent badge unchanged since Claude Sonnet 5 still leads.",
+  "confidence": "self"
+}
