@@ -28,8 +28,8 @@ Guidance for any agent producing visual or branded material (docs, diagrams, soc
 - README header: use the lockup with automatic theme switching:
   ```html
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset=".assets/psylocybin-lockup-dark.png">
-    <img src=".assets/psylocybin-lockup-light.png" alt="psylocybin" width="320">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/psylocybin-lockup-dark.png">
+    <img src="assets/psylocybin-lockup-light.png" alt="psylocybin" width="320">
   </picture>
   ```
 - Social preview (repo settings): `psylocybin-og.png`.
@@ -46,9 +46,12 @@ Guidance for any agent producing visual or branded material (docs, diagrams, soc
 - Use the full gradient as a text color for body copy or large surfaces.
 - Literal mushroom/pill/drug imagery, emoji, or trippy stock textures.
 
-## Existing assets (repo `.assets/`)
+## Existing assets (repo `assets/`)
 - `psylocybin-icon.svg`, `favicon.svg`
 - `psylocybin-icon-mono-black.svg`, `psylocybin-icon-mono-white.svg` — single-color contexts only (terminals, stickers, print); never recolored beyond ink/white
 - `favicon-16.png`, `favicon-32.png`, `favicon-180.png` (apple-touch)
 - `psylocybin-lockup-dark.png`, `psylocybin-lockup-light.png`
-- `psylocybin-icon-dark.png`, `psylocybin-og.png` (1200×630 social preview)
+- `psylocybin-icon-dark.png`, `psylocybin-og.png` (2400×1260, GitHub social preview)
+
+## Gotcha for asset regeneration
+When rasterizing the mark from HTML/SVG, the `<linearGradient>` def MUST live inside the same `<svg>` being captured — a gradient referenced across elements renders the rings black in exported crops.
