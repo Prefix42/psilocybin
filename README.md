@@ -1,8 +1,8 @@
 # psylocybin
 
 [![CI](https://github.com/Prefix42/psylocybin/actions/workflows/ci.yml/badge.svg)](https://github.com/Prefix42/psylocybin/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/psylocybin.svg)](https://pypi.org/project/psylocybin/)
-[![Top Agent](https://img.shields.io/badge/top%20agent-Claude%20Sonnet%205-8A2BE2)](#effort-log)
+[![PyPI](https://img.shields.io/pypi/v/psylocybin.svg?logo=pypi&logoColor=white)](https://pypi.org/project/psylocybin/)
+[![Top Agent](https://img.shields.io/badge/top%20agent-Claude%20Sonnet%205-8A2BE2?logo=claude&logoColor=white)](#effort-log)
 
 > **Transparency note:** every line of code, test, and doc in this
 > repository was written by AI coding agents, not a human - see the
@@ -166,12 +166,14 @@ Install the dev extras and run the same checks CI runs:
 ```bash
 pip install -e ".[dev]"
 
-pytest --cov=psylocybin                       # tests + coverage
-ruff check . && ruff format --check .         # lint / style
-mypy src                                       # type check
-radon cc src -a -s && xenon --max-absolute B --max-modules A --max-average A src  # complexity
-bandit -c pyproject.toml -r src               # static security analysis
-pip-audit                                      # dependency vulnerability scan
+pytest --cov=psylocybin                                     # tests + coverage
+ruff check . && ruff format --check .                       # lint / style
+mypy src                                                    # type check
+radon cc src -a -s                                          # complexity: cyclomatic
+radon mi src -s                                             # complexity: maintainability index
+xenon --max-absolute B --max-modules A --max-average A src  # complexity: fail on excess
+bandit -c pyproject.toml -r src                             # static security analysis
+pip-audit                                                   # dependency vulnerability scan
 ```
 
 ## CI/CD
@@ -186,6 +188,7 @@ pip-audit                                      # dependency vulnerability scan
 | `complexity` | `radon` / `xenon` | cyclomatic complexity & maintainability ("code smell") gate |
 | `security` | `bandit` + `pip-audit` | static security analysis + dependency CVE scan |
 | `secrets` | `gitleaks` | scans the diff/history for committed credentials |
+| `version-bump` | (inline shell check) | requires a `pyproject.toml` version bump when `src/` or runtime deps change (PR-only) |
 
 An `all-checks` job aggregates the above into a single required status,
 handy as a single branch-protection check.
