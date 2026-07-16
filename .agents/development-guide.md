@@ -9,18 +9,8 @@ and style rules there are enforced (some by CI) and are not optional.
 
 ## Quick start
 
-The canonical local setup mirrors CI:
-
-```bash
-pip install -e ".[dev]"
-
-pytest --cov=psylocybin                        # tests + coverage
-ruff check . && ruff format --check .          # lint / style
-mypy src                                        # type check
-radon cc src -a -s && xenon --max-absolute B --max-modules A --max-average A src  # complexity
-bandit -c pyproject.toml -r src                 # static security analysis
-pip-audit                                       # dependency vulnerability scan
-```
+The canonical local setup mirrors CI. See the
+[README](../README.md#development) for the commands and tooling needed.
 
 As of this review all of the above pass (see
 [project-status.md](project-status.md) for the exact results).
