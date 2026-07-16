@@ -1,3 +1,11 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".assets/psylocybin-lockup-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset=".assets/psylocybin-lockup-light.png">
+    <img alt="psylocybin" src=".assets/psylocybin-lockup-light.png" width="320">
+  </picture>
+</p>
+
 # psylocybin
 
 [![CI](https://github.com/Prefix42/psylocybin/actions/workflows/ci.yml/badge.svg)](https://github.com/Prefix42/psylocybin/actions/workflows/ci.yml)
