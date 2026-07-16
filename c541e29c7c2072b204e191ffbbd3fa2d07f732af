@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Opus 4.8",
+  "session_scope": "mixed",
+  "files_touched": 1,
+  "summary": "Recorded in the handoff that AGENTS.md gained the effort-ref push exception and the earlier pruning rule, per AGENTS.md's whenever-AGENTS.md-changes checkpoint.",
+  "verification": "Documentation only; mirrors the AGENTS.md change made the same session.",
+  "confidence": "self"
+}
