@@ -1,8 +1,8 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/psylocybin-lockup-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="assets/psylocybin-lockup-light.png">
-    <img alt="psylocybin" src="assets/psylocybin-lockup-light.png" width="320">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Prefix42/psylocybin/main/assets/psylocybin-lockup-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Prefix42/psylocybin/main/assets/psylocybin-lockup-light.png">
+    <img alt="psylocybin" src="https://raw.githubusercontent.com/Prefix42/psylocybin/main/assets/psylocybin-lockup-light.png" width="320">
   </picture>
 </p>
 

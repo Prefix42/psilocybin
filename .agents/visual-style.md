@@ -25,11 +25,16 @@ Guidance for any agent producing visual or branded material (docs, diagrams, soc
 - Tagline when needed: "The psychedelic way to test."
 
 ## README & GitHub usage
-- README header: use the lockup with automatic theme switching:
+- README header: use the lockup with automatic theme switching, via **absolute**
+  `raw.githubusercontent.com` URLs, not repo-relative paths - `pyproject.toml`
+  sets `readme = "README.md"`, so this exact file also becomes the PyPI
+  project page's long description, and PyPI renders it standalone with no
+  repo context to resolve a relative path against. A relative path looks
+  fine on GitHub and silently breaks on PyPI:
   ```html
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/psylocybin-lockup-dark.png">
-    <img src="assets/psylocybin-lockup-light.png" alt="psylocybin" width="320">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Prefix42/psylocybin/main/assets/psylocybin-lockup-dark.png">
+    <img src="https://raw.githubusercontent.com/Prefix42/psylocybin/main/assets/psylocybin-lockup-light.png" alt="psylocybin" width="320">
   </picture>
   ```
 - Social preview (repo settings): `psylocybin-og.png`.
