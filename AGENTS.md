@@ -37,6 +37,32 @@ already happen instead of a vague feeling that "status changed":
 Treat it as the living source of truth for where things currently
 stand, not a one-time handoff memo.
 
+**Prune it: the notes are a transfer, not an archive.** This file exists to
+carry forward what the next session still needs - not to accumulate a running
+log of everything that was ever true. Keep it lean by removing entries as
+they stop being actionable, in the same session you resolve them:
+
+- When an item is done, or its durable content now lives in a permanent doc
+  (e.g. `.agents/project-status.md`,
+  `.agents/critical-issues-and-fixes.md`,
+  `.agents/architecture-and-patterns.md`), delete it from the handoff notes.
+  If the fact is worth keeping, make sure it is captured in that permanent
+  doc first - the handoff file points at the durable docs, it does not
+  duplicate them.
+- Prune at the granularity of what actually resolved. If an entry or section
+  lists several things and only some are handled, remove those and leave the
+  rest - do not clear a whole section because part of it is done, and do not
+  keep a whole section alive because one item lingers.
+- When nothing is left outstanding, the file should say exactly that. A short
+  all-clear - e.g. "Nothing to hand off; current state is in
+  `.agents/project-status.md` and the rest of `.agents/`" - is the correct
+  resting state, not a pile of stale, already-done entries. A handoff file
+  with no open actions is a success, not a gap to fill in.
+
+Rule of thumb: if an entry describes something already true and stable, it
+belongs in a permanent doc; if it describes something the next agent must
+still do, decide, or watch, it belongs here - and only until it is handled.
+
 ## Effort log
 
 Commit diffs alone don't distinguish a mechanical sweep (e.g. a
