@@ -1,3 +1,11 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Prefix42/psylocybin/main/assets/psylocybin-lockup-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Prefix42/psylocybin/main/assets/psylocybin-lockup-light.png">
+    <img alt="psylocybin" src="https://raw.githubusercontent.com/Prefix42/psylocybin/main/assets/psylocybin-lockup-light.png" width="320">
+  </picture>
+</p>
+
 # psylocybin
 
 [![CI](https://github.com/Prefix42/psylocybin/actions/workflows/ci.yml/badge.svg)](https://github.com/Prefix42/psylocybin/actions/workflows/ci.yml)
@@ -239,9 +247,10 @@ standing:
 
 | Agent | Running Total |
 |---|---|
-| Claude Sonnet 5 | 53 commits (9 mixed, 30 mechanical, 12 deep-dive, 1 verification, 1 config) |
+| Claude Sonnet 5 | 59 commits (10 mixed, 34 mechanical, 13 deep-dive, 1 verification, 1 config) |
 | Claude Opus 4.8 | 12 commits (2 deep-dive, 7 mixed, 1 mechanical, 2 config) |
 | Dependabot (automated) | 5 commits |
+| Claude Fable 5 | 4 commits (2 mechanical, 2 mixed) |
 | GitHub Copilot | 2 commits (1 deep-dive, 1 mixed) |
 | Claude Haiku 4.5 | 2 commits (2 mechanical) |
 | Prefix42 | 1 commit (1 mechanical) |
