@@ -38,9 +38,9 @@ pip install psylocybin
 from psylocybin import Guidelines, TripSitter
 
 guidelines = Guidelines(
-    seed=42,                     # reproducible trip
+    seed=42,                      # reproducible trip
     intensity=0.3,                # 30% of eligible calls hallucinate
-    mode="per_call",               # or "single" -- see "Hallucination modes" below
+    mode="per_call",              # or "single" -- see "Hallucination modes" below
     max_hallucinations=50,        # bad trip if exceeded
     max_duration_seconds=10,      # bad trip if exceeded
     allowed_exceptions=(ValueError, KeyError),
@@ -167,10 +167,10 @@ Install the dev extras and run the same checks CI runs:
 pip install -e ".[dev]"
 
 pytest --cov=psylocybin                       # tests + coverage
-ruff check . && ruff format --check .          # lint / style
+ruff check . && ruff format --check .         # lint / style
 mypy src                                       # type check
 radon cc src -a -s && xenon --max-absolute B --max-modules A --max-average A src  # complexity
-bandit -c pyproject.toml -r src                # static security analysis
+bandit -c pyproject.toml -r src               # static security analysis
 pip-audit                                      # dependency vulnerability scan
 ```
 
@@ -240,6 +240,7 @@ standing:
 | Claude Opus 4.8 | 12 commits (2 deep-dive, 7 mixed, 1 mechanical, 2 config) |
 | Dependabot (automated) | 5 commits |
 | GitHub Copilot | 2 commits (1 deep-dive, 1 mixed) |
+| Claude Haiku 4.5 | 2 commits (2 mechanical) |
 | Prefix42 | 1 commit (1 mechanical) |
 
 See [AGENTS.md](AGENTS.md#effort-log) for the full schema, the
