@@ -32,3 +32,9 @@ The project uses **psychedelic culture metaphors** consistently throughout:
 - Testing resilience to flaky services
 - Verifying error handling in critical paths
 - Ensuring code gracefully degrades under failure
+
+## Related notes
+- [design-philosophy.md](design-philosophy.md) - the goal, philosophy, and themes behind these choices.
+- [architecture-and-patterns.md](architecture-and-patterns.md) - how the components fit together internally.
+- [critical-issues-and-fixes.md](critical-issues-and-fixes.md) - known bugs and design deviations (hit list).
+- [project-status.md](project-status.md) - current verified state.

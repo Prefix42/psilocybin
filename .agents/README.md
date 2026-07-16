@@ -1,67 +1,89 @@
-# Copilot Handoff Notes
+# Agent Handoff Notes
 
-This directory contains documentation and handoff notes for collaborative development between agents and contributors.
+Shared documentation and handoff notes for agents and contributors working
+on psylocybin. Start here, then read the file most relevant to your task.
 
-## Files in this Directory
+> Correction (2026-07-15): an earlier version of this index described
+> `critical-issues-and-fixes.md`, `architecture-and-patterns.md`,
+> `development-guide.md`, and `project-status.md` as complete (e.g. "4 HIGH
+> severity issues with code examples") and claimed a code review was done
+> and the project was "ready for deployment." Those four files were in fact
+> empty placeholders and no such review was recorded. They have now been
+> filled in by a real review (see
+> [code-review-2026-07-15.md](code-review-2026-07-15.md)), and this index
+> reflects what the files actually contain.
+
+## Files in this directory
 
 ### project-overview.md
-**Project purpose, themes, and core architecture**
-- What psylocybin does (hallucination-driven fuzzer)
-- Psychedelic metaphor system (Trip, Psychonaut, TripSitter, etc.)
-- Core components overview
-- Tech stack and use cases
+Project purpose, the psychedelic metaphor system (Trip, Psychonaut,
+TripSitter, Guidelines, TripReport), core components, tech stack, and use
+cases. The quick "what is this."
 
-### critical-issues-and-fixes.md
-**Reference guide for bugs that were found and how they were fixed**
-- 4 HIGH severity issues with code examples
-- 5 MEDIUM severity issues (including NaN/infinity edge cases)
-- Testing approach and lessons learned
-- Important patterns for edge case testing
+### design-philosophy.md
+The "why": the tool's goal and the project's AI-authorship meta-goal, the
+safety-first / metaphor-as-API / reproducibility / defense-in-depth
+philosophy, and the meta-process themes (effort log, leaderboard, living
+handoff notes). Directly covers goal, design philosophy, and themes.
 
 ### architecture-and-patterns.md
-**Deep dive into design patterns and how the code is organized**
-- Context manager pattern (why patches always restore)
-- State management lifecycle
-- Hallucination modes (per_call vs single)
-- Key invariants to maintain
-- Future enhancement points
+The "how": module map, the nested-context-manager and mock/autospec
+patterns, where the RNG is spent, the trip state lifecycle, the two
+hallucination modes internally, the invariants to maintain, and extension
+points.
+
+### critical-issues-and-fixes.md
+The review hit list: bugs, fragilities, and design/doc deviations found on
+2026-07-15, each with severity, location, evidence, and a recommended fix.
+Includes test-coverage gaps. Nothing here has been fixed yet.
 
 ### development-guide.md
-**Practical guide for contributing to the project**
-- Quick start commands
-- File structure and ownership
-- Common development tasks
-- Critical code paths to understand
-- Debugging tips and pitfalls to avoid
+Practical contributor guide: quick start (and how to bootstrap when
+`pip`/`venv` are missing), file structure and ownership, common tasks,
+critical code paths, debugging tips, and the pre-PR checklist.
 
 ### project-status.md
-**Current state, commit history, and test results**
-- What's been completed
-- Commit history with what was fixed
-- Code metrics (19 tests, 100% pass rate)
-- Deployment readiness
-- How to continue work on different types of tasks
+Evergreen snapshot: verified gate results, what is done, open items, coverage
+gaps, and deployment readiness. For the live session-by-session handoff, see
+notes-for-next-agent.md instead.
 
-## How to Use This Directory
+### code-review-2026-07-15.md
+The dated record of the review that produced most of the above: scope,
+method, and probe evidence.
 
-### For Claude or New Contributors
-1. Start with **project-overview.md** to understand what this project does
-2. Read **critical-issues-and-fixes.md** to know what pitfalls to avoid
-3. Reference **architecture-and-patterns.md** when making design decisions
-4. Use **development-guide.md** when adding new features or fixing bugs
-5. Check **project-status.md** for current state and next steps
+### notes-for-next-agent.md
+The living, session-by-session handoff. Per AGENTS.md this is the source of
+truth for where things currently stand; keep it current proactively.
 
-### For Handoff Notes
-- Add notes about work completed in the relevant file or create a `NOTES.md` for current session
-- Use clear headers with dates if tracking work across sessions
-- Include specific file paths and line numbers for bugs/features
-- Update project-status.md after significant work
+## How to use this directory
 
-## Current Project State
-- [x] All 19 tests passing
-- [x] 4 HIGH severity issues fixed
-- [x] 5 MEDIUM severity issues fixed
-- [x] Code review complete
-- [x] Ready for PR or deployment
+1. **project-overview.md** and **design-philosophy.md** - what it is and why.
+2. **architecture-and-patterns.md** - how it works, before changing internals.
+3. **critical-issues-and-fixes.md** - what is known-broken or fragile, before
+   you touch `Psychonaut`/`TripSitter`.
+4. **development-guide.md** - setup, tasks, and pitfalls while working.
+5. **project-status.md** / **notes-for-next-agent.md** - current state and
+   the latest handoff.
 
-See **project-status.md** for full details.
+Also read [AGENTS.md](../AGENTS.md) for the enforced conventions (versioning,
+effort log, commit authorship, PR/leaderboard structure, style).
+
+## For handoff notes
+
+Keep [notes-for-next-agent.md](notes-for-next-agent.md) current - it is the
+single living handoff doc (do not start a separate `NOTES.md`). Tie updates
+to the checkpoints AGENTS.md lists (drafting a PR, changing AGENTS.md, before
+a session ends). Use clear headers, absolute dates, and specific file
+paths / line numbers for anything actionable.
+
+## Current project state (2026-07-15)
+
+- [x] Suite green: 19 tests pass; ruff / mypy / bandit / xenon all clean.
+- [x] Full review completed and documented (this directory).
+- [ ] Open: 1 HIGH (H1 patch-leak) + several MEDIUM/LOW items - see
+      [critical-issues-and-fixes.md](critical-issues-and-fixes.md). None
+      fixed yet.
+- [ ] Not publish-ready by design: uploads disabled, `__version__` stale
+      (M1), no `LICENSE` (L5).
+
+See [project-status.md](project-status.md) for the full picture.

@@ -37,6 +37,32 @@ already happen instead of a vague feeling that "status changed":
 Treat it as the living source of truth for where things currently
 stand, not a one-time handoff memo.
 
+**Prune it: the notes are a transfer, not an archive.** This file exists to
+carry forward what the next session still needs - not to accumulate a running
+log of everything that was ever true. Keep it lean by removing entries as
+they stop being actionable, in the same session you resolve them:
+
+- When an item is done, or its durable content now lives in a permanent doc
+  (e.g. `.agents/project-status.md`,
+  `.agents/critical-issues-and-fixes.md`,
+  `.agents/architecture-and-patterns.md`), delete it from the handoff notes.
+  If the fact is worth keeping, make sure it is captured in that permanent
+  doc first - the handoff file points at the durable docs, it does not
+  duplicate them.
+- Prune at the granularity of what actually resolved. If an entry or section
+  lists several things and only some are handled, remove those and leave the
+  rest - do not clear a whole section because part of it is done, and do not
+  keep a whole section alive because one item lingers.
+- When nothing is left outstanding, the file should say exactly that. A short
+  all-clear - e.g. "Nothing to hand off; current state is in
+  `.agents/project-status.md` and the rest of `.agents/`" - is the correct
+  resting state, not a pile of stale, already-done entries. A handoff file
+  with no open actions is a success, not a gap to fill in.
+
+Rule of thumb: if an entry describes something already true and stable, it
+belongs in a permanent doc; if it describes something the next agent must
+still do, decide, or watch, it belongs here - and only until it is handled.
+
 ## Effort log
 
 Commit diffs alone don't distinguish a mechanical sweep (e.g. a
@@ -131,9 +157,19 @@ usage:
 - The `effort` ref is not fetched or pushed by default - it lives on a
   separate ref that plain `git fetch`/`git push` ignore. To sync it
   explicitly: `git fetch origin refs/notes/effort:refs/notes/effort` /
-  `git push origin refs/notes/effort:refs/notes/effort`. This is a
-  deliberate choice to avoid silently changing anyone's git config;
-  run these manually (or ask the user before an agent pushes).
+  `git push origin refs/notes/effort:refs/notes/effort`.
+- **Pushing `refs/notes/effort` is an explicit exception to the usual "ask
+  the user before an agent pushes" rule - an agent may push it freely,
+  without asking first.** This ref is the effort log's own dedicated ref,
+  holding nothing but effort notes, and each agent maintains its own entries
+  on it - so adding a note and chaining its push (per the footgun rule
+  below) is the intended, self-service workflow and needs no separate
+  approval. Keep the exception narrow: it covers pushing `refs/notes/effort`
+  and nothing else. Pushing any other ref (a branch, a tag, a different
+  notes ref) still follows the normal rule of asking the user first. It also
+  does not extend to `git config`: setting up or fixing the push/fetch
+  refspec stays the user's to run, since agents never run `git config`
+  themselves (see the startup check below).
 - **Known footgun, confirmed in practice, not hypothetical, and it took
   real effort to pin down**: something in this environment (most likely
   an IDE's automatic background fetch) periodically force-updates
