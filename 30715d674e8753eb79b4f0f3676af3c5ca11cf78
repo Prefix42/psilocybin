@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Fixed two stale line-anchor links in .agents/critical-issues-and-fixes.md that pointed at the wrong README.md lines after the README drifted by 2 lines since the citations were written.",
+  "verification": "Cross-checked the cited phrases (\"truthy surprise\", \"collections emptied\") against the current README.md line numbers directly.",
+  "confidence": "self"
+}
