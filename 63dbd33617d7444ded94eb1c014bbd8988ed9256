@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "deep-dive",
+  "files_touched": 2,
+  "summary": "Identified that the new logo's relative asset paths would render fine on GitHub but break on the PyPI project page (pyproject.toml's readme field makes README.md double as the PyPI long description, which Warehouse renders standalone with no repo context to resolve a relative path against). Fixed README.md to use absolute raw.githubusercontent.com URLs and documented the gotcha in visual-style.md.",
+  "verification": "Reasoned through how PyPI's Warehouse renders an uploaded README versus GitHub's repo-relative rendering; confirmed the existing badges already used absolute URLs while the new picture element was the first relative-path content in the file.",
+  "confidence": "self"
+}
