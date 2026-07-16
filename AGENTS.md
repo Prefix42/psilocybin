@@ -151,6 +151,7 @@ usage:
   git commit --allow-empty -m "..."
   git notes --ref=effort add -F entry.json HEAD
   ```
+
 - To read effort notes: `git log --notes=effort --format='%H%n%N'` (or
   `git notes --ref=effort show <sha>` for one commit). Prefer asking an
   agent to pull and summarize these rather than reading raw JSON by hand.
@@ -236,7 +237,12 @@ fire. Tie README updates to checkpoints that already happen:
   description: structure and leaderboard" below) and its Running Total
   differs from what's currently in the README's Effort Log table -
   update the table (and the Top Agent badge, if the top agent changed)
-  in that same PR, not a follow-up.
+  in that same PR, not a follow-up. The badge's `logo` query param (a
+  shields.io/simple-icons slug, e.g. `claude`) names an icon for the
+  specific top agent, not just a color - if the new top agent is a
+  different product or vendor, swap the slug to match (e.g.
+  `githubcopilot` for GitHub Copilot) rather than leaving the old badge's
+  icon under a new label.
 - Whenever a workflow file under `.github/workflows/` is added, removed,
   or has its trigger/behavior meaningfully changed (e.g. a job disabled
   or re-enabled) - update the CI/CD section in the same PR, so the
