@@ -252,6 +252,7 @@ standing:
 | Dependabot (automated) | 5 commits |
 | GitHub Copilot | 2 commits (1 deep-dive, 1 mixed) |
 | Claude Haiku 4.5 | 2 commits (2 mechanical) |
+| Claude Fable 5 | 2 commits (1 mixed, 1 mechanical) |
 | Prefix42 | 1 commit (1 mechanical) |
 
 See [AGENTS.md](AGENTS.md#effort-log) for the full schema, the
