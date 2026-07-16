@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "bookkeeping",
+  "files_touched": 1,
+  "summary": "Added a Claude Fable 5 row (2 commits: 1 mixed, 1 mechanical) to the README Effort Log table, the first appearance of that agent in this repo's history, per AGENTS.md's pre-PR README-sync check.",
+  "verification": "Recomputed the Running Total directly from refs/notes/effort over origin/main HEAD per AGENTS.md's exact aggregation rules and confirmed it matches the new table.",
+  "confidence": "self"
+}
