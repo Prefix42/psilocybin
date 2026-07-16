@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Wired the new .assets/ lockup logo into the top of README.md using a <picture> element that switches between the light and dark PNG based on the viewer's color scheme.",
+  "verification": "Confirmed both lockup PNGs share the same aspect ratio (638x214) by reading their PNG headers directly.",
+  "confidence": "self"
+}
