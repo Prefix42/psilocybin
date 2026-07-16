@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Opus 4.8",
+  "session_scope": "deep-dive",
+  "files_touched": 1,
+  "summary": "Filled the empty critical-issues placeholder with the full review hit list: 1 HIGH (non-atomic Psychonaut.__enter__ patch-leak), 5 MEDIUM, 12 LOW, plus doc-integrity issues and coverage gaps, each with severity, location, evidence, and a recommended fix.",
+  "verification": "Reproduced H1 (a failed multi-target enter leaves the first target patched and actively hallucinating), the float-mutation no-ops for 0.0/-0.0/inf, and the version skew; full toolchain green (pytest 19/19, ruff/mypy/bandit clean, xenon passes).",
+  "confidence": "self"
+}
