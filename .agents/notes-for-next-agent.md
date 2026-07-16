@@ -1,6 +1,48 @@
 # Handoff: full review done - suite green, but real open issues found
 
-## Latest session (2026-07-16): documentation-accuracy pass, PR #13 authorship fixed
+## Latest session (2026-07-16): logo/brand assets added, then a repeat of the PR #13 authorship mistake caught and fixed on the spot
+
+`feature/readme_logo` (not yet merged) adds a new `.assets/` directory
+(favicon, icon in light/dark, wordmark lockup in light/dark, an OG
+social-preview image - all supplied by the user) and wires the lockup
+into the top of `README.md` via a `<picture>` element that swaps
+light/dark based on the viewer's color scheme. No `src/` changes - the
+open code issues in
+[critical-issues-and-fixes.md](critical-issues-and-fixes.md) (**H1**
+first, still the top fix) are unrelated and unchanged.
+
+**The first pass of this branch's two commits repeated PR #13's exact
+authorship mistake** (see the prior session's note below, still worth
+reading): committed as the human user, using the globally-configured
+`dir: subdir: file:` message format instead of this repo's trip-themed
+override, with no effort notes at all - this time because AGENTS.md
+simply wasn't consulted before committing, not a tooling failure. Caught
+immediately by the user (not a later audit) and fixed the same way as
+PR #13: soft-reset, recommitted both with correct
+`Claude Sonnet 5 <claude-sonnet-5@anthropic.com>` authorship and
+trip-themed messages, added effort notes, force-pushed the branch. No
+new AGENTS.md footgun needed - the mechanism didn't fail, the process
+step was just skipped.
+
+**New environment observation, not yet root-caused:**
+`feature/readme_logo` was already present on `origin` before this
+session ever ran `git push` on it. Something in this environment (the
+IDE's background git sync is the prime suspect, same one already
+implicated in the `refs/notes/effort` force-fetch footgun in AGENTS.md)
+appears to auto-push branches, not just fetch. Worth confirming before
+assuming a local-only branch is actually local-only - e.g. before
+relying on `git push` never having run as a signal that work is still
+private.
+
+Effort Log Running Total resynced in this PR: Claude Sonnet 5
+53 -> 56 commits (mechanical 30 -> 33). PR description drafted and
+handed to the user to paste in themselves - no GitHub access to open it
+directly.
+
+The sections below are unchanged from before this session and still
+accurate.
+
+## Prior session (2026-07-16): documentation-accuracy pass, PR #13 authorship fixed
 
 PR #14 merged: a documentation-accuracy and polish pass across
 `README.md`, `AGENTS.md`, and `critical-issues-and-fixes.md` - stale
