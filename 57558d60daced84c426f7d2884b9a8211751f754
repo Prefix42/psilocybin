@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Opus 4.8",
+  "session_scope": "config",
+  "files_touched": 1,
+  "summary": "Amended AGENTS.md to make pushing refs/notes/effort an explicit exception to the ask-before-pushing rule, scoped to that one ref, so agents can self-maintain their effort notes.",
+  "verification": "Convention/process change; documentation only. Confirmed the effort refspecs are configured and the remote ref is reachable.",
+  "confidence": "self"
+}
