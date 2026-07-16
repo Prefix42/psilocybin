@@ -29,10 +29,14 @@ hit list. Key updates to the picture below:
 - **Nothing here is fixed yet.** A future session that picks up H1 (or any
   `src/` change) must add the missing regression test, bump the version (CI
   requires it), author commits as the agent+model, and add an effort note.
-- **`AGENTS.md` gained a handoff-notes pruning rule** this session (under
-  "Handoff notes"): prune entries as they resolve, and collapse this file to
-  a short all-clear when nothing is outstanding. Noted here per AGENTS.md's
-  own "whenever AGENTS.md changes" handoff checkpoint.
+- **`AGENTS.md` gained two conventions this session**, noted here per its
+  own "whenever AGENTS.md changes" handoff checkpoint: (1) a handoff-notes
+  pruning rule (under "Handoff notes") - prune entries as they resolve and
+  collapse this file to a short all-clear when nothing is outstanding; and
+  (2) an effort-log push exception (under "Effort log") - an agent may push
+  `refs/notes/effort` freely without asking first, since that ref is the
+  effort log's own and each agent maintains its own entries on it (the
+  exception is scoped to that one ref; all other pushes still ask first).
 
 The release-automation history below is still accurate and worth reading
 before touching the workflows - it just is no longer the whole story.
