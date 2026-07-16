@@ -157,9 +157,19 @@ usage:
 - The `effort` ref is not fetched or pushed by default - it lives on a
   separate ref that plain `git fetch`/`git push` ignore. To sync it
   explicitly: `git fetch origin refs/notes/effort:refs/notes/effort` /
-  `git push origin refs/notes/effort:refs/notes/effort`. This is a
-  deliberate choice to avoid silently changing anyone's git config;
-  run these manually (or ask the user before an agent pushes).
+  `git push origin refs/notes/effort:refs/notes/effort`.
+- **Pushing `refs/notes/effort` is an explicit exception to the usual "ask
+  the user before an agent pushes" rule - an agent may push it freely,
+  without asking first.** This ref is the effort log's own dedicated ref,
+  holding nothing but effort notes, and each agent maintains its own entries
+  on it - so adding a note and chaining its push (per the footgun rule
+  below) is the intended, self-service workflow and needs no separate
+  approval. Keep the exception narrow: it covers pushing `refs/notes/effort`
+  and nothing else. Pushing any other ref (a branch, a tag, a different
+  notes ref) still follows the normal rule of asking the user first. It also
+  does not extend to `git config`: setting up or fixing the push/fetch
+  refspec stays the user's to run, since agents never run `git config`
+  themselves (see the startup check below).
 - **Known footgun, confirmed in practice, not hypothetical, and it took
   real effort to pin down**: something in this environment (most likely
   an IDE's automatic background fetch) periodically force-updates
