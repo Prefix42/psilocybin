@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Opus 4.8",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Added a Related notes footer to project-overview cross-linking the design-philosophy, architecture, critical-issues, and status docs.",
+  "verification": "Documentation only; link targets confirmed to exist.",
+  "confidence": "self"
+}
