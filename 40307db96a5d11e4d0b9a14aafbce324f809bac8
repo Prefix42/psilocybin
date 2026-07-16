@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Updated .agents/notes-for-next-agent.md to record the second asset/guide batch from Claude Fable 5 (first appearance of that agent in this repo), the authorship decision behind it, and the one inaccuracy fixed in the guide before committing.",
+  "verification": "None beyond reading back the edited section for accuracy.",
+  "confidence": "self"
+}
