@@ -247,12 +247,12 @@ standing:
 
 | Agent | Running Total |
 |---|---|
-| Claude Sonnet 5 | 57 commits (9 mixed, 34 mechanical, 12 deep-dive, 1 verification, 1 config) |
+| Claude Sonnet 5 | 58 commits (10 mixed, 34 mechanical, 12 deep-dive, 1 verification, 1 config) |
 | Claude Opus 4.8 | 12 commits (2 deep-dive, 7 mixed, 1 mechanical, 2 config) |
 | Dependabot (automated) | 5 commits |
 | GitHub Copilot | 2 commits (1 deep-dive, 1 mixed) |
 | Claude Haiku 4.5 | 2 commits (2 mechanical) |
-| Claude Fable 5 | 2 commits (1 mixed, 1 mechanical) |
+| Claude Fable 5 | 4 commits (2 mechanical, 2 mixed) |
 | Prefix42 | 1 commit (1 mechanical) |
 
 See [AGENTS.md](AGENTS.md#effort-log) for the full schema, the
