@@ -1,45 +1,44 @@
 # Handoff: full review done - suite green, but real open issues found
 
-## Latest session (2026-07-15): documentation review + hit list
+## Latest session (2026-07-16): documentation-accuracy pass, PR #13 authorship fixed
 
-A full project review was completed (no code changed - documentation only).
-See [code-review-2026-07-15.md](code-review-2026-07-15.md) for scope/method
-and [critical-issues-and-fixes.md](critical-issues-and-fixes.md) for the full
-hit list. Key updates to the picture below:
+PR #14 merged: a documentation-accuracy and polish pass across
+`README.md`, `AGENTS.md`, and `critical-issues-and-fixes.md` - stale
+line-anchor links corrected, a missing `radon mi` step and a missing
+`version-bump` CI/CD table row (the README had silently drifted from
+what CI actually runs), badge logo icons, and an Effort Log leaderboard
+resync. No `src/` changes - the open code issues in
+[critical-issues-and-fixes.md](critical-issues-and-fixes.md) (**H1**
+first, still the top fix - see that file and
+[project-status.md](project-status.md) for full detail) are unchanged
+and remain the priority for whoever picks up code next.
 
-- **The suite is green, not broken.** Verified locally on Python 3.13:
-  `pytest` 19/19, `ruff`/`mypy`/`bandit` clean, `xenon` passes, `radon` avg
-  A. The prior framing of "assume nothing works" did not hold empirically.
-- **But there are real open issues** the passing tests do not cover. The
-  headline is **H1**: `Psychonaut.__enter__`
-  ([psychonaut.py L180-L196](../src/psylocybin/psychonaut.py#L180-L196)) is
-  not atomic - on a multi-target trip where a later target is invalid, the
-  earlier targets stay patched and keep actively hallucinating for the rest
-  of the process (reproduced). This violates the project's core "always
-  return to sobriety" promise and has no test. It is the top fix.
-- Other confirmed items: `__version__` drift (0.1.0 vs pyproject 0.1.2, M1),
-  infinity-mutation no-op that only passes by seed luck (M2), a seed-fragile
-  test (M3), plus a batch of LOW polish/doc items. Full detail + recommended
-  fixes in the hit list.
-- **Docs were out of sync:** `.agents/`'s `critical-issues-and-fixes.md`,
-  `architecture-and-patterns.md`, `development-guide.md`, and
-  `project-status.md` were empty placeholders that `.agents/README.md`
-  described as complete. They are now filled in, a new `design-philosophy.md`
-  and this review record were added, and the README index was corrected.
-- **Nothing here is fixed yet.** A future session that picks up H1 (or any
-  `src/` change) must add the missing regression test, bump the version (CI
-  requires it), author commits as the agent+model, and add an effort note.
-- **`AGENTS.md` gained two conventions this session**, noted here per its
-  own "whenever AGENTS.md changes" handoff checkpoint: (1) a handoff-notes
-  pruning rule (under "Handoff notes") - prune entries as they resolve and
-  collapse this file to a short all-clear when nothing is outstanding; and
-  (2) an effort-log push exception (under "Effort log") - an agent may push
-  `refs/notes/effort` freely without asking first, since that ref is the
-  effort log's own and each agent maintains its own entries on it (the
-  exception is scoped to that one ref; all other pushes still ask first).
+**A more significant fix landed alongside it.** PR #13's 4 commits were
+authored/committed as the human user, not as the agent that actually did
+the work (`Claude Haiku 4.5`, per its own self-reported effort notes -
+which were already correct even though the git identity wasn't). Fixed
+by rewriting those commits' author/committer (content verified
+tree-identical throughout), rebuilding the merge commit, force-pushing
+`main`, and recreating the effort notes on the new SHAs.
+`refs/notes/effort` itself only needed a normal push (fast-forward), not
+a force-push - only `main`'s commit graph actually changed shape.
 
-The release-automation history below is still accurate and worth reading
-before touching the workflows - it just is no longer the whole story.
+**`AGENTS.md` gained two new footgun notes this session**, noted here per
+its own "whenever AGENTS.md changes" checkpoint - both caught live during
+the PR #13 rewrite above, worth reading before the next rebase or history
+rewrite in this repo:
+- Under "Commit authorship": `git rebase` (including a
+  cherry-pick-then-amend rewrite) silently resets the COMMITTER to the
+  ambient local git identity even when it preserves AUTHOR - this
+  happened to this session's own freshly-made agent commits mid-rewrite,
+  caught only by re-verifying identity after the fact.
+- Under "Effort log": a note added right after `git commit`/`cherry-pick`
+  can end up attached to an intermediate SHA that a later `--amend`
+  orphans - always verify the note landed on the final, branch-reachable
+  SHA, not a pre-amend one.
+
+The sections below are unchanged from before this session and still
+accurate.
 
 ## Environment toolchain gap - ACTION: prompt the user to install these
 
@@ -161,8 +160,9 @@ everything above in two installs.
   `git config` themselves).
 - The README's Effort Log table needed two separate resync commits
   during PR #10 (`session_scope: bookkeeping` each time) because new
-  commits kept landing on the branch after the first sync - a live
-  example of the "Keeping the README in sync" rule in AGENTS.md
+  commits kept landing on the branch after the first sync, and needed
+  another during PR #14 (Claude Sonnet 5: 48 -> 51 commits) - live
+  examples of the "Keeping the README in sync" rule in AGENTS.md
   actually being applied, not just documented.
 
 ## Known gap: no CI enforcement behind either convention
@@ -187,10 +187,15 @@ everything above in two installs.
   honest.
 
 ## Suggested next step
-- No known open issue right now - the release pipeline works end to
-  end, from a version bump landing on `main` through tag, GitHub
-  Release, and distribution build. The next natural trigger for
-  project work is whatever the user brings, or - if it ever comes up -
+- For code work: **H1** (see
+  [critical-issues-and-fixes.md](critical-issues-and-fixes.md)) is still
+  the top fix - a multi-target trip with an invalid later target leaves
+  earlier targets permanently patched, and it's the one gap in the
+  project's core safety promise. No other code issue outranks it.
+- For release/process work: no known blocking issue - the release
+  pipeline works end to end, from a version bump landing on `main`
+  through tag, GitHub Release, and distribution build. The next natural
+  trigger there is whatever the user brings, or - if it ever comes up -
   deciding whether to re-enable the actual PyPI/TestPyPI upload steps
   in `publish.yml`, which remains the user's call to make, not an
   agent's to assume. The CI-enforcement gap above is also fair game if
