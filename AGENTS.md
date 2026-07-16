@@ -205,6 +205,17 @@ usage:
     entirely, at the cost of needing its own commit approval rather
     than git notes' lighter-touch add); if that's still not robust
     enough, look outside git entirely for where this data lives.
+- **Footgun, confirmed in practice:** if a commit gets rewritten after its
+  note was added (an `--amend`, or a cherry-pick-then-amend used to fix
+  authorship - see the rebase footgun in "Commit authorship" above), the
+  note stays attached to the *old* SHA unless you explicitly move it. It's
+  easy to add the note to whatever SHA `git commit`/`git cherry-pick` just
+  printed and move on, without noticing a later amend changed the SHA out
+  from under it - the note silently ends up orphaned on a commit reachable
+  from no branch, while the real (final) commit has none. After any
+  amend/rebase of a noted commit, verify with
+  `git notes --ref=effort show <final-sha>` that the note landed on the
+  SHA actually reachable from a branch, not an intermediate one.
 - At the start of a session in this repo, check once (not per command)
   whether the refs/notes/effort push/fetch refspecs are set up, by
   reading `.git/config` directly (not `git config`, which requires
@@ -316,6 +327,15 @@ which fails the PR otherwise - not a suggestion, a blocking check.
 
 When drafting a PR description for this repository - this repo is
 hosted on GitHub, so "PR" throughout, never "MR" - structure it as:
+
+Drafting or regenerating a PR description is also one of the triggers
+(see "Handoff notes" above) for reviewing
+[.agents/notes-for-next-agent.md](.agents/notes-for-next-agent.md) itself
+- what's changed, what can be closed off, what needs to be noted for the
+next session. Do that review before or after drafting the title/body,
+whichever fits the flow better - just don't let generating the
+description substitute for it, since the description and the handoff
+notes serve different readers (this PR's reviewer vs. the next session).
 
 - `## Overview` - a short intro paragraph, what this PR does and why.
 - `## What changed` - the substance, broken into `###` subsections per
@@ -466,3 +486,16 @@ Set this per-commit (e.g. via `git commit --author` and the
 equivalent) rather than editing git config, which stays untouched. A
 commit authored directly by the human user is not an agent commit and
 does not need to follow this convention.
+
+**Footgun, confirmed in practice:** `git rebase` (including a
+cherry-pick-then-amend workflow used to rewrite history) silently resets
+the COMMITTER to the ambient local git identity on every replayed commit,
+even though it preserves the AUTHOR field untouched. A commit that was
+correctly authored *and* committed as an agent can come out the other
+side of a rebase still correctly authored but wrongly re-committed as the
+human user - this happened to freshly-made agent commits in this repo
+during a same-session history rewrite. Re-verify committer identity
+(`git show -s --format='%cn <%ce>'`) on every commit after any rebase
+touches it, and re-fix (`git commit --amend` with `GIT_COMMITTER_NAME`/
+`GIT_COMMITTER_EMAIL` set) before trusting it - don't assume a rebase
+that preserved authorship also preserved commit-ership.
