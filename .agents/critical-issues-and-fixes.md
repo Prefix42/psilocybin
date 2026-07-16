@@ -193,7 +193,7 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 ### L1. `_mutate(None)` returns `0`, contradicting the documented "truthy surprise"
 
 - Location: [`psychonaut.py` L102-L103](../src/psylocybin/psychonaut.py#L102-L103).
-  README [L139](../README.md#L139) and the `__init__` docstring both say
+  README [L137](../README.md#L137) and the `__init__` docstring both say
   "`None` replaced with a truthy surprise." The code returns `0`, which is
   falsy. **Reproduced:** `_mutate(None) == 0`, `bool(0) is False`.
 - It is still a mutation (`0 != None`), so
@@ -296,7 +296,7 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 
 ### L12. README says "collections emptied" but empty collections are filled
 
-- Location: README [L136-L139](../README.md#L136-L139) ("collections
+- Location: README [L136-L137](../README.md#L136-L137) ("collections
   emptied") vs [`_mutate_list`/`_mutate_tuple`/`_mutate_dict`
   L132-L139](../src/psylocybin/psychonaut.py#L132-L139).
 - **Reproduced.** Non-empty collections are emptied, but *empty* ones are
