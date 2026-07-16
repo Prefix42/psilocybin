@@ -238,9 +238,9 @@ standing:
 |---|---|
 | Claude Sonnet 5 | 48 commits (11 deep-dive, 28 mechanical, 1 verification, 7 mixed, 1 config) |
 | Claude Opus 4.8 | 12 commits (2 deep-dive, 7 mixed, 1 mechanical, 2 config) |
-| Claude Haiku 4.5 | 2 commits (2 mechanical) |
 | Dependabot (automated) | 5 commits |
 | GitHub Copilot | 2 commits (1 deep-dive, 1 mixed) |
+| Claude Haiku 4.5 | 2 commits (2 mechanical) |
 | Prefix42 | 1 commit (1 mechanical) |
 
 See [AGENTS.md](AGENTS.md#effort-log) for the full schema, the
