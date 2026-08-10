@@ -46,11 +46,11 @@ pip install psilocybin
 from psilocybin import Guidelines, TripSitter
 
 guidelines = Guidelines(
-    seed=42,                      # reproducible trip
-    intensity=0.3,                # 30% of eligible calls hallucinate
-    mode="per_call",              # or "single" -- see "Hallucination modes" below
-    max_hallucinations=50,        # bad trip if exceeded
-    max_duration_seconds=10,      # bad trip if exceeded
+    seed=42,  # reproducible trip
+    intensity=0.3,  # 30% of eligible calls hallucinate
+    mode="per_call",  # or "single" -- see "Hallucination modes" below
+    max_hallucinations=50,  # bad trip if exceeded
+    max_duration_seconds=10,  # bad trip if exceeded
     allowed_exceptions=(ValueError, KeyError),
     forbidden_targets=["myapp.payments.charge_card"],  # never touch this
 )
@@ -79,10 +79,11 @@ fixture for free:
 ```python
 import pytest
 
+
 @pytest.mark.psilocybin(
     targets=["myapp.orders.place_order"],
     intensity=0.4,
-    mode="single",   # one isolated glitch, not sustained flakiness
+    mode="single",  # one isolated glitch, not sustained flakiness
     seed=1234,
     max_hallucinations=20,
     allowed_exceptions=(ValueError, KeyError),
@@ -97,6 +98,7 @@ There's also a decorator form if you'd rather not use the marker/fixture:
 
 ```python
 sitter = TripSitter(Guidelines(intensity=0.5, seed=7))
+
 
 @sitter.watch(["myapp.orders.place_order"])
 def test_order_flow():

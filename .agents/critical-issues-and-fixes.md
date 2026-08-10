@@ -44,7 +44,7 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
           original = patcher.get_original()[0]
       except (AttributeError, ImportError, TypeError) as e:
           raise ValueError(f"Failed to patch target '{target_path}': ...") from e
-      mock_obj = patcher.start()          # target N started + appended
+      mock_obj = patcher.start()  # target N started + appended
       mock_obj.side_effect = self._wrap(target_path, original)
       self._patchers.append(patcher)
   ```
