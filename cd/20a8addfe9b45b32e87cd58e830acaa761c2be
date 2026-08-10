@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mixed",
+  "files_touched": 1,
+  "summary": "Rewrote .agents/notes-for-next-agent.md's handoff entry for this session: documented the psilocybin rename, the design-philosophy.md correction, and a third recurrence of the PR #13 authorship/message-format mistake with a call-out that the checklist itself may be the gap. Pruned the older 'documentation-accuracy pass, PR #13 authorship fixed' section, whose durable content (the two footgun notes) already lives permanently in AGENTS.md, per the file's own pruning rule and established two-deep session-history pattern.",
+  "verification": "Reread the resulting file end to end to confirm the demoted 'Prior session' header and the 'sections below are unchanged' transition sentence still read correctly after the deletion.",
+  "confidence": "self"
+}
