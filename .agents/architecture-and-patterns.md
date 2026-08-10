@@ -1,6 +1,6 @@
 # Architecture and Patterns
 
-How psylocybin is put together and the invariants to preserve when touching
+How psilocybin is put together and the invariants to preserve when touching
 it. Written from a full read of the source on 2026-07-15. For the goals and
 themes behind these choices see
 [design-philosophy.md](design-philosophy.md); for the open defects in the
@@ -11,13 +11,13 @@ current implementation see
 
 | Module | Responsibility |
 |---|---|
-| [`exceptions.py`](../src/psylocybin/exceptions.py) | Error hierarchy: `PsylocybinError` -> `BadTripError` -> `GuidelineViolation`. |
-| [`report.py`](../src/psylocybin/report.py) | `HallucinationEvent` (one induced glitch) and `TripReport` (events + timing + bad-trip verdict + `summary()`). |
-| [`psychonaut.py`](../src/psylocybin/psychonaut.py) | `Psychonaut` - the actual patching/hallucination engine. Also owns the mode constants (`MODE_PER_CALL`, `MODE_SINGLE`, `VALID_MODES`) and `DEFAULT_EXCEPTION_POOL`. |
-| [`guidelines.py`](../src/psylocybin/guidelines.py) | `Guidelines` dataclass + `validate()`. Imports the mode constants from `psychonaut` (note the dependency direction). |
-| [`tripsitter.py`](../src/psylocybin/tripsitter.py) | `TripSitter` - the supervisor/context manager that enforces guidelines and guarantees cleanup. |
-| [`plugin.py`](../src/psylocybin/plugin.py) | pytest integration: the `psylocybin` marker, the `trip_sitter` and `psychonaut` fixtures. Wired via the `pytest11` entry point in `pyproject.toml`. |
-| [`__init__.py`](../src/psylocybin/__init__.py) | Public surface (`__all__`) and `__version__` (currently stale - see M1). |
+| [`exceptions.py`](../src/psilocybin/exceptions.py) | Error hierarchy: `PsilocybinError` -> `BadTripError` -> `GuidelineViolation`. |
+| [`report.py`](../src/psilocybin/report.py) | `HallucinationEvent` (one induced glitch) and `TripReport` (events + timing + bad-trip verdict + `summary()`). |
+| [`psychonaut.py`](../src/psilocybin/psychonaut.py) | `Psychonaut` - the actual patching/hallucination engine. Also owns the mode constants (`MODE_PER_CALL`, `MODE_SINGLE`, `VALID_MODES`) and `DEFAULT_EXCEPTION_POOL`. |
+| [`guidelines.py`](../src/psilocybin/guidelines.py) | `Guidelines` dataclass + `validate()`. Imports the mode constants from `psychonaut` (note the dependency direction). |
+| [`tripsitter.py`](../src/psilocybin/tripsitter.py) | `TripSitter` - the supervisor/context manager that enforces guidelines and guarantees cleanup. |
+| [`plugin.py`](../src/psilocybin/plugin.py) | pytest integration: the `psilocybin` marker, the `trip_sitter` and `psychonaut` fixtures. Wired via the `pytest11` entry point in `pyproject.toml`. |
+| [`__init__.py`](../src/psilocybin/__init__.py) | Public surface (`__all__`) and `__version__` (currently stale - see M1). |
 
 Dependency direction worth remembering: `guidelines.py` imports from
 `psychonaut.py` (for the mode constants), and `tripsitter.py` imports both.
@@ -29,17 +29,17 @@ Dependency direction worth remembering: `guidelines.py` imports from
 The whole safety story rests on two stacked context managers.
 
 - `TripSitter` is the outer context manager. Its `__exit__`
-  ([tripsitter.py L63-L88](../src/psylocybin/tripsitter.py#L63-L88)) does
+  ([tripsitter.py L63-L88](../src/psilocybin/tripsitter.py#L63-L88)) does
   cleanup **first** (`self._psychonaut.__exit__(...)` unpatches everything),
   stamps `ended_at`, and only **then** calls `_evaluate(...)` to decide
   whether the trip was bad. This ordering is deliberate and load-bearing: a
   `BadTripError` is raised (if `halt_on_bad_trip`) only after the codebase is
   already sober, so a bad verdict never leaves things patched.
 - `Psychonaut` is the inner context manager. `__enter__`
-  ([L180-L196](../src/psylocybin/psychonaut.py#L180-L196)) starts an
+  ([L180-L196](../src/psilocybin/psychonaut.py#L180-L196)) starts an
   `unittest.mock.patch(..., autospec=True)` per target and installs a
   `side_effect` wrapper; `__exit__`
-  ([L198-L202](../src/psylocybin/psychonaut.py#L198-L202)) stops every
+  ([L198-L202](../src/psilocybin/psychonaut.py#L198-L202)) stops every
   patcher in reverse order and clears the list.
 
 **Invariant to preserve:** cleanup must run regardless of how the trip ends,
@@ -52,7 +52,7 @@ keep (and ideally extend) the guarantee, not weaken it.
 ## Pattern 2: mock + autospec + `side_effect` delegating to the original
 
 Each target is replaced by an autospec mock whose `side_effect` is a closure
-built by [`_wrap`](../src/psylocybin/psychonaut.py#L141-L178). The closure
+built by [`_wrap`](../src/psilocybin/psychonaut.py#L141-L178). The closure
 captures `original` (the true callable, grabbed via
 `patcher.get_original()[0]` *before* `start()`), so calling `original(...)`
 inside the wrapper invokes the real function, not the mock - no recursion.
@@ -68,7 +68,7 @@ name already imported into the code-under-test's namespace is not affected.
 ## Pattern 3: the per-call decision, and where the RNG is spent
 
 `_wrap`'s wrapper runs this ladder on every call while a trip is active
-([L142-L176](../src/psylocybin/psychonaut.py#L142-L176)):
+([L142-L176](../src/psilocybin/psychonaut.py#L142-L176)):
 
 1. `if not self._active`: pass through (should only matter outside a trip).
 2. `if mode == "single" and self._hallucinated`: pass through (budget spent).
@@ -109,7 +109,7 @@ Key state owners:
   `started_at` is), so events accumulate across successive `guide()`/`with`
   cycles - see L4. The `watch()` decorator deliberately swaps in a fresh
   report per invocation for test isolation
-  ([tripsitter.py L106-L132](../src/psylocybin/tripsitter.py#L106-L132)).
+  ([tripsitter.py L106-L132](../src/psilocybin/tripsitter.py#L106-L132)).
 
 ## The two hallucination modes, internally
 
@@ -130,10 +130,10 @@ of the ladder above.
 ## Guideline enforcement (`TripSitter`)
 
 - `forbidden_targets` is checked in `guide()` **before any patching**
-  ([L35-L54](../src/psylocybin/tripsitter.py#L35-L54)), matching exact target
+  ([L35-L54](../src/psilocybin/tripsitter.py#L35-L54)), matching exact target
   or any dotted sub-path (`forbidden + "."`). This is the one guardrail that
   cannot be bypassed by a bad trip, by construction.
-- `_evaluate` ([L90-L104](../src/psylocybin/tripsitter.py#L90-L104)) runs
+- `_evaluate` ([L90-L104](../src/psilocybin/tripsitter.py#L90-L104)) runs
   after cleanup and returns the first breached guideline's reason (duration,
   then count, then an escaped non-allowed exception), or `""`.
 - `halt_on_bad_trip` chooses between raising `BadTripError` and merely
