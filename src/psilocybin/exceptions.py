@@ -1,11 +1,11 @@
-"""Exceptions raised by psylocybin."""
+"""Exceptions raised by psilocybin."""
 
 
-class PsylocybinError(Exception):
-    """Base error for the psylocybin package."""
+class PsilocybinError(Exception):
+    """Base error for the psilocybin package."""
 
 
-class BadTripError(PsylocybinError):
+class BadTripError(PsilocybinError):
     """Raised when a hallucination session exceeds its configured guidelines."""
 
 

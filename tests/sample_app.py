@@ -1,4 +1,4 @@
-"""A tiny stand-in application to demonstrate psylocybin against."""
+"""A tiny stand-in application to demonstrate psilocybin against."""
 
 
 def add(a: int, b: int) -> int:

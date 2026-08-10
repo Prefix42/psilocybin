@@ -40,7 +40,7 @@ class TripReport:
     def summary(self) -> str:
         status = "BAD TRIP" if self.bad_trip else "safe landing"
         lines = [
-            f"psylocybin trip report -- {status}",
+            f"psilocybin trip report -- {status}",
             f"  hallucinations induced: {self.count}",
             f"  duration: {self.duration:.3f}s",
         ]
