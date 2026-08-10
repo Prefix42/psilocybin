@@ -1,6 +1,6 @@
 [project]
 name = "psilocybin"
-version = "0.1.2"
+version = "0.2.0"
 description = "A hallucination-driven fuzzer for exercising your test suite's resilience."
 readme = "README.md"
 requires-python = ">=3.9"
