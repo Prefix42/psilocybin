@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 2,
+  "summary": "Fixed pre-existing ruff-format violations the user reported from CI on this PR: collapsed aligned multi-space inline comments to a single 2-space gap (README.md's Guidelines(...) block and .agents/critical-issues-and-fixes.md's patcher.start() line), and added the missing blank line before two decorated top-level defs in README.md's embedded Python examples (@pytest.mark.psilocybin and @sitter.watch). None of these lines were touched by the rename itself - this was latent formatting debt the lint gate happened to catch now.",
+  "verification": "No ruff binary available in this environment, so matched the exact before/after diff pasted from the user's CI run line-for-line rather than guessing at ruff's style; grepped both files afterward for the same multi-space-before-# and single-blank-before-decorator patterns to confirm nothing else in scope was missed.",
+  "confidence": "self"
+}
