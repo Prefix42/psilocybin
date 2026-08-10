@@ -66,13 +66,13 @@ actual intended path all along, and this session's earlier edit to the
 guide was the mistake, not the other way round. Fable 5 sent a follow-up
 that renamed `.assets/` to `assets/` in the working tree directly (not
 just the guide text) and regenerated two files that turned out to be
-genuinely broken: `psylocybin-icon-dark.png` and
-`psylocybin-lockup-light.png` were rendering their gradient rings as
+genuinely broken: `psilocybin-icon-dark.png` and
+`psilocybin-lockup-light.png` were rendering their gradient rings as
 solid black / invisible (confirmed by diffing against the
 previously-committed versions), caused by a `<linearGradient>` def not
 being scoped inside the same `<svg>` being captured - now written down
 in the guide's own "Gotcha for asset regeneration" section so it
-doesn't recur. `psylocybin-og.png` was also regenerated at 2x
+doesn't recur. `psilocybin-og.png` was also regenerated at 2x
 resolution (2400x1260) with the tagline added. README.md's asset paths
 were updated to match in a separate, Sonnet-5-authored follow-up commit.
 Lesson: when a style guide and the actual repo state disagree, don't
