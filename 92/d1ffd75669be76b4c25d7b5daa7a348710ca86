@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 12,
+  "summary": "Staged and committed the corrected psilocybin-named brand assets, already regenerated/provided by the user: renamed 3 SVG marks in place, swapped 4 raster PNGs for freshly rendered psilocybin-named versions, and added a new public assets/visual-style.md brand guide.",
+  "verification": "Confirmed old psylocybin-named asset files were removed and the new psilocybin-named files present via git status; did not re-render the assets myself.",
+  "confidence": "self"
+}
