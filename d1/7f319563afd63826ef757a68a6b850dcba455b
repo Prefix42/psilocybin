@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Fixed a leftover psylocybin reference in .agents/project-status.md's opening line.",
+  "verification": "Reviewed the diff.",
+  "confidence": "self"
+}
