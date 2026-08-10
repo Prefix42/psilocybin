@@ -1,4 +1,4 @@
-# psylocybin Repository Overview
+# psilocybin Repository Overview
 
 ## Purpose
 A hallucination-driven fuzzer for Python test suites. Deliberately mutates return values or raises unexpected exceptions in target functions to verify surrounding code handles failures gracefully.
