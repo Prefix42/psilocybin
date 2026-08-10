@@ -1,15 +1,15 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Prefix42/psylocybin/main/assets/psylocybin-lockup-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Prefix42/psylocybin/main/assets/psylocybin-lockup-light.png">
-    <img alt="psylocybin" src="https://raw.githubusercontent.com/Prefix42/psylocybin/main/assets/psylocybin-lockup-light.png" width="320">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Prefix42/psilocybin/main/assets/psilocybin-lockup-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Prefix42/psilocybin/main/assets/psilocybin-lockup-light.png">
+    <img alt="psilocybin" src="https://raw.githubusercontent.com/Prefix42/psilocybin/main/assets/psilocybin-lockup-light.png" width="320">
   </picture>
 </p>
 
-# psylocybin
+# psilocybin
 
-[![CI](https://github.com/Prefix42/psylocybin/actions/workflows/ci.yml/badge.svg)](https://github.com/Prefix42/psylocybin/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/psylocybin.svg?logo=pypi&logoColor=white)](https://pypi.org/project/psylocybin/)
+[![CI](https://github.com/Prefix42/psilocybin/actions/workflows/ci.yml/badge.svg)](https://github.com/Prefix42/psilocybin/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/psilocybin.svg?logo=pypi&logoColor=white)](https://pypi.org/project/psilocybin/)
 [![Top Agent](https://img.shields.io/badge/top%20agent-Claude%20Sonnet%205-8A2BE2?logo=claude&logoColor=white)](#effort-log)
 
 > **Transparency note:** every line of code, test, and doc in this
@@ -19,7 +19,7 @@
 > but never wrote or edited the implementation directly. Part of the
 > point of this project is to see how far that division of labor can go.
 
-A hallucination-driven fuzzer for your test suite. `psylocybin` deliberately
+A hallucination-driven fuzzer for your test suite. `psilocybin` deliberately
 makes chosen functions in your codebase lie - mutating return values or
 raising unexpected exceptions - so you can see whether the surrounding code
 survives it. It's built to plug straight into `pytest`.
@@ -37,13 +37,13 @@ Two roles, borrowed from how a psychedelic trip is actually run safely:
 ## Install
 
 ```bash
-pip install psylocybin
+pip install psilocybin
 ```
 
 ## Basic usage
 
 ```python
-from psylocybin import Guidelines, TripSitter
+from psilocybin import Guidelines, TripSitter
 
 guidelines = Guidelines(
     seed=42,                      # reproducible trip
@@ -73,13 +73,13 @@ codebase in a hallucinating state.
 ## pytest integration
 
 Installing the package registers a pytest plugin automatically (via the
-`pytest11` entry point). You get a `psylocybin` marker and a `trip_sitter`
+`pytest11` entry point). You get a `psilocybin` marker and a `trip_sitter`
 fixture for free:
 
 ```python
 import pytest
 
-@pytest.mark.psylocybin(
+@pytest.mark.psilocybin(
     targets=["myapp.orders.place_order"],
     intensity=0.4,
     mode="single",   # one isolated glitch, not sustained flakiness
@@ -174,7 +174,7 @@ Install the dev extras and run the same checks CI runs:
 ```bash
 pip install -e ".[dev]"
 
-pytest --cov=psylocybin                                     # tests + coverage
+pytest --cov=psilocybin                                     # tests + coverage
 ruff check . && ruff format --check .                       # lint / style
 mypy src                                                    # type check
 radon cc src -a -s                                          # complexity: cyclomatic
