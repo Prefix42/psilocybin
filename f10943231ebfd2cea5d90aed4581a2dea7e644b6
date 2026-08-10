@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Updated README.md's title, badges, image URLs, install command, and code examples from psylocybin to psilocybin.",
+  "verification": "Reviewed the diff; grepped this file for remaining psylocybin references (none).",
+  "confidence": "self"
+}
