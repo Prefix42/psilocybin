@@ -1,11 +1,11 @@
-# Visual style — psylocybin
+# Visual style — psilocybin
 
 Guidance for any agent producing visual or branded material (docs, diagrams, social images, UI) for this project.
 
 ## Logo
 - Mark: **"Warped orbit"** — three concentric ellipses drifting off-axis around an offset pupil. It reads as a hypnotic eye slipping out of true: the TripSitter watching, reality wobbling.
-- Canonical files: `psylocybin-icon.svg` (full 3-ring mark), `favicon.svg` (simplified 1-ring + pupil, for ≤32px).
-- Wordmark: lowercase `psylocybin`, Space Grotesk SemiBold (600), letter-spacing -0.01em. In lockups the mark **replaces the "o"** (psyl◎cybin), sized ~1.05× the lowercase x-height cap.
+- Canonical files: `psilocybin-icon.svg` (full 3-ring mark), `favicon.svg` (simplified 1-ring + pupil, for ≤32px).
+- Wordmark: lowercase `psilocybin`, Space Grotesk SemiBold (600), letter-spacing -0.01em. In lockups the mark **replaces the "o"** (psyl◎cybin), sized ~1.05× the lowercase x-height cap.
 - Never redraw the mark; scale the SVGs. At small sizes use the simplified favicon variant, not the 3-ring mark.
 
 ## Color
@@ -33,11 +33,11 @@ Guidance for any agent producing visual or branded material (docs, diagrams, soc
   fine on GitHub and silently breaks on PyPI:
   ```html
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Prefix42/psylocybin/main/assets/psylocybin-lockup-dark.png">
-    <img src="https://raw.githubusercontent.com/Prefix42/psylocybin/main/assets/psylocybin-lockup-light.png" alt="psylocybin" width="320">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Prefix42/psilocybin/main/assets/psilocybin-lockup-dark.png">
+    <img src="https://raw.githubusercontent.com/Prefix42/psilocybin/main/assets/psilocybin-lockup-light.png" alt="psilocybin" width="320">
   </picture>
   ```
-- Social preview (repo settings): `psylocybin-og.png`.
+- Social preview (repo settings): `psilocybin-og.png`.
 - Badges (shields.io): keep the existing set; for new badges use color `8A2BE2` (matches the Top Agent badge) or `7C3AED`, `logoColor=white`. No rainbow badge rows.
 
 ## Diagrams & docs illustrations
@@ -52,11 +52,11 @@ Guidance for any agent producing visual or branded material (docs, diagrams, soc
 - Literal mushroom/pill/drug imagery, emoji, or trippy stock textures.
 
 ## Existing assets (repo `assets/`)
-- `psylocybin-icon.svg`, `favicon.svg`
-- `psylocybin-icon-mono-black.svg`, `psylocybin-icon-mono-white.svg` — single-color contexts only (terminals, stickers, print); never recolored beyond ink/white
+- `psilocybin-icon.svg`, `favicon.svg`
+- `psilocybin-icon-mono-black.svg`, `psilocybin-icon-mono-white.svg` — single-color contexts only (terminals, stickers, print); never recolored beyond ink/white
 - `favicon-16.png`, `favicon-32.png`, `favicon-180.png` (apple-touch)
-- `psylocybin-lockup-dark.png`, `psylocybin-lockup-light.png`
-- `psylocybin-icon-dark.png`, `psylocybin-og.png` (2400×1260, GitHub social preview)
+- `psilocybin-lockup-dark.png`, `psilocybin-lockup-light.png`
+- `psilocybin-icon-dark.png`, `psilocybin-og.png` (2400×1260, GitHub social preview)
 
 ## Gotcha for asset regeneration
 When rasterizing the mark from HTML/SVG, the `<linearGradient>` def MUST live inside the same `<svg>` being captured — a gradient referenced across elements renders the rings black in exported crops.
