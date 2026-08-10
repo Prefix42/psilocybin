@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "config",
+  "files_touched": 1,
+  "summary": "Bumped pyproject.toml's version from 0.1.2 to 0.2.0, required by the version-bump CI gate since this PR changes files under src/ (the package rename). Caught while drafting the PR description, by reading the actual version-bump job logic in .github/workflows/ci.yml rather than assuming the rename was exempt. Initially bumped to a patch (0.1.3); the user corrected this to a minor bump, since renaming the package (import paths, PyPI project identity) is more than a patch-level change.",
+  "verification": "Read .github/workflows/ci.yml's version-bump job directly and confirmed it diffs src/ against the PR base and fails if the version is unchanged; this PR's src/ changes would have tripped it without this bump.",
+  "confidence": "self"
+}
