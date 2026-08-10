@@ -1,7 +1,7 @@
 # Agent Handoff Notes
 
 Shared documentation and handoff notes for agents and contributors working
-on psylocybin. Start here, then read the file most relevant to your task.
+on psilocybin. Start here, then read the file most relevant to your task.
 
 > Correction (2026-07-15): an earlier version of this index described
 > `critical-issues-and-fixes.md`, `architecture-and-patterns.md`,
