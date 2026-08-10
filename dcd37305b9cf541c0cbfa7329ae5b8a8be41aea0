@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Fixed a leftover psylocybin reference in AGENTS.md's versioning section pip-install example.",
+  "verification": "Reviewed the diff.",
+  "confidence": "self"
+}
