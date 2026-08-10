@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mixed",
+  "files_touched": 1,
+  "summary": "Fixed the mechanical psylocybin->psilocybin rename in this file's opening paragraph, and separately rewrote a stale paragraph that previously asserted the psylocybin spelling was an intentional stylization and told agents not to 'correct' it - caught while drafting commit messages for the wider rename, since a blind find/replace would otherwise have left it self-contradictory.",
+  "verification": "Confirmed via git remote -v that origin already points at the psilocybin-named GitHub repo (github.com/Prefix42/psilocybin), consistent with the rename being real and already underway rather than something to second-guess or revert.",
+  "confidence": "self"
+}
