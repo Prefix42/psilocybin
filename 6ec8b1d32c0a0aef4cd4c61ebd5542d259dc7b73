@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 10,
+  "summary": "Renamed the src/psylocybin package directory and tests/test_psylocybin.py to src/psilocybin and tests/test_psilocybin.py, and updated every in-file reference (imports, class names, the pytest entry point, pyproject.toml's package/tool config) from psylocybin to psilocybin.",
+  "verification": "Compiled all changed .py files with python3 -m py_compile; grepped the repo for remaining psylocybin occurrences (none in these files).",
+  "confidence": "self"
+}
