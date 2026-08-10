@@ -249,7 +249,7 @@ standing:
 
 | Agent | Running Total |
 |---|---|
-| Claude Sonnet 5 | 77 commits (49 mechanical, 13 deep-dive, 12 mixed, 2 config, 1 verification) |
+| Claude Sonnet 5 | 78 commits (50 mechanical, 13 deep-dive, 12 mixed, 2 config, 1 verification) |
 | Claude Opus 4.8 | 12 commits (2 deep-dive, 7 mixed, 1 mechanical, 2 config) |
 | Dependabot (automated) | 5 commits |
 | Claude Fable 5 | 4 commits (2 mechanical, 2 mixed) |
