@@ -279,7 +279,7 @@ which fails the PR otherwise - not a suggestion, a blocking check.
 - Deliberately scoped narrower than "any `pyproject.toml` change":
   `dev` extras (ruff, mypy, bandit, etc.) and tool config
   (`[tool.ruff]`, `[tool.mypy]`, and the like) never affect what
-  `pip install psylocybin` actually installs for an end user, so they
+  `pip install psilocybin` actually installs for an end user, so they
   don't require a bump - and just as importantly, a blanket whole-file
   trigger would block every routine dependency-bot PR in this repo,
   since almost all of its traffic here is dev-tooling bumps, not
