@@ -2,7 +2,7 @@ import math
 
 import pytest
 
-from psylocybin import BadTripError, Guidelines, TripSitter
+from psilocybin import BadTripError, Guidelines, TripSitter
 
 SAFE_EXCEPTIONS = (ValueError, TypeError, RuntimeError, KeyError, IndexError)
 
@@ -31,7 +31,7 @@ def test_trip_sitter_enforces_max_hallucinations():
 
     with pytest.raises(BadTripError):
         with sitter:
-            sample_app.greet("psylocybin")
+            sample_app.greet("psilocybin")
 
 
 def test_forbidden_target_cannot_be_guided():
@@ -42,7 +42,7 @@ def test_forbidden_target_cannot_be_guided():
         sitter.guide(["tests.sample_app.add"])
 
 
-@pytest.mark.psylocybin(
+@pytest.mark.psilocybin(
     targets=["tests.sample_app.add"],
     intensity=0.5,
     seed=42,
@@ -161,7 +161,7 @@ def test_exception_type_validation_in_guidelines():
 
 def test_exception_pool_type_validation():
     """Test that Psychonaut validates exception_pool types."""
-    from psylocybin import Psychonaut
+    from psilocybin import Psychonaut
 
     # Invalid: non-exception types in exception_pool
     with pytest.raises(TypeError, match="must contain only exception classes"):
@@ -175,7 +175,7 @@ def test_exception_pool_type_validation():
         Psychonaut(targets=["tests.sample_app.add"], exception_pool=(ValueError, 123))
 
     # Valid: actual exception classes
-    from psylocybin import Psychonaut
+    from psilocybin import Psychonaut
 
     psychonaut = Psychonaut(
         targets=["tests.sample_app.add"], exception_pool=(ValueError, TypeError)
@@ -216,7 +216,7 @@ def test_decorator_isolation_with_watch():
 
 def test_mutation_actually_changes_values():
     """Test that mutation logic actually produces different values."""
-    from psylocybin import Psychonaut
+    from psilocybin import Psychonaut
 
     psychonaut = Psychonaut(targets=[], seed=42)
 
@@ -246,7 +246,7 @@ def test_mutation_actually_changes_values():
 
 def test_float_mutations_handle_special_values():
     """Test that float mutations work correctly with special values."""
-    from psylocybin import Psychonaut
+    from psilocybin import Psychonaut
 
     psychonaut = Psychonaut(targets=[], seed=42)
 
@@ -263,7 +263,7 @@ def test_float_mutations_handle_special_values():
 
 def test_original_exception_not_recorded_as_hallucination():
     """Test that exceptions from original() are NOT recorded as hallucinations."""
-    from psylocybin import Psychonaut, TripReport
+    from psilocybin import Psychonaut, TripReport
 
     def faulty_add(a, b):
         """A function that always raises."""
@@ -291,7 +291,7 @@ def test_original_exception_not_recorded_as_hallucination():
 
 def test_nan_is_mutated():
     """Test that NaN float values are properly mutated."""
-    from psylocybin import Psychonaut
+    from psilocybin import Psychonaut
 
     psychonaut = Psychonaut(targets=[], seed=99)
     nan = float("nan")
@@ -304,7 +304,7 @@ def test_nan_is_mutated():
 
 def test_infinity_is_mutated():
     """Test that infinity values are properly mutated."""
-    from psylocybin import Psychonaut
+    from psilocybin import Psychonaut
 
     psychonaut = Psychonaut(targets=[], seed=100)
 
@@ -326,7 +326,7 @@ def test_infinity_is_mutated():
 
 def test_invalid_patch_target_raises_clear_error():
     """Test that invalid patch targets raise helpful error messages."""
-    from psylocybin import Guidelines, TripSitter
+    from psilocybin import Guidelines, TripSitter
 
     guidelines = Guidelines()
     sitter = TripSitter(guidelines)

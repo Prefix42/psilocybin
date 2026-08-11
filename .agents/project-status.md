@@ -1,6 +1,6 @@
 # Project Status
 
-Current state of psylocybin. This file is the evergreen snapshot; for the
+Current state of psilocybin. This file is the evergreen snapshot; for the
 live, session-by-session handoff see
 [notes-for-next-agent.md](notes-for-next-agent.md), and for the dated review
 that produced this snapshot see

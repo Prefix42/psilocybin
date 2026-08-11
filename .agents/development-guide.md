@@ -1,6 +1,6 @@
 # Development Guide
 
-Practical guide for working on psylocybin. Written 2026-07-15. Read
+Practical guide for working on psilocybin. Written 2026-07-15. Read
 [architecture-and-patterns.md](architecture-and-patterns.md) for the
 internals and [critical-issues-and-fixes.md](critical-issues-and-fixes.md)
 for the open hit list before making changes. Also read
@@ -24,15 +24,15 @@ hit the same wall, bootstrap into a scratch target dir instead of a venv:
 python3 -c "import urllib.request; urllib.request.urlretrieve('https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')"
 python3 get-pip.py --target /path/to/libs
 PYTHONPATH=/path/to/libs python3 -m pip install --target /path/to/libs \
-  pytest pytest-cov mypy bandit radon xenon /path/to/psylocybin
-PYTHONPATH=/path/to/libs python3 -m pytest -v      # entry point auto-loads the plugin; do NOT add -p psylocybin.plugin
+  pytest pytest-cov mypy bandit radon xenon /path/to/psilocybin
+PYTHONPATH=/path/to/libs python3 -m pytest -v      # entry point auto-loads the plugin; do NOT add -p psilocybin.plugin
 ```
 
 Gotchas learned the hard way:
 
 - Install the package **non-editable** (pass the repo path, not `-e`) so the
   `pytest11` entry point registers and the marker/fixtures load. If you also
-  pass `-p psylocybin.plugin` on top of that, pytest double-registers the
+  pass `-p psilocybin.plugin` on top of that, pytest double-registers the
   plugin and dies with "Plugin already registered under a different name."
 - Console-script tools (`ruff`, `twine`) install a launcher into
   `<libs>/bin`, but `pip --target` **skips** that dir if it already exists
@@ -44,16 +44,16 @@ Gotchas learned the hard way:
 ## File structure and ownership
 
 ```
-src/psylocybin/
+src/psilocybin/
   __init__.py      public API surface + __version__ (stale, see M1)
-  exceptions.py    PsylocybinError / BadTripError / GuidelineViolation
+  exceptions.py    PsilocybinError / BadTripError / GuidelineViolation
   report.py        HallucinationEvent, TripReport
   psychonaut.py    the hallucination engine + mode constants + default pool
   guidelines.py    Guidelines dataclass + validate()
   tripsitter.py    the supervisor / context manager + watch() decorator
   plugin.py        pytest marker + trip_sitter/psychonaut fixtures
 tests/
-  test_psylocybin.py   the whole suite (19 tests)
+  test_psilocybin.py   the whole suite (19 tests)
   sample_app.py        tiny add()/greet() stand-in to hallucinate against
   __init__.py          (empty; makes tests an importable package)
 .github/workflows/     ci.yml, release.yml, publish.yml
@@ -87,16 +87,16 @@ constants in `psychonaut.py` to avoid an import cycle.
 
 ## Critical code paths to understand first
 
-1. [`Psychonaut._wrap`](../src/psylocybin/psychonaut.py#L141-L178) - the
+1. [`Psychonaut._wrap`](../src/psilocybin/psychonaut.py#L141-L178) - the
    per-call decision ladder and where every RNG draw is spent. Everything
    about intensity, modes, and reproducibility flows through here.
-2. [`Psychonaut.__enter__`/`__exit__`](../src/psylocybin/psychonaut.py#L180-L202)
+2. [`Psychonaut.__enter__`/`__exit__`](../src/psilocybin/psychonaut.py#L180-L202)
    - patch application and teardown. The atomicity bug (H1) lives in
    `__enter__`.
-3. [`TripSitter.__exit__`](../src/psylocybin/tripsitter.py#L63-L88) and
-   [`_evaluate`](../src/psylocybin/tripsitter.py#L90-L104) - cleanup-then-judge
+3. [`TripSitter.__exit__`](../src/psilocybin/tripsitter.py#L63-L88) and
+   [`_evaluate`](../src/psilocybin/tripsitter.py#L90-L104) - cleanup-then-judge
    ordering, allowed-exception suppression, `halt_on_bad_trip`.
-4. [`TripSitter.watch`](../src/psylocybin/tripsitter.py#L106-L132) - the
+4. [`TripSitter.watch`](../src/psilocybin/tripsitter.py#L106-L132) - the
    decorator form and its per-invocation report reset (contrast with the
    report accumulation on a reused sitter, L4).
 
@@ -112,7 +112,7 @@ constants in `psychonaut.py` to avoid an import cycle.
   the expected values under the new code and update the seeded assertions.
 - **`BadTripError: no psychonaut configured`.** You entered a `TripSitter`
   without calling `.guide(...)` (or used the `trip_sitter` fixture with no
-  `@pytest.mark.psylocybin` marker, L8).
+  `@pytest.mark.psilocybin` marker, L8).
 - **State leaked between two trips on one sitter.** The `TripReport` is
   shared and not reset between `guide()`/`with` cycles (L4). Use `watch()`
   (fresh report per call) or a fresh `TripSitter` for isolation.

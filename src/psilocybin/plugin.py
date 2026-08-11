@@ -1,12 +1,12 @@
-"""pytest integration for psylocybin.
+"""pytest integration for psilocybin.
 
 Registered as a pytest11 entry point, so installing the package makes
-the `psylocybin` marker and the `trip_sitter` / `psychonaut` fixtures
+the `psilocybin` marker and the `trip_sitter` / `psychonaut` fixtures
 available automatically -- no need to add anything to conftest.py.
 
 Usage:
 
-    @pytest.mark.psylocybin(
+    @pytest.mark.psilocybin(
         targets=["myapp.orders.place_order"],
         intensity=0.4,
         mode="per_call",   # or "single" for one hallucination per trip
@@ -29,10 +29,10 @@ from .tripsitter import TripSitter
 def pytest_configure(config):
     config.addinivalue_line(
         "markers",
-        "psylocybin(targets, intensity=0.25, mode='per_call', seed=None, "
+        "psilocybin(targets, intensity=0.25, mode='per_call', seed=None, "
         "max_hallucinations=None, max_duration_seconds=None, allowed_exceptions=(), "
         "forbidden_targets=(), halt_on_bad_trip=True): run this test under a "
-        "psylocybin hallucination trip. mode is 'per_call' (every call independently "
+        "psilocybin hallucination trip. mode is 'per_call' (every call independently "
         "eligible to hallucinate) or 'single' (at most one hallucination for the "
         "whole trip).",
     )
@@ -40,8 +40,8 @@ def pytest_configure(config):
 
 @pytest.fixture
 def trip_sitter(request):
-    """A TripSitter configured from the closest @pytest.mark.psylocybin, if any."""
-    marker = request.node.get_closest_marker("psylocybin")
+    """A TripSitter configured from the closest @pytest.mark.psilocybin, if any."""
+    marker = request.node.get_closest_marker("psilocybin")
     kwargs = dict(marker.kwargs) if marker else {}
     targets = kwargs.pop("targets", None)
     if targets is None and marker and marker.args:

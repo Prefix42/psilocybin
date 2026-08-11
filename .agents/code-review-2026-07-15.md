@@ -11,7 +11,7 @@ understanding in [design-philosophy.md](design-philosophy.md),
 
 ## Scope
 
-- Every source file under `src/psylocybin/`, the full test suite, and
+- Every source file under `src/psilocybin/`, the full test suite, and
   `tests/sample_app.py`.
 - `pyproject.toml`, all three GitHub workflows, `dependabot.yml`,
   `.gitignore`, both `README.md`s, `AGENTS.md`, `CLAUDE.md`.
@@ -51,7 +51,7 @@ the green suite.
   - never the real `4`. The first target was never unpatched and kept
   actively hallucinating. Confirms H1 as a real, reproduced defect.
 - **`__version__` skew (M1).** Installed dist reports `0.1.2` (pytest banner:
-  `psylocybin-0.1.2`) while `psylocybin.__version__` returns `'0.1.0'`.
+  `psilocybin-0.1.2`) while `psilocybin.__version__` returns `'0.1.0'`.
 - **Infinity mutation no-op (M2).** Of the four `choice == 3` multipliers,
   `0.5` and `2.0` both leave `+inf` equal to `+inf`.
   `test_infinity_is_mutated` passes only because its `seed=100` happens to

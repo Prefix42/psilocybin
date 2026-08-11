@@ -5,7 +5,7 @@ Guidance for any agent producing visual or branded material (docs, diagrams, soc
 ## Logo
 - Mark: **"Warped orbit"** — three concentric ellipses drifting off-axis around an offset pupil. It reads as a hypnotic eye slipping out of true: the TripSitter watching, reality wobbling.
 - Canonical files: `psilocybin-icon.svg` (full 3-ring mark), `favicon.svg` (simplified 1-ring + pupil, for ≤32px).
-- Wordmark: lowercase `psilocybin`, Space Grotesk SemiBold (600), letter-spacing -0.01em. In lockups the mark **replaces the "o"** (psyl◎cybin), sized ~1.05× the lowercase x-height cap.
+- Wordmark: lowercase `psilocybin`, Space Grotesk SemiBold (600), letter-spacing -0.01em. In lockups the mark **replaces the "o"** (psil◎cybin), sized ~1.05× the lowercase x-height cap.
 - Never redraw the mark; scale the SVGs. At small sizes use the simplified favicon variant, not the 3-ring mark.
 
 ## Color
@@ -25,16 +25,11 @@ Guidance for any agent producing visual or branded material (docs, diagrams, soc
 - Tagline when needed: "The psychedelic way to test."
 
 ## README & GitHub usage
-- README header: use the lockup with automatic theme switching, via **absolute**
-  `raw.githubusercontent.com` URLs, not repo-relative paths - `pyproject.toml`
-  sets `readme = "README.md"`, so this exact file also becomes the PyPI
-  project page's long description, and PyPI renders it standalone with no
-  repo context to resolve a relative path against. A relative path looks
-  fine on GitHub and silently breaks on PyPI:
+- README header: use the lockup with automatic theme switching:
   ```html
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Prefix42/psilocybin/main/assets/psilocybin-lockup-dark.png">
-    <img src="https://raw.githubusercontent.com/Prefix42/psilocybin/main/assets/psilocybin-lockup-light.png" alt="psilocybin" width="320">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/psilocybin-lockup-dark.png">
+    <img src="assets/psilocybin-lockup-light.png" alt="psilocybin" width="320">
   </picture>
   ```
 - Social preview (repo settings): `psilocybin-og.png`.

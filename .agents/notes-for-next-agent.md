@@ -1,6 +1,55 @@
 # Handoff: full review done - suite green, but real open issues found
 
-## Latest session (2026-07-16): logo/brand assets added, then a repeat of the PR #13 authorship mistake caught and fixed on the spot
+## Latest session (2026-08-10): fixed the actual psylocybin -> psilocybin misspelling, and repeated (then caught) the same authorship mistake a third time
+
+`fix/psilocybin_spelling` (pushed, not yet merged) renames the package for
+real: `src/psylocybin/` -> `src/psilocybin/`, `tests/test_psylocybin.py` ->
+`tests/test_psilocybin.py`, every in-file reference, `pyproject.toml`'s
+name/entry-point/tool config, both GitHub workflows, `README.md`, `AGENTS.md`,
+every file in `.agents/`, and the brand assets (new psilocybin-named SVGs/PNGs
+plus a new public `assets/visual-style.md`, all supplied by the user). 16
+commits total, one per file or coupled group, plus a 17th `bookkeeping`
+commit resyncing the Effort Log table.
+
+**`design-philosophy.md` was itself wrong, not the code.** It used to assert
+the `psylocybin` spelling was an intentional stylization and told agents not
+to "correct" it. That was stale: the user confirmed the misspelling was never
+intentional, and `git remote -v` already pointed at
+`github.com/Prefix42/psilocybin`, proving the real rename was already
+underway at the hosting level before this session touched anything. Rewrote
+that paragraph to say what actually happened instead of leaving it
+self-contradictory after the mechanical find/replace ran over it. Worth
+reading this repo's own claims of "intentional" skeptically next time one
+doesn't match what the user is actually asking for - it may just be
+undocumented drift nobody caught yet.
+
+**Same authorship/message-format mistake as PR #13 and the logo session
+below, a third time.** All 16 (then 17) commits were first made using the
+user's globally-configured `dir: subdir: file:` prefix and the human user's
+git identity, because the initial draft came from a generic commit-drafting
+flow that never consulted `AGENTS.md` before committing - same root cause as
+the prior two occurrences ("the mechanism didn't fail, the process step was
+just skipped"). Caught this time while drafting effort notes and reading
+`AGENTS.md` in full for the notes schema, not by the user flagging it first.
+Fixed the same way as before: `git reset --soft` back to the base commit
+(nothing had been pushed yet), recommitted all 16 with correct
+`Claude Sonnet 5 <claude-sonnet-5@anthropic.com>` authorship and trip-themed
+messages, added effort notes, then pushed once at the end (no force-push
+needed this time, since the mistake was caught pre-push). Third time
+suggests the checklist itself is the gap: nothing currently prompts an agent
+to read `AGENTS.md`'s "Commit message style" and "Commit authorship"
+sections *before* drafting the first commit of a session, only after
+something later goes looking for the effort-log schema. Worth a more
+prominent, earlier trigger if this happens a fourth time.
+
+Effort Log Running Total resynced in this PR: Claude Sonnet 5
+59 -> 75 commits (mechanical 34 -> 49, mixed 10 -> 11). PR description
+drafted and handed to the user to paste in themselves - no GitHub access to
+open it directly.
+
+The sections below are unchanged from before this session and still accurate.
+
+## Prior session (2026-07-16): logo/brand assets added, then a repeat of the PR #13 authorship mistake caught and fixed on the spot
 
 `feature/readme_logo` (not yet merged) adds a new `.assets/` directory
 (favicon, icon in light/dark, wordmark lockup in light/dark, an OG
@@ -66,58 +115,18 @@ actual intended path all along, and this session's earlier edit to the
 guide was the mistake, not the other way round. Fable 5 sent a follow-up
 that renamed `.assets/` to `assets/` in the working tree directly (not
 just the guide text) and regenerated two files that turned out to be
-genuinely broken: `psylocybin-icon-dark.png` and
-`psylocybin-lockup-light.png` were rendering their gradient rings as
+genuinely broken: `psilocybin-icon-dark.png` and
+`psilocybin-lockup-light.png` were rendering their gradient rings as
 solid black / invisible (confirmed by diffing against the
 previously-committed versions), caused by a `<linearGradient>` def not
 being scoped inside the same `<svg>` being captured - now written down
 in the guide's own "Gotcha for asset regeneration" section so it
-doesn't recur. `psylocybin-og.png` was also regenerated at 2x
+doesn't recur. `psilocybin-og.png` was also regenerated at 2x
 resolution (2400x1260) with the tagline added. README.md's asset paths
 were updated to match in a separate, Sonnet-5-authored follow-up commit.
 Lesson: when a style guide and the actual repo state disagree, don't
 assume the guide is stale without checking whether the repo state is
 the thing that's actually wrong.
-
-The sections below are unchanged from before this session and still
-accurate.
-
-## Prior session (2026-07-16): documentation-accuracy pass, PR #13 authorship fixed
-
-PR #14 merged: a documentation-accuracy and polish pass across
-`README.md`, `AGENTS.md`, and `critical-issues-and-fixes.md` - stale
-line-anchor links corrected, a missing `radon mi` step and a missing
-`version-bump` CI/CD table row (the README had silently drifted from
-what CI actually runs), badge logo icons, and an Effort Log leaderboard
-resync. No `src/` changes - the open code issues in
-[critical-issues-and-fixes.md](critical-issues-and-fixes.md) (**H1**
-first, still the top fix - see that file and
-[project-status.md](project-status.md) for full detail) are unchanged
-and remain the priority for whoever picks up code next.
-
-**A more significant fix landed alongside it.** PR #13's 4 commits were
-authored/committed as the human user, not as the agent that actually did
-the work (`Claude Haiku 4.5`, per its own self-reported effort notes -
-which were already correct even though the git identity wasn't). Fixed
-by rewriting those commits' author/committer (content verified
-tree-identical throughout), rebuilding the merge commit, force-pushing
-`main`, and recreating the effort notes on the new SHAs.
-`refs/notes/effort` itself only needed a normal push (fast-forward), not
-a force-push - only `main`'s commit graph actually changed shape.
-
-**`AGENTS.md` gained two new footgun notes this session**, noted here per
-its own "whenever AGENTS.md changes" checkpoint - both caught live during
-the PR #13 rewrite above, worth reading before the next rebase or history
-rewrite in this repo:
-- Under "Commit authorship": `git rebase` (including a
-  cherry-pick-then-amend rewrite) silently resets the COMMITTER to the
-  ambient local git identity even when it preserves AUTHOR - this
-  happened to this session's own freshly-made agent commits mid-rewrite,
-  caught only by re-verifying identity after the fact.
-- Under "Effort log": a note added right after `git commit`/`cherry-pick`
-  can end up attached to an intermediate SHA that a later `--amend`
-  orphans - always verify the note landed on the final, branch-reachable
-  SHA, not a pre-amend one.
 
 The sections below are unchanged from before this session and still
 accurate.

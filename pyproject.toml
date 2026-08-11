@@ -1,6 +1,6 @@
 [project]
-name = "psylocybin"
-version = "0.1.2"
+name = "psilocybin"
+version = "0.2.0"
 description = "A hallucination-driven fuzzer for exercising your test suite's resilience."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -21,7 +21,7 @@ dev = [
 ]
 
 [project.entry-points.pytest11]
-psylocybin = "psylocybin.plugin"
+psilocybin = "psilocybin.plugin"
 
 [build-system]
 requires = ["setuptools>=61.0"]
@@ -35,7 +35,7 @@ testpaths = ["tests"]
 addopts = "-ra"
 
 [tool.coverage.run]
-source = ["psylocybin"]
+source = ["psilocybin"]
 branch = true
 
 [tool.coverage.report]
@@ -56,7 +56,7 @@ mccabe = { max-complexity = 10 }
 [tool.mypy]
 python_version = "3.10"
 mypy_path = "src"
-packages = ["psylocybin"]
+packages = ["psilocybin"]
 ignore_missing_imports = true
 disallow_untyped_defs = false
 warn_unused_ignores = true
@@ -65,6 +65,6 @@ warn_redundant_casts = true
 [tool.bandit]
 exclude_dirs = ["tests", "build", "dist"]
 # B311: "standard pseudo-random generators not suitable for security purposes".
-# psylocybin uses random.Random deliberately for reproducible fuzz seeding,
+# psilocybin uses random.Random deliberately for reproducible fuzz seeding,
 # never for anything security- or crypto-sensitive.
 skips = ["B311"]

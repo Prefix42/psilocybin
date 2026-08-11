@@ -31,7 +31,7 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 
 ### H1. `Psychonaut.__enter__` is not atomic - a failed target leaves earlier targets permanently patched and actively hallucinating
 
-- Location: [psychonaut.py L180-L196](../src/psylocybin/psychonaut.py#L180-L196)
+- Location: [psychonaut.py L180-L196](../src/psilocybin/psychonaut.py#L180-L196)
 - The core promise, stated in the README ("guarantees the codebase is
   restored to normal when the trip ends, whether it ended cleanly or not")
   and the class docstrings, is that a trip never leaves the codebase in a
@@ -44,7 +44,7 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
           original = patcher.get_original()[0]
       except (AttributeError, ImportError, TypeError) as e:
           raise ValueError(f"Failed to patch target '{target_path}': ...") from e
-      mock_obj = patcher.start()          # target N started + appended
+      mock_obj = patcher.start()  # target N started + appended
       mock_obj.side_effect = self._wrap(target_path, original)
       self._patchers.append(patcher)
   ```
@@ -78,12 +78,12 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 
 ### M1. `__version__` is out of sync with `pyproject.toml`
 
-- Location: [`__init__.py` L46](../src/psylocybin/__init__.py#L46)
+- Location: [`__init__.py` L46](../src/psilocybin/__init__.py#L46)
   (`__version__ = "0.1.0"`) vs [`pyproject.toml` L3](../pyproject.toml#L3)
   (`version = "0.1.2"`).
 - **Reproduced.** A build/install of the package reports dist version
-  `0.1.2` (the pytest banner shows `psylocybin-0.1.2`) while
-  `import psylocybin; psylocybin.__version__` returns `'0.1.0'`. The runtime
+  `0.1.2` (the pytest banner shows `psilocybin-0.1.2`) while
+  `import psilocybin; psilocybin.__version__` returns `'0.1.0'`. The runtime
   attribute lies about the installed version.
 - This is more than cosmetic here: the entire release-automation system
   (see [AGENTS.md](../AGENTS.md) "Versioning") is built around bumping
@@ -92,7 +92,7 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
   0.1.0 has widened the gap.
 - **Recommended fix:** stop hard-coding the version in two places. Read it
   at runtime from installed metadata
-  (`importlib.metadata.version("psylocybin")`), or make `pyproject.toml`
+  (`importlib.metadata.version("psilocybin")`), or make `pyproject.toml`
   source the version dynamically from `__init__.__version__`
   (`[project] dynamic = ["version"]` + a setuptools `attr:` directive).
   Whichever direction, add it to the version-bump discipline so the two can
@@ -100,7 +100,7 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 
 ### M2. Float mutation can be a silent no-op (records a "hallucination" that changed nothing)
 
-- Location: [`_mutate_float` L110-L127](../src/psylocybin/psychonaut.py#L110-L127).
+- Location: [`_mutate_float` L110-L127](../src/psilocybin/psychonaut.py#L110-L127).
 - `_mutate`'s implied contract (asserted all over the tests: "should produce
   a different value") does **not** hold for several float inputs, across more
   than one branch:
@@ -115,10 +115,10 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 - **Reproduced.** `-0.0 == 0.0` is `True`; `1e308 + 1.0 == 1e308` is `True`;
   and `_mutate(0.0)` returned a value equal to `0.0` for **26 of the first
   50 seeds**. `+inf`/`-inf` no-op via 2 of the 4 `choice == 3` multipliers.
-  [`test_infinity_is_mutated`](../tests/test_psylocybin.py#L305-L323) passes
+  [`test_infinity_is_mutated`](../tests/test_psilocybin.py#L305-L323) passes
   only because its fixed `seed=100` happens to dodge the no-op branch
   (observed `+inf -> 0.0`, `-inf -> nan`);
-  [`test_float_mutations_handle_special_values`](../tests/test_psylocybin.py#L247-L261)
+  [`test_float_mutations_handle_special_values`](../tests/test_psilocybin.py#L247-L261)
   only asserts `isinstance(..., float)` for `0.0`, so it never catches the
   no-op at all.
 - **Real-world impact (not just a flaky test):** when the return-mutation
@@ -139,7 +139,7 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 
 ### M3. `test_empty_allowed_exceptions_does_not_crash` is seed-fragile and asserts the wrong thing
 
-- Location: [`test_psylocybin.py` L127-L144](../tests/test_psylocybin.py#L127-L144).
+- Location: [`test_psilocybin.py` L127-L144](../tests/test_psilocybin.py#L127-L144).
 - The test does a single `add(1, 1)` at `intensity=1.0` and asserts it raises
   `BadTripError`. But a hallucination is a 50/50 coin flip between
   return-mutation and exception-injection. Only the exception branch produces
@@ -158,8 +158,8 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 ### M4. Not safe for concurrent code-under-test (undocumented)
 
 - Location: shared mutable state on `Psychonaut` -
-  [`_active`/`_hallucinated`/`_rng` L82-L84](../src/psylocybin/psychonaut.py#L82-L84),
-  consumed in [`_wrap` L141-L178](../src/psylocybin/psychonaut.py#L141-L178).
+  [`_active`/`_hallucinated`/`_rng` L82-L84](../src/psilocybin/psychonaut.py#L82-L84),
+  consumed in [`_wrap` L141-L178](../src/psilocybin/psychonaut.py#L141-L178).
 - A single `random.Random` plus plain instance flags drive every wrapped
   call. If the code being fuzzed calls targets from multiple threads (or
   overlapping async tasks), the RNG draws interleave nondeterministically
@@ -172,7 +172,7 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 
 ### M5. `autospec` patch-site semantics will surprise users (undocumented gotcha)
 
-- Location: [`__enter__` L185](../src/psylocybin/psychonaut.py#L185) uses
+- Location: [`__enter__` L185](../src/psilocybin/psychonaut.py#L185) uses
   `patch(target_path, autospec=True)`.
 - Patching happens at the definition site. If the code-under-test did
   `from myapp.inventory import reserve_item` and calls the bare name, that
@@ -192,19 +192,19 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 
 ### L1. `_mutate(None)` returns `0`, contradicting the documented "truthy surprise"
 
-- Location: [`psychonaut.py` L102-L103](../src/psylocybin/psychonaut.py#L102-L103).
+- Location: [`psychonaut.py` L102-L103](../src/psilocybin/psychonaut.py#L102-L103).
   README [L137](../README.md#L137) and the `__init__` docstring both say
   "`None` replaced with a truthy surprise." The code returns `0`, which is
   falsy. **Reproduced:** `_mutate(None) == 0`, `bool(0) is False`.
 - It is still a mutation (`0 != None`), so
-  [`test_mutation_actually_changes_values`](../tests/test_psylocybin.py#L217-L244)
+  [`test_mutation_actually_changes_values`](../tests/test_psilocybin.py#L217-L244)
   passes - but the docs are wrong, and `0` collides with a perfectly ordinary
   real return value. **Fix:** either return an actually-truthy sentinel to
   match the docs, or correct the docs to say `None -> 0`.
 
 ### L2. Dead/misleading `try/except` in `_wrap`
 
-- Location: [`psychonaut.py` L152-L157](../src/psylocybin/psychonaut.py#L152-L157).
+- Location: [`psychonaut.py` L152-L157](../src/psilocybin/psychonaut.py#L152-L157).
   `try: result = original(...) except Exception: raise` re-raises with no
   handling - it does nothing a plain call wouldn't. The comment claims it
   prevents recording the original's exception as a hallucination, but that
@@ -214,7 +214,7 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 
 ### L3. `single`-mode budget can be spent without recording a hallucination
 
-- Location: [`psychonaut.py` L150-L166](../src/psylocybin/psychonaut.py#L150-L166).
+- Location: [`psychonaut.py` L150-L166](../src/psilocybin/psychonaut.py#L150-L166).
   `self._hallucinated = True` is set *before* the return-mutation branch
   calls `original(...)`. If that call raises a real exception, the budget is
   consumed (so no later call can hallucinate in `single` mode) yet no
@@ -225,11 +225,11 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 
 ### L4. Report accumulates across trips on a reused `TripSitter` (surprising vs "resets")
 
-- Location: [`TripSitter.guide` L42-L54](../src/psylocybin/tripsitter.py#L42-L54)
+- Location: [`TripSitter.guide` L42-L54](../src/psilocybin/tripsitter.py#L42-L54)
   passes `report=self.report`, and `__enter__` only resets `started_at`, not
   `events`. So a second `guide()`/`with` on the same sitter keeps
   accumulating events.
-  [`test_single_mode_resets_between_separate_trips`](../tests/test_psylocybin.py#L99-L116)
+  [`test_single_mode_resets_between_separate_trips`](../tests/test_psilocybin.py#L99-L116)
   bakes this in (expects `count == 2`, i.e. 1 + 1). The `single`-mode
   *budget* resets per trip, but the *report* does not - the naming invites
   confusion. **Fix:** document the distinction clearly (see
@@ -246,12 +246,12 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 
 - The package is fully annotated and passes `mypy`, but ships no `py.typed`
   file, so downstream users get no types (PEP 561). Low priority for a test
-  tool, but trivial to add. **Fix:** add `src/psylocybin/py.typed` and
+  tool, but trivial to add. **Fix:** add `src/psilocybin/py.typed` and
   include it in the package data.
 
 ### L7. `_evaluate` reason precedence can report a less-relevant cause
 
-- Location: [`tripsitter.py` L90-L104](../src/psylocybin/tripsitter.py#L90-L104).
+- Location: [`tripsitter.py` L90-L104](../src/psilocybin/tripsitter.py#L90-L104).
   Checks are ordered duration -> hallucination count -> escaped exception,
   first match wins. When more than one guideline is breached at once, the
   reported `bad_trip_reason` may not be the most salient one. Minor;
@@ -259,8 +259,8 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 
 ### L8. `trip_sitter` fixture used without a marker fails on `with`
 
-- Location: [`plugin.py` L42-L55](../src/psylocybin/plugin.py#L42-L55).
-  With no `@pytest.mark.psylocybin`, `targets` is empty, `guide()` is never
+- Location: [`plugin.py` L42-L55](../src/psilocybin/plugin.py#L42-L55).
+  With no `@pytest.mark.psilocybin`, `targets` is empty, `guide()` is never
   called, and entering the sitter raises `BadTripError("no psychonaut
   configured")`. Probably intended, but easy to trip over. **Fix:** document
   that the marker (or an explicit `.guide(...)`) is required, or make a
@@ -268,14 +268,14 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 
 ### L9. `HallucinationEvent.timestamp` is a monotonic value, not a wall-clock timestamp
 
-- Location: [`report.py` L15](../src/psylocybin/report.py#L15) uses
+- Location: [`report.py` L15](../src/psilocybin/report.py#L15) uses
   `default_factory=monotonic`. The field name reads like an epoch timestamp
   but is a monotonic clock reading (correct for durations, meaningless as a
   date). Minor naming/clarity issue.
 
 ### L10. Return-mutation runs the target's side effects; exception-injection skips them
 
-- Location: [`_wrap` L151-L176](../src/psylocybin/psychonaut.py#L151-L176).
+- Location: [`_wrap` L151-L176](../src/psilocybin/psychonaut.py#L151-L176).
   The mutation branch calls `original(...)` (side effects happen, then the
   return is perturbed); the exception branch never calls `original` (side
   effects skipped). This is a reasonable design, but it means the two
@@ -298,7 +298,7 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
 
 - Location: README [L136-L137](../README.md#L136-L137) ("collections
   emptied") vs [`_mutate_list`/`_mutate_tuple`/`_mutate_dict`
-  L132-L139](../src/psylocybin/psychonaut.py#L132-L139).
+  L132-L139](../src/psilocybin/psychonaut.py#L132-L139).
 - **Reproduced.** Non-empty collections are emptied, but *empty* ones are
   filled: `_mutate([]) == [None]`, `_mutate(()) == (None,)`,
   `_mutate({}) == {"hallucinated": True}`. The README describes only half
@@ -346,12 +346,12 @@ them would have caught items above:
 - The H1 multi-target patch-leak path (no test guides more than one target,
   let alone a failing second one).
 - `halt_on_bad_trip=False` - the "record the bad trip but swallow the
-  exception" path in [`__exit__` L76-L80](../src/psylocybin/tripsitter.py#L76-L80).
+  exception" path in [`__exit__` L76-L80](../src/psilocybin/tripsitter.py#L76-L80).
 - `max_duration_seconds` breach (the duration check in `_evaluate`).
 - Forbidden **sub-path** matching (`target.startswith(forbidden + ".")` at
-  [`tripsitter.py` L37](../src/psylocybin/tripsitter.py#L37)) - only exact
+  [`tripsitter.py` L37](../src/psilocybin/tripsitter.py#L37)) - only exact
   matches are tested.
 - The `<hallucinated {type}>` fallback branch in `_mutate` for unknown
-  types ([`psychonaut.py` L104](../src/psylocybin/psychonaut.py#L104)).
+  types ([`psychonaut.py` L104](../src/psilocybin/psychonaut.py#L104)).
 - `GuidelineViolation` vs `BadTripError` distinction (tests only ever catch
   the base `BadTripError`).

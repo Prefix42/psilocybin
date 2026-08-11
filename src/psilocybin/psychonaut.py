@@ -1,4 +1,4 @@
-"""Psychonaut: the part of psylocybin that actually takes the trip.
+"""Psychonaut: the part of psilocybin that actually takes the trip.
 
 A Psychonaut wraps a set of target callables (given as dotted import
 paths, e.g. "myapp.billing.charge_card") so that, with some probability
@@ -173,7 +173,7 @@ class Psychonaut:
                     detail=f"raised {exc_type.__name__}",
                 )
             )
-            raise exc_type(f"psylocybin hallucination on {target_path}")
+            raise exc_type(f"psilocybin hallucination on {target_path}")
 
         return wrapper
 

@@ -7,7 +7,7 @@ commit history. This is the "why" companion to
 
 ## The goal
 
-psylocybin is a **hallucination-driven fuzzer for test suites**. Instead of
+psilocybin is a **hallucination-driven fuzzer for test suites**. Instead of
 fuzzing inputs, it fuzzes the *behavior of your own functions*: at a
 configured probability it makes chosen callables lie - returning a
 plausible-but-wrong value, or raising an unexpected exception - so you can
@@ -73,10 +73,12 @@ guarantees you come back" is both the theme and the core invariant.
 `AGENTS.md` deliberately extends this into commit messages ("lean into the
 trip theme"), so the theme is a maintained convention, not an accident.
 
-Note the package name is spelled **psylocybin** (with a `y`), not the
-mushroom compound "psilocybin". This is an intentional stylization ("psy"),
-consistent throughout the code, tests, and packaging. Do not "correct" it -
-renaming would break the package name, entry points, and imports.
+The package was originally shipped under a misspelled name, "psylocybin"
+(with a `y`), instead of the actual mushroom compound "psilocybin". It has
+since been renamed throughout the code, tests, and packaging to the correct
+spelling - if you see "psylocybin" anywhere outside old commit history or
+this note, it's a leftover that should be fixed, not an intentional
+stylization.
 
 ### Reproducibility, bounded blast radius, defense in depth
 
