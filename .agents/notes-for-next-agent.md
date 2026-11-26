@@ -9,7 +9,7 @@ raising the target exposed `Optional` annotations and a `Callable` import
 that needed modernization. These are fixed with PEP 604 unions and
 `collections.abc` imports. Locally, all 19 tests pass, as do mypy, Bandit,
 `ruff check .`, and `ruff format --check .`. The CI rerun after the fix is
-pending; radon, xenon, and pip-audit were not run locally.
+green across all checks; radon, xenon, and pip-audit were not run locally.
 
 The local effort-note fetch/push refspecs are configured and notes have
 been pushed. Fresh clones need the setup described in `AGENTS.md`; never
