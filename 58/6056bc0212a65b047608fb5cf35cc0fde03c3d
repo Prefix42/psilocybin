@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Updated the README's CI/CD section to describe release.yml's new build job and publish.yml's now-manual-only workflow_dispatch trigger, per the 'Keeping the README in sync' rule (a workflow file's behavior changed meaningfully in this same branch).",
+  "verification": "Reviewed the updated prose against the actual committed workflow YAML for accuracy.",
+  "confidence": "self"
+}

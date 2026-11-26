@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Updated .agents/architecture-and-patterns.md's module table, source-line links, and inline class/marker names from psylocybin to psilocybin.",
+  "verification": "Reviewed the diff; no structural or content change beyond the rename.",
+  "confidence": "self"
+}

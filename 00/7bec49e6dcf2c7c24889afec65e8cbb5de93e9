@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Documented the user's confirmed preference for PR description structure (## Overview intro paragraph, ## What changed with ### subsections per area, leaderboard last) in AGENTS.md's PR-description section, after the user compared two draft formats and confirmed which one they liked.",
+  "verification": "Reviewed the diff for correctness; no functional code affected.",
+  "confidence": "self"
+}

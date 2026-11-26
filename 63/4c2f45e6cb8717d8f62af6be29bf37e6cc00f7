@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "bookkeeping",
+  "files_touched": 1,
+  "summary": "Resynced README.md's Effort Log table (46 -> 47 commits for Claude Sonnet 5) to include the handoff-notes commit added earlier in this same branch, before drafting the PR description.",
+  "verification": "Cross-checked the new number against a fresh git notes query over origin/main HEAD.",
+  "confidence": "self"
+}

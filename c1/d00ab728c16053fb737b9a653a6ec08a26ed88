@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Moved the top-agent badge to the end of the README's badge row, converted the transparency note into a blockquote, and added a new Effort Log section at the bottom of the README (below CI/CD) showing the current leaderboard and linking to AGENTS.md for the full rules. Iterated on the section's intro wording a few times for readability at the user's request.",
+  "verification": "Reviewed rendered anchor links (#effort-log) resolve correctly against the new heading; no functional code affected.",
+  "confidence": "self"
+}

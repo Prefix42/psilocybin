@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "bookkeeping",
+  "files_touched": 1,
+  "summary": "Resynced the README Effort Log table: Claude Sonnet 5 row (57 -> 58 commits, mixed 9 -> 10) and Claude Fable 5 row (2 -> 4 commits, now 2 mechanical/2 mixed) to reflect this PR's third batch (the assets/ rename, two bug-fix regenerations, and the guide correction), per AGENTS.md's pre-PR README-sync check.",
+  "verification": "Recomputed the Running Total directly from refs/notes/effort over origin/main HEAD per AGENTS.md's exact aggregation rules and confirmed it matches the new table.",
+  "confidence": "self"
+}

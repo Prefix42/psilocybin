@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "deep-dive",
+  "files_touched": 3,
+  "summary": "Built version-bump CI enforcement (fails a PR if src/ or pyproject.toml's dependencies/requires-python changed without a version bump) and a new release.yml that auto-tags and creates a GitHub Release when pyproject.toml's version changes on main. Disabled publish.yml's actual PyPI/TestPyPI upload steps (if: false, original conditions preserved as comments) at the user's request while this is worked out. The version-bump scope was refined mid-session from a blanket src/-only check to also include dependencies/requires-python specifically, after discussing with the user that a whole-pyproject.toml trigger would block routine dev-tooling dependency-bot PRs for no user-facing reason.",
+  "verification": "Validated all three workflow YAML files parse with PyYAML. Sanity-tested the version-bump job's shell logic locally against the real pyproject.toml (negative case: no src/ or deps changes correctly reports not-required; positive case: simulated a dependencies line change and confirmed the comparison correctly flags it).",
+  "confidence": "self"
+}

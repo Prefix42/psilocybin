@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Removed a specific tool-name reference (the `mr` skill) from AGENTS.md's PR-description instructions at the user's request, since naming it could hint at other platforms/tooling used elsewhere. Kept the underlying instruction (use PR not MR) generic.",
+  "verification": "Grepped the repo for other mentions of the same tool name to confirm none remained.",
+  "confidence": "self"
+}

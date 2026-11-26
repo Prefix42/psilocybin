@@ -1,0 +1,9 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Straightened dashes throughout README.md and fixed the CI badge URL to point at the real repo (Prefix42/psylocybin) instead of the placeholder OWNER/psylocybin.",
+  "verification": "None recorded beyond the diff itself.",
+  "confidence": "estimated",
+  "estimated_by": "Claude Sonnet 5"
+}

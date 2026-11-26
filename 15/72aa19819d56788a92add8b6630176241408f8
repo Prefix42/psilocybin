@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Added a new 'Handoff notes' section to AGENTS.md instructing agents to keep notes-for-next-agent.md proactively current rather than only updating it at the end of a session.",
+  "verification": "Reviewed the diff for correctness; no functional code affected.",
+  "uncommitted_work": ""
+}

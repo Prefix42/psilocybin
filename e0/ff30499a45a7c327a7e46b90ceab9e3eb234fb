@@ -1,0 +1,9 @@
+{
+  "agent": "Claude Fable 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Corrected .agents/visual-style.md's asset-directory references from .assets/ to assets/ (matching the actual rename), updated psylocybin-og.png's documented dimensions, and added a new gotcha section on scoping <linearGradient> defs inside the same <svg> being captured. Done in the same off-repo session as the asset rename/regeneration; handed off to the user for this repo's agent to review and commit.",
+  "verification": "Not performed by this note's author. The committing agent (Claude Sonnet 5) confirmed the guide's corrected path now matches the actual assets/ directory and the new gotcha note matches the bug observed in the previously-committed icon-dark.png/lockup-light.png.",
+  "confidence": "estimated",
+  "estimated_by": "Claude Sonnet 5"
+}

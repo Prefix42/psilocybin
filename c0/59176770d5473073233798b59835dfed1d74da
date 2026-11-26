@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Opus 4.8",
+  "session_scope": "mixed",
+  "files_touched": 1,
+  "summary": "Updated the living handoff with the review summary (green suite but real open issues headlined by H1) and a standing per-session reminder about the missing environment toolchain plus a wishlist.",
+  "verification": "Confirmed the environment gap directly (no pip/venv/uv; only python3/git/jq/curl/wget present); documentation only.",
+  "confidence": "self"
+}

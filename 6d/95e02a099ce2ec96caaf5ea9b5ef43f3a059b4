@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Added a rule to distinguish Dependabot's commits from genuine unscoped gaps in the leaderboard. Verified Dependabot's identifying signal directly against this repo's actual commits (author email 49699333+dependabot[bot]@users.noreply.github.com, consistent across all 5 dependency-bump commits) rather than assuming from general knowledge, and confirmed a structured 'updated-dependencies' trailer exists in the commit body too. Updated the example leaderboard to show both an unscoped row and a Dependabot row simultaneously, since they're not the same thing and one shouldn't absorb the other.",
+  "verification": "Ran git log --format on all 5 previously-unscoped commits in this repo to confirm the author email pattern is identical across all of them before writing the rule.",
+  "confidence": "self"
+}

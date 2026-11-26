@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Updated .agents/critical-issues-and-fixes.md's source-line links and inline code/prose references from psylocybin to psilocybin throughout the issues list.",
+  "verification": "Reviewed the diff; no content change beyond the rename.",
+  "confidence": "self"
+}

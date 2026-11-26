@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Opus 4.8",
+  "session_scope": "mixed",
+  "files_touched": 1,
+  "summary": "Filled the architecture-and-patterns placeholder: module map, nested context-manager and mock/autospec patterns, RNG spend, trip state lifecycle, the two hallucination modes internally, invariants, and extension points.",
+  "verification": "Derived from a full read of src plus this session's toolchain and probe run; documentation only, no runtime change.",
+  "confidence": "self"
+}

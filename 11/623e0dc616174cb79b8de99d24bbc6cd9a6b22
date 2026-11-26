@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Added confidence/estimated_by fields to the effort-log JSON schema and updated the leaderboard rules to keep the table itself clean (no estimate disclaimers, no all-zero rows), per user direction after discussing how to backfill pre-convention commits honestly.",
+  "verification": "Reviewed the diff for correctness; no functional code affected.",
+  "confidence": "self"
+}

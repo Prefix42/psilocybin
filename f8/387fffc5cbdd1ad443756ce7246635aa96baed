@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "deep-dive",
+  "files_touched": 1,
+  "summary": "Root-caused a real data-loss incident: c1d00ab's effort note vanished between being added and being read back. git reflog show refs/notes/effort revealed a 'fetch: forced-update' event, traced to the fetch refspec's leading + (force-update, non-fast-forward allowed), which lets any fetch - including an IDE's automatic background fetch - silently overwrite local-only notes with the remote's stale state. Recovered the lost note from a saved copy, then documented the footgun and two mitigations (push promptly; drop the + so a divergent fetch fails loudly instead of silently discarding data) in AGENTS.md, and updated the startup config-check to flag a +-prefixed fetch line.",
+  "verification": "Confirmed via git reflog show refs/notes/effort that the forced-update event's parent commit predated c1d00ab's note; confirmed the note was genuinely absent via git notes --ref=effort show c1d00ab before recovery, and present after re-adding it.",
+  "confidence": "self"
+}

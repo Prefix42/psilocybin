@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mixed",
+  "files_touched": 2,
+  "summary": "Documented the new versioning rules (bump requirement, scope, PR title [X.Y.Z] prefix, release automation, temporarily-disabled publishing) in a new AGENTS.md 'Versioning' section. Also refined the 'Handoff notes' section after the user pointed out notes-for-next-agent.md had gone stale for a long stretch despite the existing rule - tied updates to concrete checkpoints (drafting a PR description, AGENTS.md changing, session end as last resort) instead of the vague 'as soon as status changes' trigger that demonstrably didn't fire in practice. Rewrote notes-for-next-agent.md itself to reflect true current state, including the fact that this same session accidentally staged changes directly on main a second time before catching it.",
+  "verification": "Reviewed the rewritten notes file for consistency with the final committed AGENTS.md content (branch name, version-bump scope wording).",
+  "confidence": "self"
+}

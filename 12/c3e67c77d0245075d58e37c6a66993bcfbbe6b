@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Updated .agents/README.md's intro line from psylocybin to psilocybin.",
+  "verification": "Reviewed the diff.",
+  "confidence": "self"
+}

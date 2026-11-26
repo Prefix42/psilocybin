@@ -1,0 +1,9 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Implemented the pytest plugin integration (marker registration, trip_sitter/psychonaut fixtures), following standard pytest plugin conventions.",
+  "verification": "None recorded beyond the diff itself.",
+  "confidence": "estimated",
+  "estimated_by": "Claude Sonnet 5"
+}

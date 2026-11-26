@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mixed",
+  "files_touched": 2,
+  "summary": "Documented the GITHUB_TOKEN cross-workflow-trigger footgun as a new bullet in AGENTS.md's Versioning section, so a future agent doesn't reintroduce a release:published trigger expecting it to fire automatically. Rewrote notes-for-next-agent.md to reflect current state: PR #9 merged, the bug found during its smoke test, and this branch's fix, not yet merged or proven end-to-end.",
+  "verification": "Reviewed the new AGENTS.md bullet against the actual committed workflow changes for accuracy, and checked the rewritten handoff notes against the current branch/commit state.",
+  "confidence": "self"
+}

@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Updated .github/workflows/ci.yml's coverage flag and a comment from psylocybin to psilocybin to match the renamed package.",
+  "verification": "Reviewed the diff; no functional change to the workflow logic.",
+  "confidence": "self"
+}

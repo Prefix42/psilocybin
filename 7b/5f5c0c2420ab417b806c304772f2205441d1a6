@@ -1,0 +1,9 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mixed",
+  "files_touched": 1,
+  "summary": "Added Style, Commit message style, and Commit authorship sections to AGENTS.md, establishing this repo's no-emoji/no-em-dash rule, its psychedelic-trip commit message convention, and per-commit model-specific authorship overriding global generic-identity guidance.",
+  "verification": "None recorded beyond the diff itself.",
+  "confidence": "estimated",
+  "estimated_by": "Claude Sonnet 5"
+}

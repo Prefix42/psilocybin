@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "bookkeeping",
+  "files_touched": 1,
+  "summary": "Resynced the README Effort Log table's Claude Sonnet 5 row after the psilocybin rename's 16 commits landed, from 59 to 75 total commits (49 mechanical, 13 deep-dive, 11 mixed, 1 verification, 1 config).",
+  "verification": "Recomputed the aggregate from git log --no-merges --notes=effort origin/main HEAD, grouped by agent and session_scope, and confirmed every other agent's count matched the table unchanged (only Sonnet 5 moved, by exactly +16).",
+  "confidence": "self"
+}

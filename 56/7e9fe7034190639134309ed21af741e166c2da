@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "deep-dive",
+  "files_touched": 1,
+  "summary": "Wrote the full effort-log and leaderboard system into AGENTS.md after a multi-round design discussion: the git notes schema, session_scope category definitions with a mixed tie-breaker, the zero-commit empty-anchor-commit fallback, and the MR/PR leaderboard aggregation rules.",
+  "verification": "Reviewed the final diff for internal consistency across all new sections; no code affected.",
+  "confidence": "self"
+}

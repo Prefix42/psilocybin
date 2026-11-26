@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Updated the regenerated-asset filenames mentioned in .agents/notes-for-next-agent.md's handoff narrative from psylocybin to psilocybin, to match the current asset names.",
+  "verification": "Reviewed the diff.",
+  "confidence": "self"
+}

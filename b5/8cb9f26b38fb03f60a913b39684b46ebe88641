@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Opus 4.8",
+  "session_scope": "config",
+  "files_touched": 1,
+  "summary": "Added a handoff-notes pruning convention to AGENTS.md: prune resolved entries from notes-for-next-agent and collapse it to a short all-clear when nothing is outstanding.",
+  "verification": "Convention/process change; documentation only.",
+  "confidence": "self"
+}

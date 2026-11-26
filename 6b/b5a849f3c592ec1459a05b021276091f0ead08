@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 6,
+  "summary": "Added the .assets/ directory (favicon, icon in light/dark, wordmark lockup in light/dark, OG social-preview image) that the user had already dropped into the working tree, so it could be referenced from the README.",
+  "verification": "Read each PNG/SVG to confirm dimensions and content before committing.",
+  "confidence": "self"
+}

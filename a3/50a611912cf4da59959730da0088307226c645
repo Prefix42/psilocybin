@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Opus 4.8",
+  "session_scope": "mixed",
+  "files_touched": 1,
+  "summary": "Filled the development-guide placeholder: quick start, how to bootstrap when pip/venv are missing, file map, common tasks, critical code paths, debugging pitfalls, and a pre-PR checklist.",
+  "verification": "The bootstrap steps and gotchas documented are the ones actually used to run the suite this session; documentation only.",
+  "confidence": "self"
+}

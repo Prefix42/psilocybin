@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Updated .agents/development-guide.md's source-line links, directory-tree diagram, class names, marker, and plugin-invocation examples from psylocybin to psilocybin.",
+  "verification": "Reviewed the diff.",
+  "confidence": "self"
+}

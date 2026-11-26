@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "deep-dive",
+  "files_touched": 1,
+  "summary": "Formalized 'always chain notes add and push into one command' as the actual defense against the force-fetch footgun, after confirming with the user that removing the fetch refspec's leading + alone did not stop repeated data loss. Rewrote the footgun section to reflect the full diagnostic history (the + wasn't sufficient, something forces the fetch regardless of refspec) and documented an explicit escalation plan (worklog.md next, then non-git storage) if chaining itself turns out insufficient.",
+  "verification": "Reviewed the rewritten section for consistency with the earlier startup-check bullet, which still recommends the non-force fetch line as defense in depth without overstating it as sufficient.",
+  "confidence": "self"
+}

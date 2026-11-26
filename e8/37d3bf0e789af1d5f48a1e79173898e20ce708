@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Updated .agents/code-review-2026-07-15.md's scope section and version-skew note from psylocybin to psilocybin.",
+  "verification": "Reviewed the diff.",
+  "confidence": "self"
+}

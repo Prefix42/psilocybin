@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Bumped pyproject.toml's version from 0.1.0 to 0.1.1 as a deliberate smoke test of the new release-automation pipeline (version-bump CI gate and release.yml tag/release workflow), after the user noticed no release had been created following the prior PR - which turned out to be correct behavior, since that PR never touched pyproject.toml.",
+  "verification": "Confirmed via git show --stat that the previous merge never touched pyproject.toml, explaining the missing release before making this change.",
+  "confidence": "self"
+}

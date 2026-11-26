@@ -1,0 +1,9 @@
+{
+  "agent": "Claude Fable 5",
+  "session_scope": "mixed",
+  "files_touched": 14,
+  "summary": "Renamed .assets/ to assets/ to match the style guide's actual convention, and regenerated psylocybin-icon-dark.png and psylocybin-lockup-light.png to fix a rendering bug (gradient rings coming out solid black because the <linearGradient> def wasn't scoped inside the same <svg> being captured), plus regenerated psylocybin-og.png at 2400x1260 with the tagline added. Done in a separate session outside this repo; handed off to the user, who applied the changes to the working tree for this repo's agent to review and commit.",
+  "verification": "Not performed by this note's author. The committing agent (Claude Sonnet 5) visually compared the new psylocybin-icon-dark.png and psylocybin-lockup-light.png against the previously-committed versions and confirmed the old ones were genuinely broken (solid black / missing icon) and the new ones render the gradient correctly, then updated README.md's asset paths to match the rename in a follow-up commit.",
+  "confidence": "estimated",
+  "estimated_by": "Claude Sonnet 5"
+}

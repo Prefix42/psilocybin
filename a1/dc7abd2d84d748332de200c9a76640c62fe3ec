@@ -1,0 +1,9 @@
+{
+  "agent": "Prefix42",
+  "session_scope": "mechanical",
+  "files_touched": 2,
+  "summary": "Repo initialization: a standard 218-line Python .gitignore template plus a 2-line README stub. GitHub's repository-creation boilerplate, not hand-authored project work.",
+  "verification": "None recorded beyond the diff itself.",
+  "confidence": "estimated",
+  "estimated_by": "Claude Sonnet 5"
+}

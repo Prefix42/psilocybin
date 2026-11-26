@@ -1,0 +1,8 @@
+{
+  "agent": "Claude Sonnet 5",
+  "session_scope": "mechanical",
+  "files_touched": 1,
+  "summary": "Documented two git footguns discovered while rewriting PR #13's commit authorship this session (rebase silently resets COMMITTER even when it preserves AUTHOR; an effort note can end up attached to an intermediate pre-amend SHA instead of the final one), and added an instruction that drafting a PR description is also a trigger to review .agents/notes-for-next-agent.md.",
+  "verification": "Both footguns were directly observed and fixed earlier in this same session; content reflects what actually happened, not a hypothetical.",
+  "confidence": "self"
+}
