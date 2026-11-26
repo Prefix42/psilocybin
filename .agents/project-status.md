@@ -6,7 +6,7 @@ live, session-by-session handoff see
 that produced this snapshot see
 [code-review-2026-07-15.md](code-review-2026-07-15.md).
 
-Last reviewed: **2026-07-15** (full read + local run of the whole toolchain).
+Last reviewed: **2026-11-26** (Python support floor and GitHub Actions uplift).
 
 ## Empirical state (verified 2026-07-15)
 
@@ -22,6 +22,11 @@ All quality gates pass on Python 3.13:
 | `radon cc src -a` | average complexity A (2.9); worst block B |
 | `xenon --max-absolute B --max-modules A --max-average A src` | passes |
 
+The Python support uplift was separately checked on Python 3.14: all 19
+tests pass when the pytest plugin is enabled; mypy, Bandit, `ruff check .`,
+and `ruff format --check .` pass. Radon, xenon, and pip-audit were not run
+locally.
+
 So the earlier handoff's "assume nothing works" framing does not match
 reality: the suite is green and the tooling gates hold. What the review
 found instead is a set of **latent** issues and doc/design deviations,
@@ -33,7 +38,7 @@ catalogued in [critical-issues-and-fixes.md](critical-issues-and-fixes.md).
   (`Guidelines`), reporting (`TripReport`), exceptions, and the pytest
   plugin are all implemented and working.
 - Both hallucination modes (`per_call`, `single`) work as documented.
-- CI matrix (3.9-3.13) plus lint/type/complexity/security/secrets gates and
+- CI matrix (3.11-3.14) plus lint/type/complexity/security/secrets gates and
   a `version-bump` gate are wired and, per the handoff notes, green on
   `main`.
 - Release automation (tag + GitHub Release + build/`twine check` on a
@@ -63,8 +68,7 @@ Full detail, evidence, and recommended fixes in
   (L3); report accumulates across trips (L4); missing `LICENSE` (L5); no
   `py.typed` (L6); reason precedence (L7); markerless fixture (L8);
   monotonic "timestamp" naming (L9); mutation-vs-exception side-effect
-  asymmetry (L10); mypy targets 3.10 while floor is 3.9 (L11); README
-  "collections emptied" imprecision (L12).
+  asymmetry (L10); README "collections emptied" imprecision (L12).
 - **Documentation integrity (D1-D5):** the `.agents/README.md` originally
   claimed four placeholder docs were complete and a review was done; those
   placeholders are now filled and the index corrected. The root README's

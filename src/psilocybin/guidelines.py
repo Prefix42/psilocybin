@@ -2,7 +2,6 @@
 
 from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import Optional
 
 from .psychonaut import MODE_PER_CALL, VALID_MODES
 
@@ -39,11 +38,11 @@ class Guidelines:
             If False, the breach is only recorded on the TripReport.
     """
 
-    seed: Optional[int] = None
+    seed: int | None = None
     intensity: float = 0.25
     mode: str = MODE_PER_CALL
-    max_hallucinations: Optional[int] = None
-    max_duration_seconds: Optional[float] = None
+    max_hallucinations: int | None = None
+    max_duration_seconds: float | None = None
     allowed_exceptions: Sequence[type[BaseException]] = field(default_factory=tuple)
     forbidden_targets: Sequence[str] = field(default_factory=tuple)
     halt_on_bad_trip: bool = True

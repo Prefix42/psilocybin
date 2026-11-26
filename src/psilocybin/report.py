@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass, field
 from time import monotonic
-from typing import Optional
 
 
 @dataclass
@@ -21,7 +20,7 @@ class TripReport:
 
     events: list[HallucinationEvent] = field(default_factory=list)
     started_at: float = field(default_factory=monotonic)
-    ended_at: Optional[float] = None
+    ended_at: float | None = None
     bad_trip: bool = False
     bad_trip_reason: str = ""
 

@@ -23,7 +23,7 @@ The project uses **psychedelic culture metaphors** consistently throughout:
 - **single**: At most one hallucination per entire trip (tests single isolated glitch)
 
 ## Tech Stack
-- Python 3.9+
+- Python 3.11+
 - pytest integration via plugin entry point
 - Uses unittest.mock.patch for function wrapping
 - Includes decorators and fixtures for test integration

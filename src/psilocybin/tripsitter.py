@@ -15,7 +15,6 @@ The TripSitter is responsible for:
 import functools
 from collections.abc import Callable, Iterable
 from time import monotonic
-from typing import Optional
 
 from .exceptions import BadTripError, GuidelineViolation
 from .guidelines import Guidelines
@@ -30,7 +29,7 @@ class TripSitter:
         guidelines.validate()
         self.guidelines = guidelines
         self.report = TripReport()
-        self._psychonaut: Optional[Psychonaut] = None
+        self._psychonaut: Psychonaut | None = None
 
     def _check_target_allowed(self, target: str) -> None:
         for forbidden in self.guidelines.forbidden_targets:
