@@ -9,8 +9,10 @@ README and shared project notes were updated, and the package version was
 bumped to 0.2.1 because the CI version-bump gate requires it for a
 `requires-python` change. The 19 tests pass on Python 3.14 with the pytest
 plugin explicitly enabled, and mypy and Bandit pass. Ruff, radon, xenon,
-pip-audit, and GitHub Actions workflows remain unverified. This working
-tree has not been committed.
+pip-audit, and GitHub Actions workflows remain unverified. The uplift and
+leaderboard commits are on local branch `chore/python-support-floor`;
+local `main` is restored to `origin/main`. The project branch has not been
+pushed; the effort notes ref has been pushed.
 
 `refs/notes/effort` is not configured in this clone. If adding a commit
 effort note later, first tell the user and offer the setup commands from
