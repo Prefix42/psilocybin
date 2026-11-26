@@ -192,7 +192,7 @@ pip-audit                                                   # dependency vulnera
 
 | Job | Tool | Purpose |
 |---|---|---|
-| `test` | `pytest` + `pytest-cov` | tests across Python 3.9-3.13, with coverage |
+| `test` | `pytest` + `pytest-cov` | tests across Python 3.11-3.14, with coverage |
 | `lint` | `ruff` | style and lint issues |
 | `typecheck` | `mypy` | static type checking |
 | `complexity` | `radon` / `xenon` | cyclomatic complexity & maintainability ("code smell") gate |

@@ -1,9 +1,9 @@
 [project]
 name = "psilocybin"
-version = "0.2.0"
+version = "0.2.1"
 description = "A hallucination-driven fuzzer for exercising your test suite's resilience."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 license = { text = "MIT" }
 dependencies = ["pytest>=7.0"]
 
@@ -44,7 +44,7 @@ exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py39"
+target-version = "py311"
 src = ["src", "tests"]
 
 [tool.ruff.lint]
@@ -54,7 +54,7 @@ per-file-ignores = { "tests/*" = ["S101"] }
 mccabe = { max-complexity = 10 }
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 mypy_path = "src"
 packages = ["psilocybin"]
 ignore_missing_imports = true

@@ -100,7 +100,7 @@ stylization.
 Despite being an experiment, the project deliberately holds itself to a
 production bar, which is part of the point (can agents sustain that bar?):
 
-- A broad CI matrix (Python 3.9-3.13) plus gates for lint (`ruff`), types
+- A broad CI matrix (Python 3.11-3.14) plus gates for lint (`ruff`), types
   (`mypy`), complexity (`radon`/`xenon`), security (`bandit`, `pip-audit`),
   and secrets (`gitleaks`), aggregated behind a single `all-checks` status.
 - Release automation that tags and builds on a version bump, with a
