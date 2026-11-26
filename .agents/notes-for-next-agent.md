@@ -2,21 +2,18 @@
 
 ## Latest session (2026-11-26): removing EOL Python support
 
-The package's supported Python floor is now 3.11, the oldest non-EOL Python
-release as of this date. CI tests Python 3.11-3.14; lint/type-check,
-release, and manual publish jobs use Python 3.14. Ruff and mypy targets,
-README and shared project notes were updated, and the package version was
-bumped to 0.2.1 because the CI version-bump gate requires it for a
-`requires-python` change. The 19 tests pass on Python 3.14 with the pytest
-plugin explicitly enabled, and mypy and Bandit pass. Ruff, radon, xenon,
-pip-audit, and GitHub Actions workflows remain unverified. The uplift and
-leaderboard commits are on local branch `chore/python-support-floor`;
-local `main` is restored to `origin/main`. The project branch has not been
-pushed; the effort notes ref has been pushed.
+The package floor is 3.11; CI tests 3.11-3.14 and tooling/build jobs use
+Python 3.14. PR #19 targets `main` from the pushed branch
+`chore/python-support-floor`. Its initial Ruff check failed because
+raising the target exposed `Optional` annotations and a `Callable` import
+that needed modernization. These are fixed with PEP 604 unions and
+`collections.abc` imports. Locally, all 19 tests pass, as do mypy, Bandit,
+`ruff check .`, and `ruff format --check .`. The CI rerun after the fix is
+pending; radon, xenon, and pip-audit were not run locally.
 
-`refs/notes/effort` is not configured in this clone. If adding a commit
-effort note later, first tell the user and offer the setup commands from
-`AGENTS.md`; never run `git config` as an agent.
+The local effort-note fetch/push refspecs are configured and notes have
+been pushed. Fresh clones need the setup described in `AGENTS.md`; never
+run `git config` as an agent.
 
 ## Prior session (2026-08-10): fixed the actual psylocybin -> psilocybin misspelling, and repeated (then caught) the same authorship mistake a third time
 
@@ -166,8 +163,8 @@ installed, so no one has to re-bootstrap by hand like the 2026-07-15 review
 did.
 
 Available in the 2026-11-26 session: Python 3.14.2, pip, pytest, mypy,
-bandit, and git. `uv`, ruff, radon, xenon, twine, and build are not
-available.
+bandit, ruff, and git. `uv`, radon, xenon, pip-audit, twine, and build
+are not available.
 
 ### Blocking essentials (needed to run the documented dev/CI workflow)
 

@@ -23,9 +23,9 @@ All quality gates pass on Python 3.13:
 | `xenon --max-absolute B --max-modules A --max-average A src` | passes |
 
 The Python support uplift was separately checked on Python 3.14: all 19
-tests pass when the pytest plugin is enabled, and mypy and Bandit pass.
-Ruff, radon, xenon, pip-audit, and the GitHub Actions workflows were not
-run locally.
+tests pass when the pytest plugin is enabled; mypy, Bandit, `ruff check .`,
+and `ruff format --check .` pass. Radon, xenon, and pip-audit were not run
+locally.
 
 So the earlier handoff's "assume nothing works" framing does not match
 reality: the suite is green and the tooling gates hold. What the review
