@@ -1,6 +1,21 @@
 # Handoff: full review done - suite green, but real open issues found
 
-## Latest session (2026-08-10): fixed the actual psylocybin -> psilocybin misspelling, and repeated (then caught) the same authorship mistake a third time
+## Latest session (2026-11-26): removing EOL Python support
+
+The package floor is 3.11; CI tests 3.11-3.14 and tooling/build jobs use
+Python 3.14. PR #19 targets `main` from the pushed branch
+`chore/python-support-floor`. Its initial Ruff check failed because
+raising the target exposed `Optional` annotations and a `Callable` import
+that needed modernization. These are fixed with PEP 604 unions and
+`collections.abc` imports. Locally, all 19 tests pass, as do mypy, Bandit,
+`ruff check .`, and `ruff format --check .`. The CI rerun after the fix is
+green across all checks; radon, xenon, and pip-audit were not run locally.
+
+The local effort-note fetch/push refspecs are configured and notes have
+been pushed. Fresh clones need the setup described in `AGENTS.md`; never
+run `git config` as an agent.
+
+## Prior session (2026-08-10): fixed the actual psylocybin -> psilocybin misspelling, and repeated (then caught) the same authorship mistake a third time
 
 `fix/psilocybin_spelling` (pushed, not yet merged) renames the package for
 real: `src/psylocybin/` -> `src/psilocybin/`, `tests/test_psylocybin.py` ->
@@ -147,26 +162,17 @@ outstanding) and move on. Otherwise, surface it and offer to have the tools
 installed, so no one has to re-bootstrap by hand like the 2026-07-15 review
 did.
 
-What is actually present: `python3` (3.13 only), `git`, `jq`, `curl`,
-`wget`. That is it.
-
-What the 2026-07-15 review needed and had to bootstrap by hand: there is
-**no `pip`, no `venv`/`ensurepip`, no `uv`, no `pipx`, no `virtualenv`**. The
-workaround was to `curl` `get-pip.py`, `python3 get-pip.py --target <dir>`,
-then `pip install --target <dir> ...` with `PYTHONPATH`/`PATH` pointed at it
-(see [development-guide.md](development-guide.md) for the exact incantation
-and its gotchas). It works, but it is slow and fiddly and re-derived from
-scratch each session.
+Available in the 2026-11-26 session: Python 3.14.2, pip, pytest, mypy,
+bandit, ruff, and git. `uv`, radon, xenon, pip-audit, twine, and build
+are not available.
 
 ### Blocking essentials (needed to run the documented dev/CI workflow)
 
 Ask the user to have these added to the environment so the
 [development-guide.md](development-guide.md) Quick start just works:
 
-- A working `pip` + `venv`/`ensurepip` (the `python3.13-venv` /
-  `python3-pip` system packages), **or** `uv` (a single static binary that
-  provides install + venv + resolver and would sidestep the whole
-  bootstrap - the cleanest single ask).
+- Install the missing development and packaging tools listed below (or
+  install `uv` and use it to manage the environment).
 - The `[dev]` extras the project already declares: `pytest`, `pytest-cov`,
   `ruff`, `mypy`, `bandit`, `pip-audit`, `radon`, `xenon`, `build`. With a
   working pip, `pip install -e ".[dev]"` covers these; listing them here so
@@ -178,11 +184,8 @@ Ask the user to have these added to the environment so the
 
 Rationale tied to this specific repo's conventions, not generic wishlist:
 
-- **Python 3.9, 3.10, 3.11, 3.12** interpreters. Only 3.13 is present, but CI
-  tests the full 3.9-3.13 matrix and the package floor is 3.9. Without the
-  older interpreters a local run cannot catch a 3.9-only break (directly
-  relevant to L11, the mypy-targets-3.10-vs-floor-3.9 finding), and cannot
-  reproduce a matrix-specific CI failure.
+- **Python 3.11, 3.12, and 3.13** interpreters for local matrix testing.
+  Only 3.14.2 is present; CI tests 3.11-3.14 and the package floor is 3.11.
 - **`tox` or `nox`** - to drive that multi-version matrix locally instead of
   one interpreter at a time.
 - **`gh` (GitHub CLI)** - this repo is GitHub-hosted with heavy release

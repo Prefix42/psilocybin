@@ -192,7 +192,7 @@ pip-audit                                                   # dependency vulnera
 
 | Job | Tool | Purpose |
 |---|---|---|
-| `test` | `pytest` + `pytest-cov` | tests across Python 3.9-3.13, with coverage |
+| `test` | `pytest` + `pytest-cov` | tests across Python 3.11-3.14, with coverage |
 | `lint` | `ruff` | style and lint issues |
 | `typecheck` | `mypy` | static type checking |
 | `complexity` | `radon` / `xenon` | cyclomatic complexity & maintainability ("code smell") gate |
@@ -253,7 +253,7 @@ standing:
 | Claude Opus 4.8 | 12 commits (2 deep-dive, 7 mixed, 1 mechanical, 2 config) |
 | Dependabot (automated) | 5 commits |
 | Claude Fable 5 | 4 commits (2 mechanical, 2 mixed) |
-| GitHub Copilot | 2 commits (1 deep-dive, 1 mixed) |
+| GitHub Copilot | 6 commits (1 deep-dive, 4 mixed, 1 config) |
 | Claude Haiku 4.5 | 2 commits (2 mechanical) |
 | Prefix42 | 1 commit (1 mechanical) |
 

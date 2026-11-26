@@ -23,7 +23,8 @@ producing it.
 
 Severity key: HIGH = correctness/safety defect or broken core promise;
 MEDIUM = latent bug, real fragility, or undocumented sharp edge users will
-hit; LOW = polish, minor mismatch, or packaging nicety.
+hit; LOW = polish, minor mismatch, or packaging nicety. Most entries remain
+open; resolved entries are explicitly marked.
 
 ---
 
@@ -283,16 +284,11 @@ hit; LOW = polish, minor mismatch, or packaging nicety.
   one-line note in the docs so users understand what a hallucination does
   and does not run.
 
-### L11. `mypy` type-checks against 3.10 while the package floor is 3.9
+### L11. RESOLVED 2026-11-26: `mypy` and Ruff targets did not match the package floor
 
-- Location: [`pyproject.toml` L57](../pyproject.toml#L57)
-  (`[tool.mypy] python_version = "3.10"`) vs
-  [L6](../pyproject.toml#L6) (`requires-python = ">=3.9"`) and
-  [L47](../pyproject.toml#L47) (`[tool.ruff] target-version = "py39"`).
-- mypy would not catch a construct that is valid in 3.10 but breaks on 3.9,
-  even though the CI test matrix and the metadata both claim 3.9 support.
-  No such construct is present today, so this is latent, not an active
-  break. **Fix:** set `python_version = "3.9"` to match the real floor.
+The package floor and test matrix have been raised to Python 3.11, and
+`python_version` / `target-version` now match that floor. CI tests Python
+3.11-3.14.
 
 ### L12. README says "collections emptied" but empty collections are filled
 

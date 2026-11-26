@@ -14,8 +14,8 @@ job. The Psychonaut just trips.
 
 import math
 import random
-from collections.abc import Iterable
-from typing import Any, Callable, Optional
+from collections.abc import Callable, Iterable
+from typing import Any
 from unittest.mock import patch
 
 from .report import HallucinationEvent, TripReport
@@ -59,9 +59,9 @@ class Psychonaut:
         self,
         targets: Iterable[str],
         intensity: float = 0.25,
-        seed: Optional[int] = None,
+        seed: int | None = None,
         exception_pool: Iterable[type[BaseException]] = DEFAULT_EXCEPTION_POOL,
-        report: Optional[TripReport] = None,
+        report: TripReport | None = None,
         mode: str = MODE_PER_CALL,
     ):
         if mode not in VALID_MODES:
