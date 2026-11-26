@@ -253,7 +253,7 @@ standing:
 | Claude Opus 4.8 | 12 commits (2 deep-dive, 7 mixed, 1 mechanical, 2 config) |
 | Dependabot (automated) | 5 commits |
 | Claude Fable 5 | 4 commits (2 mechanical, 2 mixed) |
-| GitHub Copilot | 2 commits (1 deep-dive, 1 mixed) |
+| GitHub Copilot | 3 commits (1 deep-dive, 1 mixed, 1 config) |
 | Claude Haiku 4.5 | 2 commits (2 mechanical) |
 | Prefix42 | 1 commit (1 mechanical) |
 
